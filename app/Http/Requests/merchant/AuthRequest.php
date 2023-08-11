@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\merchant;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -11,7 +11,7 @@ class AuthRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,10 +21,12 @@ class AuthRequest extends FormRequest
      */
     public function rules(): array
     {
+        
         return [
             'email' => 'required|email|unique:users,email',
             'password' => 'required',
             'name' => 'required'
         ];
+        
     }
 }

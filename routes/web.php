@@ -1,7 +1,8 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\TestController;
+use App\Http\Controllers\Merchant\AuthController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Agency\AgencyAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,5 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register',[AuthController::class, 'register']);
-Route::post('/login',[AuthController::class, 'login']);
+Route::prefix('merchant' )->group(function(){
+    Route::post('/register',[AuthController::class, 'register']);
+    Route::post('/login',[AuthController::class, 'login']);
+});
+
+Route::prefix('agency')->group(function()
+{
+    Route::post('/register', [AgencyAuthController::class, 'register']);
+});
+
+Route::get('/', HomeController::class);
