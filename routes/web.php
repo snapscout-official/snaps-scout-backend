@@ -1,9 +1,12 @@
 <?php
 
-use App\Http\Controllers\Merchant\AuthController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\Agency\AgencyAuthController;
+use App\Models\User;
+use App\Models\Agency;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Merchant\AuthController;
+use App\Http\Controllers\Agency\AgencyAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +30,11 @@ Route::prefix('agency')->group(function()
 });
 
 Route::get('/', HomeController::class);
+
+    // Route::get('/agency/{agency}', function(Agency $agency){
+    //     $user = User::where('id', 15)->first();
+    //     if (Gate::forUser($user)->allows('view-agency-info', $agency))
+    //     {
+    //         dd($agency);
+    //     }
+    // });
