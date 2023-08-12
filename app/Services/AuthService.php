@@ -120,10 +120,11 @@ class AuthService
                 'emailVerificationUrl' => 'localhost:5173'
             ]);
 
-            return response()->json([
-                'authenticated' => false,
-                'message' => 'Failed to Register'
-            ]);
+            
         }
+        return response()->json([
+            'authenticated' => false,
+            'message' => 'Failed to Register'
+        ]);
     }
 }
