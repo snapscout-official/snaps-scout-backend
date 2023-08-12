@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Agency;
 use App\Models\Merchant;
 use App\Models\User;
 use Carbon\Carbon;
@@ -23,5 +24,7 @@ class HomeController extends Controller
     //    echo 'MerchantID : ' . $merchant->merchant_id . '<br>';
     //    echo 'UserId : ' . $merchant->user->id . '<br>';
     //    echo 'MerchantCountry: ' . $merchant->location->country;
+        
+
     }
 }

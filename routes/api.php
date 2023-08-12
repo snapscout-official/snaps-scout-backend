@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Models\Merchant;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
@@ -19,16 +20,26 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::middleware('auth:sanctum')->group(function()
 {
-    Route::middleware('merchant')->group(function(){
-        Route::get('/merchant', function()
+    Route::middleware('role:merchant')->group(function(){
+        Route::get('/merchant/{merchant}', function(Merchant $merchant)
         {
-            if (Gate::allows('view-merchant'))
-            {
+            Gate::authorize('view-merchant', $merchant);
+
                 return response()->json([
-                    'AgencyUser' => auth()->user()->agency
+                    'AgencyUser' => auth()->user()->merchant
                 ]);
-            }
-            abort(403);
+            
+        });
+    });
+
+    Route::middleware('role:agency')->group(function()
+    {
+        Route::get('/agency',function()
+        {
+        Gate::authorize('view-agency');
+            return response()->json([
+                'agencyUser' => auth()->user()->agency
+            ]);
         });
     });
 

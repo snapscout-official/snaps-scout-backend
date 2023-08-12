@@ -21,10 +21,7 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         //
     ];
-
-    /**
-     * Register any authentication / authorization services.
-     */
+    
     public function boot(): void
     {
         //Gate that checks if the user that wants to retrieve the merchant info is the merchant itself.
@@ -35,9 +32,9 @@ class AuthServiceProvider extends ServiceProvider
 
         //Gate that checks if the user that wants to retrieve the agency info is the agency itself.
         
-        Gate::define('view-agency', function(Agency $agency)
+        Gate::define('view-agency', function()
         {
-            return (auth()->user()->id === $agency->agency_id && auth()->user()->role_id === Role::AGENCY);
+            return  auth()->user()->role_id === Role::AGENCY;
         });
         
     }

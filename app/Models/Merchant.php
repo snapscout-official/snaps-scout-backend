@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 class Merchant extends Model
 {
@@ -18,6 +18,7 @@ class Merchant extends Model
         'philgeps_id'
     ];
 
+    protected $touches = ['user'];
 
     protected $table = 'merchant';
     protected $primaryKey = 'merchant_id';

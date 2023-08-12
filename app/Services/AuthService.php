@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\Agency\AgencyLoginRequest;
 use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
@@ -98,7 +99,7 @@ class AuthService
         $agencyCategory = AgencyCategory::create([
             'agency_category_name' => $request->agency_category_name
              ]);
-             
+        
         $user->agency()->create([
         'agency_name' =>$request->agency_name,
         'position' =>$request->position,
@@ -126,5 +127,33 @@ class AuthService
             'authenticated' => false,
             'message' => 'Failed to Register'
         ]);
+    }
+
+    
+    public function authenticateAgencyLogin(AgencyLoginRequest $request)
+    {
+        $user = User::where('email', $request->email)->first();
+        if ($user->role_id !== Role::AGENCY)
+        {
+            return response()->json([
+                'authenticated' => false,
+                'message' => 'You are not authorized to login as agency'
+            ], 402);
+        }
+        
+        if (Auth::attempt($request->only(['email', 'password'])))
+        {
+            $request->session()->regenerate();
+            return response()->json([
+                'authenticated' => true,
+                'message' => 'Successfully logged in'
+            ]);
+        }
+
+        return response()->json([
+            'authenticated' => false,
+            'message' => 'Unable to authenticate credentials'
+        ]);
+
     }
 }

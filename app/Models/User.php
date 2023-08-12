@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -35,12 +36,29 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function hasRole(string $role)
+    {
+        
+        if ($this->role->role_name === $role)
+        {
+            return true;
+        }
+        return false;
+    }
+
    public function merchant():HasOne
    {
     return $this->hasOne(Merchant::class, 'merchant_id', 'id');
    }
+
    public function agency():HasOne
    {
     return $this->hasOne(Agency::class, 'agency_id', 'id');
+   }
+
+   public function role():BelongsTo
+   {
+    return $this->belongsTo(Role::class, 'role_id');
    }
 }

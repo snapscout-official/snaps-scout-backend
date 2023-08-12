@@ -21,10 +21,10 @@ return new class extends Migration
             $table->string('business_name')
                 ->unique()
                 ->nullable(false);
-            $table->foreignId('location_id')
-                ->constrained('locations', 'location_id')
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
+            // $table->foreignId('location_id')
+            //     ->constrained('locations', 'location_id')
+            //     ->cascadeOnDelete()
+            //     ->cascadeOnUpdate();
             $table->foreignId('category_id')
                 ->constrained('merchant_category')
                 ->cascadeOnDelete()
