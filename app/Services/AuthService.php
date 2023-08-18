@@ -22,7 +22,7 @@ class AuthService
     public function authenticateRegisterMerchant(Request $request)
     {
       
-            User::create([
+            $user = User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
@@ -31,16 +31,20 @@ class AuthService
             if (Auth::attempt($request->only(['email', 'password'])))
             {
             $request->session()->regenerate();
-            return response()->json([
+
+            return  $request->expectsJson() ? response()->json([
                 'authenticated' => true,
                 'User' => auth()->user(),
-                'message' => 'Successfully authenticated'
-            ]);
+                'message' => 'Successfully authenticated',
+                'access_token' => $user->createToken('auth-token')->plainTextToken
+            ]) : null;
             }
-            return response()->json([
+
+            
+            return $request->expectsJson() ?  response()->json([
                 'authenticated' => false,
                 'message' => 'Invalid credentials'
-            ]);
+            ]) : null;
         
     }
     public function authenticateLoginMerchant(Request $request)
@@ -56,16 +60,16 @@ class AuthService
         if (Auth::attempt($request->only(['email', 'password'])))
         {
             $request->session()->regenerate();
-            return response()->json([
+            return $request->expectsJson() ?  response()->json([
                 'authenticated' => true,
                 'User' => auth()->user(),
                 'Message' => 'Successfully authenticated'
-            ]);
+            ]) : null;
         }
-        return response()->json([
+        return $request->expectsJson() ?  response()->json([
             'authenticated' => false,
             'Message' => 'Error authentication'
-        ]);
+        ]) : null;
     }
 
     public function authenticateRegisterAgency(AgencyRegister $request)
@@ -110,23 +114,26 @@ class AuthService
 
         if (Auth::attempt($request->only(['email', 'password'])))
         {
-            $request->session()->regenerate();
+            
+            $user = User::where('email', $request->email)->first();
 
             event(new Registered($user));
-
-            return response()->json([
+        
+            return  $request->expectsJson() ? response()->json([
                 'authenticated'=> true,
                 'agencyUser' => auth()->user(),
                 'message' => 'Sucessfully authenticated',
-                'emailVerificationUrl' => 'localhost:5173'
-            ]);
+                'emailVerificationUrl' => 'localhost:5173',
+                'access_token' => $user->createToken('auth-token')->plainTextToken
+                
+            ]) : null;
 
             
         }
-        return response()->json([
+        return $request->expectsJson() ?  response()->json([
             'authenticated' => false,
             'message' => 'Failed to Register'
-        ]);
+        ]) : null;
     }
 
     
@@ -135,25 +142,26 @@ class AuthService
         $user = User::where('email', $request->email)->first();
         if ($user->role_id !== Role::AGENCY)
         {
-            return response()->json([
+            return  $request->expectsJson() ?  response()->json([
                 'authenticated' => false,
                 'message' => 'You are not authorized to login as agency'
-            ], 402);
+            ], 402) : null;
         }
         
         if (Auth::attempt($request->only(['email', 'password'])))
         {
-            $request->session()->regenerate();
-            return response()->json([
+           
+            return  $request->expectsJson() ? response()->json([
                 'authenticated' => true,
-                'message' => 'Successfully logged in'
-            ]);
+                'message' => 'Successfully logged in',
+                'access_token' => $user->createToken('auth-token')->plainTextToken
+            ]) : null;
         }
 
-        return response()->json([
+        return $request->expectsJson() ?  response()->json([
             'authenticated' => false,
             'message' => 'Unable to authenticate credentials'
-        ]);
+        ]) : null;
 
     }
 }

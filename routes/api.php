@@ -1,10 +1,12 @@
 <?php
 
+use App\Models\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TestController;
 use App\Http\Controllers\Api\AuthController;
-use App\Models\Merchant;
+use App\Http\Controllers\Agency\AgencyAuthController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 /*
@@ -36,7 +38,7 @@ Route::middleware('auth:sanctum')->group(function()
     {
         Route::get('/agency',function()
         {
-        Gate::authorize('view-agency');
+        // Gate::authorize('view-agency');
             return response()->json([
                 'agencyUser' => auth()->user()->agency
             ]);
@@ -64,5 +66,10 @@ Route::middleware('auth:sanctum')->group(function()
 
 
 
-Route::post('login', [AuthController::class, 'login']);
-Route::post('register', [AuthController::class, 'register']);
+Route::get('/test', TestController::class);
+
+Route::prefix('agency')->group(function()
+{
+    Route::post('/register', [AgencyAuthController::class, 'register']);
+    Route::post('/login', [AgencyAuthController::class, 'login']);
+});

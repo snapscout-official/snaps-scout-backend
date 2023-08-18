@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Merchant\AuthController;
 use App\Http\Controllers\Agency\AgencyAuthController;
-
+use App\Http\Controllers\TestController;
 
 Route::prefix('merchant' )->group(function(){
     Route::post('/register',[AuthController::class, 'register']);
@@ -17,5 +17,5 @@ Route::prefix('agency')->group(function()
     Route::post('/login', [AgencyAuthController::class, 'login']);
 });
 
-Route::get('/', HomeController::class);
+Route::get('/', TestController::class);
 
