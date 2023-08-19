@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Http\Requests\Agency\AgencyLoginRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Location;
@@ -13,37 +12,53 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\Agency\AgencyRegister;
-
+use App\Http\Requests\Agency\AgencyLoginRequest;
+use App\Http\Requests\merchant\MerchantRegisterRequest;
+use App\Models\Merchant;
+use App\Models\MerchantCategory;
+use App\Models\Philgep;
 
 class AuthService
 {
 
-    public function authenticateRegisterMerchant(Request $request)
+    public function authenticateRegisterMerchant(MerchantRegisterRequest $request)
     {
-      
+            DB::beginTransaction();
+
             $user = User::create([
-                'name' => $request->name,
+                'first_name' => $request->firstName,
+                'last_name' => $request->lastName,
+                'birth_date' => $request->dateOfBirth,
+                'tin_number' => $request->tinNumber,
+                'gender' => $request->gender,
+                'phone_number' => $request->phoneNumber,
                 'email' => $request->email,
-                'password' => Hash::make($request->password)
+                'password' => Hash::make($request->password),
+                'role_id' => Role::MERCHANT,
             ]);
-            
-            if (Auth::attempt($request->only(['email', 'password'])))
-            {
+            $location = Location::create([
+                'building_name' => $request->building,
+                'street' => $request->street,
+                'barangay' => $request->barangay,
+                'city' => $request->city,
+                'province' => $request->province,
+                'country' => $request->country
+            ]);
 
-            return  $request->expectsJson() ? response()->json([
-                'authenticated' => true,
-                'User' => auth()->user(),
-                'message' => 'Successfully authenticated',
-                'access_token' => $user->createToken('auth-token')->plainTextToken
-            ]) : null;
-            }
+            $category = MerchantCategory::create([
+                'merchant_name' => $request->category,
+            ]);
+            $philgeps = Philgep::create([
+                'type' => $request->philgeps
+            ]);
+            $user->merchant()->create([
+                'business_name' => $request->businessName,
+                'location_id' => $location->location_id,
+                'category_id' => $category->id,
+                'philgeps_id' => $philgeps->id,
+            ]);
 
-            
-            return $request->expectsJson() ?  response()->json([
-                'authenticated' => false,
-                'message' => 'Invalid credentials'
-            ]) : null;
-        
+        DB::commit();
     }
     public function authenticateLoginMerchant(Request $request)
     {

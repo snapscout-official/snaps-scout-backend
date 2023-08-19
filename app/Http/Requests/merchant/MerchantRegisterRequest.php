@@ -37,7 +37,9 @@ class MerchantRegisterRequest extends FormRequest
             'password' => 'required',
             'businessName' => 'required',
             'position' => 'required',
-            'tinNumber' => 'required|unique:users,tin_number'
+            'tinNumber' => 'required|unique:users,tin_number',
+            'category' => 'required',
+            'philgeps' => 'required',
 
         ];
     }

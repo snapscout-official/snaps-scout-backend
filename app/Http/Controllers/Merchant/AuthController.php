@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Merchant;
 
 use App\Services\AuthService;
-use App\Http\Requests\merchant\AuthRequest;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\merchant\MerchantAuthRequest;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\merchant\MerchantRegisterRequest;
+use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function register(AuthRequest $request)
+    public function register(MerchantRegisterRequest $request)
     {
         
         
@@ -18,7 +18,7 @@ class AuthController extends Controller
     }
 
 
-    public function login(MerchantAuthRequest $request)
+    public function login(Request $request)
     {
 
        return (new AuthService())->authenticateLoginMerchant($request);
