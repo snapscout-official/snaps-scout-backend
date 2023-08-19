@@ -8,7 +8,9 @@ use App\Models\Agency;
 use App\Models\Merchant;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
@@ -36,6 +38,15 @@ class AuthServiceProvider extends ServiceProvider
         {
             return  auth()->user()->role_id === Role::AGENCY;
         });
+
+    //     VerifyEmail::toMailUsing(function(object $notifiable, string $url)
+    // {
+    //     $frontEndUrl = 'http://localhost:5173/verify-email';
+    //     return (new MailMessage)
+    //         ->subject('Verify email address')
+    //         ->line('Click the button below to verify your email address.')
+    //         ->action('Verify email address', $frontEndUrl);
+    // });
         
     }
 }

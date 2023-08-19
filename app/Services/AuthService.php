@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Http\Requests\Agency\AgencyLoginRequest;
-use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Location;
@@ -30,7 +29,6 @@ class AuthService
             
             if (Auth::attempt($request->only(['email', 'password'])))
             {
-            $request->session()->regenerate();
 
             return  $request->expectsJson() ? response()->json([
                 'authenticated' => true,
@@ -77,23 +75,21 @@ class AuthService
       
         DB::beginTransaction();
 
-        $date = Carbon::createFromFormat('F j, Y', $request->birth_date)
-                    ->format('Y-m-d');
         
         $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name' => $request->last_name,
-            'birth_date' => $date,
-            'tin_number' => $request->tin_number,
+            'first_name' => $request->firstName,
+            'last_name' => $request->lastName,
+            'birth_date' => $request->dateOfBirth,
+            'tin_number' => $request->tinNumber,
             'gender' => $request->gender,
-            'phone_number' => $request->phone_number,
+            'phone_number' => $request->contactNumber,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => Role::AGENCY
         ]);
 
        $location = Location::create([
-            'building_name' =>$request->building_name ,
+            'building_name' =>$request->buildingName ,
             'street' => $request->street,
             'barangay' =>$request->barangay,
             'city' => $request->city,
@@ -101,11 +97,11 @@ class AuthService
             'country' =>$request->country,
        ]);
         $agencyCategory = AgencyCategory::create([
-            'agency_category_name' => $request->agency_category_name
+            'agency_category_name' => $request->agencyCategory
              ]);
         
         $user->agency()->create([
-        'agency_name' =>$request->agency_name,
+        'agency_name' =>$request->agencyName,
         'position' =>$request->position,
         'location_id' => $location->location_id,
         'category_id' => $agencyCategory->id,

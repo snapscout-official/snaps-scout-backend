@@ -7,7 +7,10 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Agency\AgencyAuthController;
+use App\Models\User;
+use App\Notifications\UserRegistered;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Notification;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +29,6 @@ Route::middleware('auth:sanctum')->group(function()
         Route::get('/merchant/{merchant}', function(Merchant $merchant)
         {
             Gate::authorize('view-merchant', $merchant);
-
                 return response()->json([
                     'AgencyUser' => auth()->user()->merchant
                 ]);

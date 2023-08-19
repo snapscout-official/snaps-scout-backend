@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Agency;
+namespace App\Http\Requests\merchant;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AgencyRegister extends FormRequest
+class MerchantRegisterRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,22 +23,22 @@ class AgencyRegister extends FormRequest
     {
         return [
             'firstName' => 'required',
-            'lastName'=>'required',
-            'dateOfBirth' => 'required',
-            'tinNumber' => 'required|unique:users,tin_number',
-            'gender' =>'required',
-            'contactNumber' => 'required|unique:users,phone_number',
-            'email'=>'required|email|unique:users,email',
-            'password'=> 'required',
-            'agencyName' => 'required',
-            'buildingName' => 'required',
+            'lastName' => 'required',
+            'dateOfBirth' => 'required|date',
+            'gender' => 'required',
+            'phoneNumber' => 'required|unique:users,phone_number',
             'street' => 'required',
             'barangay' => 'required',
             'city' => 'required',
             'province' => 'required',
             'country' => 'required',
-            'agencyCategory' => 'required',
-            'position' => 'required'
+            'building' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required',
+            'businessName' => 'required',
+            'position' => 'required',
+            'tinNumber' => 'required|unique:users,tin_number'
+
         ];
     }
 }
