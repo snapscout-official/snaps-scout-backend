@@ -59,6 +59,25 @@ class AuthService
             ]);
 
         DB::commit();
+        if (!Auth::attempt($request->only(['email', 'password'])))
+        {
+            return $request->expectsJson() ? 
+                response()->json([
+                    'authenticated' => false,
+                    'message' => 'failed to register merchant user',
+
+                ]): null;
+        }
+        
+        event(new Registered($user));
+
+        return $request->expectsJson() ? 
+            response()->json([
+                'authenticated' => true,
+                'user' => $user,
+                'merchantInfo' => $user->merchant,
+                'access_token' => $user->createToken('auth-token')->plainTextToken,
+            ]) : null;
     }
     public function authenticateLoginMerchant(Request $request)
     {
@@ -164,7 +183,8 @@ class AuthService
            
             return  $request->expectsJson() ? response()->json([
                 'authenticated' => true,
-                'message' => 'Successfully logged in',
+                'user' => $user,
+                'agencyInfo' => $user->agency,
                 'access_token' => $user->createToken('auth-token')->plainTextToken
             ]) : null;
         }
