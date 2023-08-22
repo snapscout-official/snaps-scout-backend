@@ -67,9 +67,8 @@ Route::middleware('auth:sanctum')->group(function()
 });
 
 
-
-Route::get('/test', TestController::class);
-
+Route::apiResource('test', TestController::class);
+// Route::get('/test', TestController::class);
 Route::prefix('agency')->group(function()
 {
     Route::post('/register', [AgencyAuthController::class, 'register']);

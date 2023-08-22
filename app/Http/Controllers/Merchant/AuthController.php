@@ -10,17 +10,21 @@ use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    public function __construct(private AuthService $authService)
+    {
+        
+    }
+    
     public function register(MerchantRegisterRequest $request)
     {
         
         
-        return (new AuthService())->authenticateRegisterMerchant($request);
+        return $this->authService->authenticateRegisterMerchant($request);
     }
-
 
     public function login(Request $request)
     {
 
-       return (new AuthService())->authenticateLoginMerchant($request);
+       return $this->authService->authenticateLoginMerchant($request);
     }
 }

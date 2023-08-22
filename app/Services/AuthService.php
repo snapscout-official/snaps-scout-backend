@@ -14,7 +14,6 @@ use Illuminate\Auth\Events\Registered;
 use App\Http\Requests\Agency\AgencyRegister;
 use App\Http\Requests\Agency\AgencyLoginRequest;
 use App\Http\Requests\merchant\MerchantRegisterRequest;
-use App\Models\Merchant;
 use App\Models\MerchantCategory;
 use App\Models\Philgep;
 
@@ -36,6 +35,7 @@ class AuthService
                 'password' => Hash::make($request->password),
                 'role_id' => Role::MERCHANT,
             ]);
+            
             $location = Location::create([
                 'building_name' => $request->building,
                 'street' => $request->street,
@@ -68,7 +68,7 @@ class AuthService
 
                 ]): null;
         }
-        
+
         event(new Registered($user));
 
         return $request->expectsJson() ? 
@@ -76,12 +76,13 @@ class AuthService
                 'authenticated' => true,
                 'user' => $user,
                 'merchantInfo' => $user->merchant,
-                'access_token' => $user->createToken('auth-token')->plainTextToken,
+                'accessToken' => $user->createToken('auth-token')->plainTextToken,
             ]) : null;
     }
     public function authenticateLoginMerchant(Request $request)
     {
         $user = User::where('email', $request->email)->first();
+
         if ($user->role_id !== Role::MERCHANT)
         {
             return response()->json([
@@ -89,18 +90,19 @@ class AuthService
                 'message' => 'You are not authorized to login as Merchant'
             ], 402);
         }
-        if (Auth::attempt($request->only(['email', 'password'])))
+        if (!Auth::attempt($request->only(['email', 'password'])))
         {
-            $request->session()->regenerate();
             return $request->expectsJson() ?  response()->json([
-                'authenticated' => true,
-                'User' => auth()->user(),
-                'Message' => 'Successfully authenticated'
+                'authenticated' => false,
+                'Message' => 'Invalid credentials'
             ]) : null;
         }
+        
         return $request->expectsJson() ?  response()->json([
-            'authenticated' => false,
-            'Message' => 'Error authentication'
+            'authenticated' => true,
+            'User' => auth()->user(),
+            'Message' => 'Successfully authenticated',
+            'accessToken' => $user->createToken('auth-token')->plainTextToken
         ]) : null;
     }
 
@@ -154,7 +156,7 @@ class AuthService
                 'agencyUser' => auth()->user(),
                 'message' => 'Sucessfully authenticated',
                 'emailVerificationUrl' => 'localhost:5173',
-                'access_token' => $user->createToken('auth-token')->plainTextToken
+                'accessToken' => $user->createToken('auth-token')->plainTextToken
                 
             ]) : null;
 
@@ -185,7 +187,7 @@ class AuthService
                 'authenticated' => true,
                 'user' => $user,
                 'agencyInfo' => $user->agency,
-                'access_token' => $user->createToken('auth-token')->plainTextToken
+                'accessToken' => $user->createToken('auth-token')->plainTextToken
             ]) : null;
         }
 
