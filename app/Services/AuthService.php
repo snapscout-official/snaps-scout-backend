@@ -136,7 +136,7 @@ class AuthService
             'agency_category_name' => $request->agencyCategory
              ]);
         
-        $user->agency()->create([
+        $agency = $user->agency()->create([
         'agency_name' =>$request->agencyName,
         'position' =>$request->position,
         'location_id' => $location->location_id,
@@ -146,8 +146,7 @@ class AuthService
 
         if (Auth::attempt($request->only(['email', 'password'])))
         {
-            
-            $user = User::where('email', $request->email)->first();
+        
 
             event(new Registered($user));
         
@@ -156,8 +155,8 @@ class AuthService
                 'agencyUser' => auth()->user(),
                 'message' => 'Sucessfully authenticated',
                 'emailVerificationUrl' => 'localhost:5173',
-                'accessToken' => $user->createToken('auth-token')->plainTextToken
-                
+                'accessToken' => $user->createToken('auth-token')->plainTextToken,
+                'agencyInfo' => $agency
             ]) : null;
 
             

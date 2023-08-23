@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id('code');
             $table->string('specs_name');
             $table->string('specs_value');
-            $table->foreignId('variant_code')->constrained('variants');
-            $table->timestamps();
+            $table->foreignId('variant_code')->constrained('variants', 'var_code');
+           
         });
     }
 

@@ -13,13 +13,12 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id('product_id')->from(1000);
-            $table->unsignedBigInteger('sub_code')->nullable();
+            $table->foreignId('parent_code')->constrained('parent_category', 'parent_id');
+            $table->unsignedBigInteger('sub_code');
             $table->foreign('sub_code')->references('sub_id')->on('sub_category');
             $table->unsignedBigInteger('third_code')->nullable();
             $table->foreign('third_code')->references('third_id')->on('third_category');
-            $table->text('description');
-            $table->boolean('is_available')->default(false);
-            $table->decimal('price', 8, 2);
+            $table->text('description');    
             $table->timestamps();
         });
     }

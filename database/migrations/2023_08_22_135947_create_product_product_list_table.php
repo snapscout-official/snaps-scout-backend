@@ -11,11 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('third_category', function (Blueprint $table) {
-            $table->id('third_id');
-            $table->string('third_name');
-            $table->foreignId('sub_id')->constrained('sub_category', 'sub_id');
-           
+        Schema::create('product_product_list', function (Blueprint $table) {
+            $table->foreignId('product_id')->constrained('products', 'product_id');
+            $table->foreignId('product_list_id')->constrained('product_lists', 'list_id');
         });
     }
 
@@ -24,6 +22,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('third_category');
+        Schema::dropIfExists('product_product_list');
     }
 };

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('sub_id');
             $table->string('sub_name');
             $table->foreignId('parent')->constrained('parent_category', 'parent_id');
-            // $table->timestamps();
+            
         });
     }
 
