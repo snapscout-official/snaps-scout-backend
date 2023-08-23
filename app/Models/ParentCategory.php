@@ -6,6 +6,7 @@ use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class ParentCategory extends Model
 {
@@ -20,14 +21,15 @@ class ParentCategory extends Model
 
     public $timestamps = false;
 
-    public function products():HasMany
+    public function products():HasManyThrough
     {
-        return $this->hasMany(Product::class,'parent_code', 'parent_id');
+        return $this->hasManyThrough(Product::class, SubCategory::class, 'parent', 'sub_code', 'parent_id', 'sub_id');
     }
 
     public function subCategories():HasMany
     {
         return $this->hasMany(SubCategory::class, 'parent', 'parent_id' );
     }
+
     
 }
