@@ -12,6 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('variant_specs', function (Blueprint $table) {
+            $table->id();
             $table->foreignId('variant_id')->constrained('variants', 'var_code');
             $table->foreignId('specs_id')->constrained('product_specs', 'code');
         });

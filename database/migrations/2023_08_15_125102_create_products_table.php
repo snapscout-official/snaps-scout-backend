@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id('product_id')->from(1000);
+            $table->string('product_name')->unique();
             $table->foreignId('parent_code')->constrained('parent_category', 'parent_id');
             $table->unsignedBigInteger('sub_code');
             $table->foreign('sub_code')->references('sub_id')->on('sub_category');

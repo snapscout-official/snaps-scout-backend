@@ -16,8 +16,8 @@ class SubCategory extends Model
         'parent'
     ];
     protected $table = 'sub_category';
-
     public $timestamps = false;
+    protected $primaryKey = 'sub_id';
 
     public function thirdCategories():HasMany
     {

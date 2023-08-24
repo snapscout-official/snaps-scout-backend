@@ -17,6 +17,7 @@ class Product extends Model
         'description'
     ];
 
+    protected $primaryKey = 'product_id';
     // public function parentCategory():BelongsTo
     // {
     //     return $this->belongsTo(ParentCategory::class ,'parent_code', 'parent_id');
@@ -25,5 +26,9 @@ class Product extends Model
     public function subCategory():BelongsTo
     {
         return $this->belongsTo(subCategory::class, 'sub_code', 'sub_id');
+    }
+    public function thirdCategory():BelongsTo
+    {
+        return $this->belongsTo(ThirdCategory::class, 'third_code', 'third_id')->withDefault();
     }
 }

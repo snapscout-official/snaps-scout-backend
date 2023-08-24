@@ -17,5 +17,5 @@ Route::prefix('agency')->group(function()
     Route::post('/login', [AgencyAuthController::class, 'login']);
 });
 
-Route::get('/', TestController::class);
+Route::get('/', HomeController::class);
 

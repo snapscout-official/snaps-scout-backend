@@ -18,9 +18,8 @@ class ParentCategory extends Model
     ];
 
     protected $table = 'parent_category';
-
     public $timestamps = false;
-
+    protected $primaryKey = 'parent_id';
     public function products():HasManyThrough
     {
         return $this->hasManyThrough(Product::class, SubCategory::class, 'parent', 'sub_code', 'parent_id', 'sub_id');
