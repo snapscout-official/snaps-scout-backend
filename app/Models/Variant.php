@@ -16,11 +16,15 @@ class Variant extends Model
         'is_available',
     ];
 
-    protected $timestamps = false;
+    public $timestamps = false;
     protected $table = 'variants';
+    protected $primaryKey = 'var_code';
 
     public function specs():BelongsToMany
     {
-        return $this->belongsToMany(Spec::class, 'variant_specs', 'variant_id', 'specs_id', 'var_code', 'code');
+        return $this->belongsToMany(Spec::class, 'variant_specs', 'variant_id', 'specs_id', 'var_code', 'code')
+                ->as('properties');
     }
+
+    
 }

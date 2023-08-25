@@ -74,3 +74,5 @@ Route::prefix('agency')->group(function()
     Route::post('/register', [AgencyAuthController::class, 'register']);
     Route::post('/login', [AgencyAuthController::class, 'login']);
 });
+
+Route::post('/superadmin/');
