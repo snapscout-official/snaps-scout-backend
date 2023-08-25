@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Events\UserRegistered;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Location;
@@ -147,7 +148,8 @@ class AuthService
         if (Auth::attempt($request->only(['email', 'password'])))
         {
         
-
+            
+            
             event(new Registered($user));
         
             return  $request->expectsJson() ? response()->json([

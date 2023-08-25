@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Agency;
-use App\Models\Merchant;
-use App\Models\Product;
+use Carbon\Carbon;
 use App\Models\Spec;
 use App\Models\User;
+use App\Models\Agency;
+use App\Models\Product;
 use App\Models\Variant;
-use Carbon\Carbon;
+use App\Models\Merchant;
+use App\Mail\MyTestEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
@@ -40,13 +42,14 @@ class HomeController extends Controller
     // $subCategory = $product->subCategory()->first();
     // dump($subCategory);
     // dump($subCategory->parentCategory()->first());
-        $variant = Variant::find(1);
-        dump($variant->variant_name);
-        foreach($variant->specs as $spec)
-        {
-            dump($spec->specs_name);
-            dump($spec->specs_value);
-        }
+        // $variant = Variant::find(1);
+        // dump($variant->variant_name);
+        // foreach($variant->specs as $spec)
+        // {
+        //     dump($spec->specs_name);
+        //     dump($spec->specs_value);
+        // }
+        Mail::to('gio.gonzales@carsu.edu.ph')->send(new MyTestEmail());
         
 
    

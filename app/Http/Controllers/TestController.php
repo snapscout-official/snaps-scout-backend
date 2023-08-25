@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-
+use App\Mail\MyTestEmail;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class TestController extends Controller
 {
     public function __invoke(Request $request)
     {
-        $name = 'Gio Gonzales';
-        $num = 1.23;
-        return response('Hello world')->cookie('name', 'value', 'minutes');
-        // dd(gettype($res->is_admin));
+        // $user = User::find();
+        Mail::to('gio.gonzales@carsu.edu.ph')->send(new MyTestEmail());
     }
 
-    public function test()
-    {
-
-    }
+   
 }
