@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\UserRegistered;
 use Carbon\Carbon;
 use App\Models\Spec;
 use App\Models\User;
@@ -49,7 +50,9 @@ class HomeController extends Controller
         //     dump($spec->specs_name);
         //     dump($spec->specs_value);
         // }
-        Mail::to('gio.gonzales@carsu.edu.ph')->send(new MyTestEmail());
+        $user = User::find(1);
+        event(new UserRegistered($user));
+        // Mail::to('gio.gonzales@carsu.edu.ph')->send(new MyTestEmail());
         
 
    
