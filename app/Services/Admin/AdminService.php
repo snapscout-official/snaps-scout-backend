@@ -32,24 +32,53 @@ class AdminService
     }
     public function createCategory(AdminRequest $request)
     {
+        //if the user added a thirdCategory the subCategory and parentCategory should also be present
+        //in order to link the relationships
         if ($request->filled('thirdCategory'))
         {
             $parentCategory = ParentCategory::where('parent_name', $request->parentName);
-        //    $parentCategory->createThirdCategory($request->secondCategory, $request->thirdCategory);
+            //the method returns an model instance of the thirdCategory
+            $thirdCategory = $parentCategory->createThirdCategory($request->secondCategory, $request->thirdCategory);
+            if (!isset($thirdCategory))
+            {
+                return response()->json([
+                    'message' => 'unsucessful third Category creation'
+                ], 422);
+            }
+            return response()->json([
+                'message' => 'sucessfully created third category',
+                'thirdCategory' => $thirdCategory
+            ], 200);
         }
+
+        //user wants to create a secondCategory the parentcategory should be present
+        //thirdCategory could be null
         else if ($request->filled('secondCategory'))
         {
             $parentCategory = ParentCategory::where('parent_name', $request->parentCategory);
-            $parentCategory->subCategories->create([
+            $subCategoryResult = $parentCategory->subCategories()->create([
                 'sub_name' => $request->subCategory
             ]);
+            if (!isset($subCategoryResult))
+            {
+                return response()->json([
+                    'message' => 'unsucessful sub category creation'
+                ], 422);
+            }
+            return response()->json([
+                'message' => 'sucessfully created sub category',
+                'subCategory' => $subCategoryResult
+            ], 200);
         }
+
+        //if parent category only created then the subCategory and thirdCategory is not needed only needs to
+        //create the parentCategory
         else if ($request->filled('parentCategory'))
         {
             $parentCategory = ParentCategory::create([
                 'parent_name' => $request->parentCategory,
             ]);
-            if (!$parentCategory)
+            if (!isset($parentCategory))
             {
                 return response()->json([
                     'message' => 'unsucessfully created parent category'

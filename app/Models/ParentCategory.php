@@ -30,12 +30,18 @@ class ParentCategory extends Model
         return $this->hasMany(SubCategory::class, 'parent', 'parent_id' );
     }
 
+
+    //creates third category base on the given parent category and subCategory on the request data
     public function createThirdCategory(string $subCategory, string $thirdCategory)
     {
            $subCategoryResult = $this->subCategories()
                                 ->where('sub_name', $subCategory)
                                 ->first();
-            $subCategoryResult->thirdCategories()->create([
+            if (!isset($subCategoryResult))
+            {
+                return null;
+            }
+            return $subCategoryResult->thirdCategories()->create([
                 'third_name' => $thirdCategory
             ]);
         }
