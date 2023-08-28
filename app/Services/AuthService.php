@@ -174,7 +174,7 @@ class AuthService
     {
         $user = User::where('email', $request->email)->first();
         if ($user->role_id !== Role::AGENCY)
-        {
+        {   
             return  $request->expectsJson() ?  response()->json([
                 'authenticated' => false,
                 'message' => 'You are not authorized to login as agency'

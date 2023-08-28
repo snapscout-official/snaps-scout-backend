@@ -4,23 +4,27 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Http\Requests\Admin\AdminLoginRequest;
-use App\Models\Role;
+use Illuminate\Support\Facades\Auth;
 
 class AdminService
 {
-    public function __construct()
-    {
-    }
     public function loginAdmin(AdminLoginRequest $request)
     {
-        $user = User::where('email', $request->email)->first();
-        if ($user->role_id !== Role::SUPERADMIN)
+        if (!Auth::attempt($request->only(['email', 'password'])))
         {
             return $request->expectsJson() ? response()->json([
                 'authenticated' => false,
-                'message' => 'You are not authorized to login as admin'
-            ], 401) : null;
+                'message' => 'credentials error',
+            ]) : null; 
         }
-        
+        $user = User::where('email', $request->email)->first();
+
+        return $request->expectsJson() ? response()->json([
+            'authenticated' => true,
+            'message' => 'Sucessfully authenticated',
+            'admin' =>  $user,
+            'accessToken' => $user->createToken('auth-token')->plainTextToken
+        ]) : null;
+
     }
 }

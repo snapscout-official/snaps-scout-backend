@@ -1,10 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminController;
 use App\Models\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\Agency\AgencyAuthController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -52,11 +52,14 @@ Route::middleware('auth:sanctum')->group(function()
 });
 
 
-Route::apiResource('test', TestController::class);
 Route::prefix('agency')->group(function()
 {
     Route::post('/register', [AgencyAuthController::class, 'register']);
     Route::post('/login', [AgencyAuthController::class, 'login']);
 });
 
-// Route::prefix('/super-admin', [])
+Route::prefix('super-admin')->group(function(){
+    Route::middleware('admin')->group(function(){
+        Route::post('/login', [AdminController::class, 'login']);
+    });
+});
