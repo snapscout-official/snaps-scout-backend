@@ -25,28 +25,15 @@ class AuthServiceProvider extends ServiceProvider
     ];
     
     public function boot(): void
-    {
-        //Gate that checks if the user that wants to retrieve the merchant info is the merchant itself.
-        
+    {        
         Gate::define('view-merchant', function(Merchant $merchant){
             return (auth()->user()->id === $merchant->merchant_id && auth()->user()->role_id === Role::MERCHANT);
         });
-
-        //Gate that checks if the user that wants to retrieve the agency info is the agency itself.
-        
+    
         Gate::define('view-agency', function()
         {
             return  auth()->user()->role_id === Role::AGENCY;
         });
-
-    //     VerifyEmail::toMailUsing(function(object $notifiable, string $url)
-    // {
-    //     $frontEndUrl = 'http://localhost:5173/verify-email';
-    //     return (new MailMessage)
-    //         ->subject('Verify email address')
-    //         ->line('Click the button below to verify your email address.')
-    //         ->action('Verify email address', $frontEndUrl);
-    // });
-        
+       
     }
 }
