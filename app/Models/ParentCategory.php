@@ -37,7 +37,7 @@ class ParentCategory extends Model
            $subCategoryResult = $this->subCategories()
                                 ->where('sub_name', $subCategory)
                                 ->first();
-            if (!isset($subCategoryResult))
+            if (is_null($subCategoryResult))
             {
                 return null;
             }

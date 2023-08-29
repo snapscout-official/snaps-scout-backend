@@ -3,11 +3,10 @@
 namespace App\Services\Admin;
 
 use App\Models\User;
-use App\Http\Requests\Admin\AdminLoginRequest;
-use App\Http\Requests\Admin\AdminRequest;
 use App\Models\ParentCategory;
-use App\Models\SubCategory;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Admin\AdminRequest;
+use App\Http\Requests\Admin\AdminLoginRequest;
 
 class AdminService
 {
@@ -36,10 +35,10 @@ class AdminService
         //in order to link the relationships
         if ($request->filled('thirdCategory'))
         {
-            $parentCategory = ParentCategory::where('parent_name', $request->parentName);
+            $parentCategory = ParentCategory::where('parent_name', $request->parentCategory)->first();
             //the method returns an model instance of the thirdCategory
-            $thirdCategory = $parentCategory->createThirdCategory($request->secondCategory, $request->thirdCategory);
-            if (!isset($thirdCategory))
+            $thirdCategoryResult = $parentCategory->createThirdCategory($request->secondCategory, $request->thirdCategory);
+            if (is_null($thirdCategoryResult))
             {
                 return response()->json([
                     'message' => 'unsucessful third Category creation'
@@ -47,7 +46,7 @@ class AdminService
             }
             return response()->json([
                 'message' => 'sucessfully created third category',
-                'thirdCategory' => $thirdCategory
+                'thirdCategory' => $thirdCategoryResult
             ], 200);
         }
 
@@ -59,7 +58,7 @@ class AdminService
             $subCategoryResult = $parentCategory->subCategories()->create([
                 'sub_name' => $request->subCategory
             ]);
-            if (!isset($subCategoryResult))
+            if (is_null($subCategoryResult))
             {
                 return response()->json([
                     'message' => 'unsucessful sub category creation'
@@ -78,7 +77,7 @@ class AdminService
             $parentCategory = ParentCategory::create([
                 'parent_name' => $request->parentCategory,
             ]);
-            if (!isset($parentCategory))
+            if (is_null($parentCategory))
             {
                 return response()->json([
                     'message' => 'unsucessfully created parent category'

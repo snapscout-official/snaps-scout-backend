@@ -17,7 +17,7 @@ class ThirdCategory extends Model
     protected $table = 'third_category';
 
     public $timestamps = false;
-
+    protected $primaryKey = 'third_id';
     public function products()
     {
         return $this->hasMany(Product::class, 'third_code', 'third_id');

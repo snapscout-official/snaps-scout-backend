@@ -22,8 +22,8 @@ class AdminRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'parentCategory' => 'required|string|unique:parent_category,parent_name',
-            'subCategory' => 'nullable|string',
+            'parentCategory' => 'required|string',
+            'secondCategory' => 'nullable|string',
             'thirdCategory' => 'nullable|string'
         ];
     }
