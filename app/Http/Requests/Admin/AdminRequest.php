@@ -21,10 +21,15 @@ class AdminRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules =  [
             'parentCategory' => 'required|string',
-            'secondCategory' => 'nullable|string',
-            'thirdCategory' => 'nullable|string'
+            'secondCategory' => 'sometimes|required|string',
+            'thirdCategory' => 'sometimes|required|string'
         ];
+        if (!($this->filled('secondCategory') || $this->filled('thirdCategory')))
+        {
+            $rules['parentCategory'] = 'required|string|unique:parent_category,parent_id';
+        }
+        return $rules;
     }
 }
