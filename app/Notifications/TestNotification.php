@@ -7,9 +7,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class TestNotification extends Notification
+class TestNotification extends Notification implements ShouldQueue
 {
     use Queueable;
+
 
     /**
      * Get the notification's delivery channels.
@@ -40,7 +41,7 @@ class TestNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            
         ];
     }
 }

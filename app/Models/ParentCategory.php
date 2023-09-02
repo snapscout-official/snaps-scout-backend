@@ -44,6 +44,6 @@ class ParentCategory extends Model
             return $subCategoryResult->thirdCategories()->create([
                 'third_name' => $thirdCategory
             ]);
-        }
+    }
     
 }
