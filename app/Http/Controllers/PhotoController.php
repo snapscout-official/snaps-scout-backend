@@ -21,6 +21,9 @@ class PhotoController extends Controller
         // Storage::put('');
         // $path = $request->file('image')->store('public/images');
         Storage::put('public/images', $request->image);
+        // dump(Storage::path('public/images/' . $request->file('image')->getClientOriginalName()));
+        return Storage::download('public/images/2Z5D2ZeUkFnO2J10PC2cXqJOw3KQepe1UTMmwSMR.png');
+        // dd($request->file('image')->getClientOriginalName());
 
         
     }
