@@ -24,4 +24,8 @@ class SendEmailNotification
     {
         $event->user->notify(new TestNotification());
     }
+    public function viaConnection():string
+    {
+        return 'database';
+    }
 }

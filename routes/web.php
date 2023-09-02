@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Merchant\AuthController;
 use App\Http\Controllers\Agency\AgencyAuthController;
+use App\Http\Controllers\PhotoController;
 
 Route::prefix('merchant' )->group(function(){
     Route::post('/register',[AuthController::class, 'register']);
@@ -17,4 +18,5 @@ Route::prefix('agency')->group(function()
 });
 
 Route::get('/', HomeController::class);
+Route::get('/create', [PhotoController::class, 'create'])->name('upload');
 

@@ -12,21 +12,14 @@ use App\Models\Variant;
 use App\Models\Merchant;
 use App\Mail\MyTestEmail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
 class HomeController extends Controller
 {
     public function __invoke()
     {
-        
-   
-        $user = User::find(6);
-        event(new UserRegistered($user));
-    
-        
 
-   
-    
 
     }
 }
