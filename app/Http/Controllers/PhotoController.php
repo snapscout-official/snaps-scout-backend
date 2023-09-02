@@ -17,12 +17,9 @@ class PhotoController extends Controller
     
     public function store(Request $request)
     {
-        // $file = $request->file('image');
-    //    $request->image;
-        // Storage::put('');
-        // $path = $request->file('image')->store('public/images');
-        Storage::put('public/images', $request->image);
+        
         $file = $request->file('image');
+        $path = $request->image->storeAs('public/images', $file->getClientOriginalName());
         
         $document = ProposalDocument::create([
             'title' => $file->getClientOriginalName(),
@@ -36,7 +33,7 @@ class PhotoController extends Controller
                 
             ]);
         }
-        
+
         return response()->json([
             'message' => "Success",
             'document' => $document
