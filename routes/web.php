@@ -19,4 +19,5 @@ Route::prefix('agency')->group(function()
 
 Route::get('/', HomeController::class);
 Route::get('/create', [PhotoController::class, 'create'])->name('upload');
+Route::post('/create', [PhotoController::class, 'store']);
 
