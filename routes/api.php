@@ -33,8 +33,8 @@ Route::middleware('auth:sanctum')->group(function()
         });
     });
     Route::prefix('admin')->group(function(){
-            
-        Route::post('/create-category', [AdminController::class, 'create']);
+        Route::get('/create-category', [AdminController::class, 'create']);
+        Route::post('/create-category', [AdminController::class, 'store']);
     });
 
 

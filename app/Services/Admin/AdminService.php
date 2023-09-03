@@ -29,7 +29,7 @@ class AdminService
         ]) : null;
 
     }
-    public function createCategory(AdminRequest $request)
+    public function postCategory(AdminRequest $request)
     {
         //if the user added a thirdCategory the subCategory and parentCategory should also be present
         //in order to link the relationships
@@ -90,5 +90,9 @@ class AdminService
         }
         
 
+    }
+    public function returnData()
+    {
+        
     }
 }

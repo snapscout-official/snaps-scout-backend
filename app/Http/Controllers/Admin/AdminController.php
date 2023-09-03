@@ -17,8 +17,12 @@ class AdminController extends Controller
     {
         return $this->adminService->loginAdmin($request);
     }
-    public function create(AdminRequest $request)
+    public function store(AdminRequest $request)
     {
-        return $this->adminService->createCategory($request);
+        return $this->adminService->postCategory($request);
+    }
+    public function create()
+    {
+        return $this->adminService->returnData();
     }
 }
