@@ -96,7 +96,8 @@ class AdminService
     {
         
         $subCategories = SubCategory::with('parentCategory')->get();
-        return response()->json(['subCategories' => $subCategories]);
+        $parentCategories = ParentCategory::all();
+        return response()->json(['subCategories' => $subCategories, 'parentCategories' => $parentCategories]);
         
 
     }
