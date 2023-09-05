@@ -36,9 +36,12 @@ class AdminService
         //in order to link the relationships
         if ($request->filled('thirdCategory'))
         {
-            $parentCategory = ParentCategory::where('parent_name', $request->parentCategory)->first();
+            $subCategory = SubCategory::where('sub_name', $request->subCategory)->first();
             //the method returns an model instance of the thirdCategory
-            $thirdCategoryResult = $parentCategory->createThirdCategory($request->secondCategory, $request->thirdCategory);
+            $thirdCategoryResult = $subCategory->thirdCategories()->create([
+                'third_name' => $request->thirdCategory,
+            ]);
+            // $thirdCategoryResult = $parentCategory->createThirdCategory($request->secondCategory, $request->thirdCategory);
             if (is_null($thirdCategoryResult))
             {
                 return response()->json([
@@ -47,7 +50,9 @@ class AdminService
             }
             return response()->json([
                 'message' => 'sucessfully created third category',
-                'thirdCategory' => $thirdCategoryResult
+                'thirdCategory' => $thirdCategoryResult,
+                'subCategory' => $subCategory,
+                'parentCategory' => $subCategory->parentCategory
             ], 200);
         }
 
@@ -67,7 +72,8 @@ class AdminService
             }
             return response()->json([
                 'message' => 'sucessfully created sub category',
-                'subCategory' => $subCategoryResult
+                'subCategory' => $subCategoryResult,
+                'parentCategory' => $parentCategory,
             ], 200);
         }
 
@@ -89,8 +95,6 @@ class AdminService
                 'parentCategory' => $parentCategory
             ]);
         }
-        
-
     }
     public function returnData()
     {
@@ -98,7 +102,5 @@ class AdminService
         $subCategories = SubCategory::with('parentCategory')->get();
         $parentCategories = ParentCategory::all();
         return response()->json(['subCategories' => $subCategories, 'parentCategories' => $parentCategories]);
-        
-
     }
 }
