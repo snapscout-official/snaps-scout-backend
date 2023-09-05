@@ -1,12 +1,12 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Models\Merchant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Agency\AgencyAuthController;
-use App\Models\Admin;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 Route::middleware('auth:sanctum')->group(function()
@@ -33,10 +33,9 @@ Route::middleware('auth:sanctum')->group(function()
     });
     Route::prefix('admin')->group(function(){
         
-        Route::post('/create-category', [AdminController::class, 'store']);
+        Route::post('/create-category', [CategoryController::class, 'store']);
         
     });
-
 
 
     Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -71,6 +70,6 @@ Route::prefix('super-admin')->group(function(){
     });
 });
 
-Route::get('/create-category', [AdminController::class, 'create']);
+Route::get('/create-category', [CategoryController::class, 'create']);
 
 
