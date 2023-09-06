@@ -39,7 +39,7 @@ class ParentCategory extends Model
 
     public function categoryData()
     {
-        $subCategories = $this->subCategories()->with();
+        $subCategories = $this->subCategories()->get();
         return $subCategories;
     }
 
