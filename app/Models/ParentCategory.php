@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Product;
+use App\Models\ThirdCategory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,6 +29,18 @@ class ParentCategory extends Model
     public function subCategories():HasMany
     {
         return $this->hasMany(SubCategory::class, 'parent', 'parent_id' );
+    }
+    public function thirdCategories():HasManyThrough
+    {
+        return $this->HasManyThrough(ThirdCategory::class, SubCategory::class, 'parent', 'sub_id', 'parent_id', 'sub_id');
+    }
+
+    //a function that will return the desired output for the category
+
+    public function categoryData()
+    {
+        $subCategories = $this->subCategories()->with();
+        return $subCategories;
     }
 
 

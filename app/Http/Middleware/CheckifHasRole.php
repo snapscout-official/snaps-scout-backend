@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Role;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,7 +15,7 @@ class CheckifHasRole
      */
     public function handle(Request $request, Closure $next, string $role): Response
     {
-       if (!$request->user()->hasRole($role))
+       if (!$request->user()->hasRole($role) || !$request->user)
        {
         abort(403);
        }

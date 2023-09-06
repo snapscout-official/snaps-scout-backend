@@ -29,7 +29,7 @@ class AdminMiddleware
             }
             return $next($request);
         }
-        if (!($request->user()->role_id === Role::SUPERADMIN))
+        else if (!($request->user()->role_id === Role::SUPERADMIN))
         {
             return response()->json([
                 'authenticated' => false,

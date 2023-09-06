@@ -127,7 +127,7 @@ class DatabaseSeeder extends Seeder
             'phone_number' =>'09918804161',
             'email' =>'gio.gonzales@carsu.edu.ph',
             'password' => Hash::make('starmovies3144'),
-            'role_id' => Role::AGENCY
+            'role_id' => Role::SUPERADMIN
         ]);
         $location = Location::create([
             'building_name' =>'Bayawak building' ,
