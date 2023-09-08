@@ -5,6 +5,7 @@ namespace App\Services\Categories;
 use App\Models\SubCategory;
 use App\Models\ParentCategory;
 use App\Http\Requests\Admin\AdminRequest;
+use App\Models\ThirdCategory;
 
 class CategoryService {
     public function createCategory(AdminRequest $request)
@@ -74,9 +75,15 @@ class CategoryService {
     public function returnData()
     {
         
-        $data = ParentCategory::with(['subCategories', 'thirdCategories']);
+        $data = ParentCategory::with('subCategories.thirdCategories')->get();
+        $parentCategories = ParentCategory::all();
+        $subCategories = SubCategory::all();
+        $thirdCategories = ThirdCategory::all();
         return response()->json([
-            'data' => $data
+            'categories' => $data,
+            'parentCategories' => $parentCategories,
+            'subCategories' => $subCategories,
+            'thirdCategories' => $thirdCategories
         ]);
     }
 }

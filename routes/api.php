@@ -31,12 +31,13 @@ Route::middleware('auth:sanctum')->group(function()
             ]);
         });
     });
-    Route::middleware(['role:admin', 'admin'])->group(function()
+    Route::middleware(['role:super_admin', 'admin'])->group(function()
     {
         Route::prefix('admin')->group(function(){
         
             Route::post('/create-category', [CategoryController::class, 'store']);
             Route::get('/create-category', [CategoryController::class, 'create']);
+ 
         });
     
     
@@ -75,6 +76,7 @@ Route::prefix('super-admin')->group(function(){
 });
 
 // Route::get()
+
 
 
 
