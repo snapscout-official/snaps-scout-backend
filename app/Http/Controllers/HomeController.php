@@ -9,11 +9,12 @@ class HomeController extends Controller
     public function __invoke()
     {
         
-        $data = ParentCategory::with(['subCategories', 'thirdCategories'])->get();
-        
+        $data = ParentCategory::with('subCategories.thirdCategories')->get();
+        // dd($data);        
         return response()->json([
             'data' => $data
         ]);
+
            
     }
 }

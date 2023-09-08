@@ -74,8 +74,9 @@ class CategoryService {
     public function returnData()
     {
         
-        $subCategories = SubCategory::with('parentCategory')->get();
-        $parentCategories = ParentCategory::all();
-        return response()->json(['subCategories' => $subCategories, 'parentCategories' => $parentCategories]);
+        $data = ParentCategory::with(['subCategories', 'thirdCategories']);
+        return response()->json([
+            'data' => $data
+        ]);
     }
 }

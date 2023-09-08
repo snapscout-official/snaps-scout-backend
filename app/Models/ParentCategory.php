@@ -37,12 +37,6 @@ class ParentCategory extends Model
 
     //a function that will return the desired output for the category
 
-    public function categoryData()
-    {
-        $subCategories = $this->subCategories()->get();
-        return $subCategories;
-    }
-
 
     //creates third category base on the given parent category and subCategory on the request data
     public function createThirdCategory(string $subCategory, string $thirdCategory)
