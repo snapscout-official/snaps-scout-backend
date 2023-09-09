@@ -37,7 +37,7 @@ Route::middleware('auth:sanctum')->group(function()
         
             Route::post('/create-category', [CategoryController::class, 'store']);
             Route::get('/create-category', [CategoryController::class, 'create']);
- 
+
         });
     
     
@@ -76,7 +76,6 @@ Route::prefix('super-admin')->group(function(){
 });
 
 // Route::get()
-
 
 
 

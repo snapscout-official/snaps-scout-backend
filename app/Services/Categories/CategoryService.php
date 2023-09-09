@@ -5,11 +5,11 @@ namespace App\Services\Categories;
 use App\Models\SubCategory;
 use App\Models\ParentCategory;
 use App\Http\Requests\Admin\AdminRequest;
-use App\Models\ThirdCategory;
 
 class CategoryService {
     public function createCategory(AdminRequest $request)
     {
+        // return response()->json(['message' => 'Hello world']);
         if ($request->filled('thirdCategory'))
         {
             $subCategory = SubCategory::where('sub_name', $request->subCategory)->first();
@@ -34,11 +34,11 @@ class CategoryService {
 
         //user wants to create a secondCategory the parentcategory should be present
         //thirdCategory could be null
-        else if ($request->filled('secondCategory'))
+        else if ($request->filled('subCategory'))
         {
-            $parentCategory = ParentCategory::where('parent_name', $request->parentCategory);
+            $parentCategory = ParentCategory::where('parent_name', $request->parentCategory)->first();
             $subCategoryResult = $parentCategory->subCategories()->create([
-                'sub_name' => $request->subCategory
+                'sub_name' => $request->subCategory 
             ]);
             if (is_null($subCategoryResult))
             {
@@ -74,16 +74,11 @@ class CategoryService {
     }
     public function returnData()
     {
-        
         $data = ParentCategory::with('subCategories.thirdCategories')->get();
         $parentCategories = ParentCategory::all();
         $subCategories = SubCategory::all();
-        $thirdCategories = ThirdCategory::all();
         return response()->json([
             'categories' => $data,
-            'parentCategories' => $parentCategories,
-            'subCategories' => $subCategories,
-            'thirdCategories' => $thirdCategories
         ]);
     }
 }

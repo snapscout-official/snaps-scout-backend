@@ -22,13 +22,23 @@ class AdminRequest extends FormRequest
     public function rules(): array
     {
         $rules =  [
-            'parentCategory' => 'required|string',
-            'secondCategory' => 'sometimes|required|string',
+            'parentCategory' => 'sometimes',
+            'subCategory' => 'sometimes|required|string',
             'thirdCategory' => 'sometimes|required|string'
         ];
-        if (!($this->filled('secondCategory') || $this->filled('thirdCategory')))
+        if ($this->filled('thirdCategory'))
+        {
+            $rules['parentCategory'] = 'sometimes';
+        }
+        else if ($this->filled('subCategory'))
+        {
+            $rules['thirdCategory'] = 'sometimes';
+        }
+        else
         {
             $rules['parentCategory'] = 'required|string|unique:parent_category,parent_id';
+            $rules['subCategory'] ='sometimes';
+            $rules['thirdCategory'] = 'sometimes';
         }
         return $rules;
     }
