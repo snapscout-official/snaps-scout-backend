@@ -19,8 +19,6 @@ class HomeController extends Controller
         // dd($data);        
         return response()->json([
             'data' => $data,
-            'parentCategories' => $parentCategories,
-            'subCategories' => $subCategories,
         ]);
 
            

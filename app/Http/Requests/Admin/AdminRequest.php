@@ -29,10 +29,13 @@ class AdminRequest extends FormRequest
         if ($this->filled('thirdCategory'))
         {
             $rules['parentCategory'] = 'sometimes';
+            $rules['thirdCategory'] = 'required|unique:third_category,third_name';
         }
         else if ($this->filled('subCategory'))
         {
             $rules['thirdCategory'] = 'sometimes';
+            $rules['subCategory'] = 'required|unique:sub_category,sub_name';
+            $rules['parentCategory'] = 'required|string';
         }
         else
         {
