@@ -41,7 +41,7 @@ class AdminRequest extends FormRequest
         {
             $rules['parentCategory'] = 'required|string|unique:parent_category,parent_id';
             $rules['subCategory'] ='sometimes';
-            $rules['thirdCategory'] = 'sometimes';
+            $rules['thirdCategory'] = 'sometimes';  
         }
         return $rules;
     }
