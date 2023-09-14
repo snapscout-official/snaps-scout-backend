@@ -21,19 +21,30 @@ class AdminRequest extends FormRequest
             'subCategory' => 'sometimes|required|string',
             'thirdCategory' => 'sometimes|required|string'
         ];
+        //if the thirdCategory is not null then the parent field and subCategory field is expected
         if ($this->filled('thirdCategory'))
         {
+            //changes the rules for parentCategory to be sometimes
             $rules['parentCategory'] = 'sometimes';
+            //subCategory should be present if thirdCategory is not null
+            $rules['subCategory'] = 'required|string';
+            //the thirdCategory name should be unique
             $rules['thirdCategory'] = 'required|unique:third_category,third_name';
         }
+        //if no thirCategory is null and subCategory is not null then change the rules
         else if ($this->filled('subCategory'))
         {
+            //thirdCategory will be sometimes since it wont be required
             $rules['thirdCategory'] = 'sometimes';
-            $rules['subCategory'] = 'required|unique:sub_category,sub_name';
+            //subCategory name should be unique and should also be a string
+            $rules['subCategory'] = 'required|string|unique:sub_category,sub_name';
+            //parentCategory is required when adding a new subCategory
             $rules['parentCategory'] = 'required|string';
         }
+        //if thirdCat and subCat is null then checks if parentCategory is present
         else if ($this->filled('parentCategory'))
         {
+            //if present then it should be unique and the thirdCat and subCat is not required since we are only adding the parentCategory
             $rules['parentCategory'] = 'required|string|unique:parent_category,parent_name';
             $rules['subCategory'] ='sometimes';
             $rules['thirdCategory'] = 'sometimes';  
