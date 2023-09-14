@@ -2,23 +2,18 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Role;
 use Illuminate\Foundation\Http\FormRequest;
 
 class AdminRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+
     public function authorize(): bool
     {
-        return true;
+        //checks if the user requesting on the api is a superAdmin
+        return $this->user()->role_id === Role::SUPERADMIN;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
-     */
     public function rules(): array
     {
         $rules =  [
@@ -37,9 +32,9 @@ class AdminRequest extends FormRequest
             $rules['subCategory'] = 'required|unique:sub_category,sub_name';
             $rules['parentCategory'] = 'required|string';
         }
-        else
+        else if ($this->filled('parentCategory'))
         {
-            $rules['parentCategory'] = 'required|string|unique:parent_category,parent_id';
+            $rules['parentCategory'] = 'required|string|unique:parent_category,parent_name';
             $rules['subCategory'] ='sometimes';
             $rules['thirdCategory'] = 'sometimes';  
         }

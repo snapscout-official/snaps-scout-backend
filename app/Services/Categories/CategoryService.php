@@ -9,21 +9,24 @@ use App\Http\Requests\Admin\AdminRequest;
 class CategoryService {
     public function createCategory(AdminRequest $request)
     {
-        // return response()->json(['message' => 'Hello world']);
+        //the method checks first if the request has a thirdcategory field that is not null
         if ($request->filled('thirdCategory'))
         {
+            //first retrieves the subCategory since if it has a thirdCategory then a subCategory field that is not null is also expected
             $subCategory = SubCategory::where('sub_name', $request->subCategory)->first();
-            //the method returns an model instance of the thirdCategory
+            
+            //creates the thirdcategory using the relationship in order to establish a foreign key on the thirdCategory
             $thirdCategoryResult = $subCategory->thirdCategories()->create([
                 'third_name' => $request->thirdCategory,
             ]);
-            // $thirdCategoryResult = $parentCategory->createThirdCategory($request->secondCategory, $request->thirdCategory);
+            //if creation is failure then return an api response with an error message
             if (is_null($thirdCategoryResult))
             {
                 return response()->json([
                     'message' => 'unsucessful third Category creation'
                 ], 422);
             }
+            //if the creation is sucessful then return the important fields
             return response()->json([
                 'message' => 'sucessfully created third category',
                 'thirdCategory' => $thirdCategoryResult,
@@ -32,20 +35,22 @@ class CategoryService {
             ], 200);
         }
 
-        //user wants to create a secondCategory the parentcategory should be present
-        //thirdCategory could be null
+        //if thirdCategory is null then it checks if it has a subCategory
         else if ($request->filled('subCategory'))
         {
+            //creates subCategory using the parentCategory in order to establish relationship
             $parentCategory = ParentCategory::where('parent_name', $request->parentCategory)->first();
             $subCategoryResult = $parentCategory->subCategories()->create([
                 'sub_name' => $request->subCategory 
             ]);
+            //if creation has a failure then return error message
             if (is_null($subCategoryResult))
             {
                 return response()->json([
                     'message' => 'unsucessful sub category creation'
                 ], 422);
             }
+            //for success, return important fields
             return response()->json([
                 'message' => 'sucessfully created sub category',
                 'subCategory' => $subCategoryResult,
@@ -53,27 +58,31 @@ class CategoryService {
             ], 200);
         }
 
-        //if parent category only created then the subCategory and thirdCategory is not needed only needs to
-        //create the parentCategory
+        //if no third and sub then checks for parentCategory
         else if ($request->filled('parentCategory'))
         {
+            //creates parentCategory
             $parentCategory = ParentCategory::create([
                 'parent_name' => $request->parentCategory,
             ]);
+            //if creation fails then return error message
             if (is_null($parentCategory))
             {
                 return response()->json([
                     'message' => 'unsucessfully created parent category'
                 ], 422);
             }
+            //if creation is success, return important fields
             return response()->json([
                 'message' => 'sucessfully created parent category',
                 'parentCategory' => $parentCategory
             ]);
         }
     }
+    //service method that returns all the category data with its associated relationship
     public function returnData()
     {
+        //retrieves the parentCategory with its subCategories and for each of its subCategories, gets their thirdCategory
         $data = ParentCategory::with('subCategories.thirdCategories')->get();
         return response()->json([
             'categories' => $data,
