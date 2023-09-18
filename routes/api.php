@@ -1,14 +1,17 @@
 <?php
 
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\CategoryController;
+use App\Models\User;
 use App\Models\Merchant;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Agency\AgencyAuthController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use Illuminate\Support\Facades\Password;
 
 Route::middleware('auth:sanctum')->group(function()
 {
@@ -78,6 +81,33 @@ Route::middleware('guest')->group(function(){
                 : back()->withErrors(['email' => __($status)]);
         });
     
+        // Route::get('/reset-password/{token}', function(string $token)
+        // {
+        //     return 
+        // });
+        Route::post('/reset-password', function(Request $request){
+            $request->validate([
+                'token' => 'required',
+                'email' => 'required|email',
+                'password' => 'required|min:8|confirmed',
+            ]);
+         
+            $status = Password::reset(
+                $request->only('email', 'password', 'password_confirmation', 'token'),
+                function (User $user, string $password) {
+                    $user->forceFill([
+                        'password' => Hash::make($password)
+                    ])->setRememberToken(Str::random(60));
+         
+                    $user->save();
+         
+                }
+            );
+         
+            return $status === Password::PASSWORD_RESET
+                        ? redirect()->route('login')->with('status', __($status))
+                        : back()->withErrors(['email' => [__($status)]]);
+        });
 });
 
 Route::prefix('agency')->group(function()
