@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Agency\AgencyAuthController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Password;
 
 Route::middleware('auth:sanctum')->group(function()
 {
+    
+
     Route::middleware('role:merchant')->group(function(){
         Route::get('/merchant/{merchant}', function(Merchant $merchant)
         {
@@ -31,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function()
             ]);
         });
     });
+
     Route::middleware(['role:super_admin'])->group(function()
     {
         Route::prefix('admin')->group(function(){
@@ -60,6 +64,21 @@ Route::middleware('auth:sanctum')->group(function()
     
 });
 
+Route::middleware('guest')->group(function(){
+    Route::get('/forgot-password', function(){
+        return view('auth.forgot-password');
+    });
+    Route::post('/forgot-password', function(Request $request){
+        $request->validate(['email' => 'required|email']);
+        $status = Password::sendResetLink(
+            $request->only('email')
+        );
+        return $status === Password::RESET_LINK_SENT
+                ? back()->with(['status' => __($status)])
+                : back()->withErrors(['email' => __($status)]);
+        });
+    
+});
 
 Route::prefix('agency')->group(function()
 {
