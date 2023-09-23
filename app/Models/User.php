@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Notifications\ResetPasswordNotification;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
@@ -63,7 +64,7 @@ class User extends Authenticatable implements MustVerifyEmail
    }
    public function sendPasswordResetNotification($token)
    {
-     $url = 'http://localhost:5173/reset-token/url=' . $token;
-     $this->notify(new ResetPassword($url));
+     $url = 'http://localhost:5173/reset-token/token=' . $token;
+     $this->notify(new ResetPasswordNotification($url));
    }
 }

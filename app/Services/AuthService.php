@@ -107,7 +107,7 @@ class AuthService
         ]) : null;
     }
 
-    public function authenticateRegisterAgency(AgencyRegister $request)
+    public function  authenticateRegisterAgency(AgencyRegister $request)
     {
       
         DB::beginTransaction();
