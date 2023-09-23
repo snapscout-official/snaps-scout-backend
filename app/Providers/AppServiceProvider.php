@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Test\MyService;
+use Barryvdh\Debugbar\Facades\Debugbar;
+use DebugBar\DebugBar as DebugBarDebugBar;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -23,6 +25,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // Debugbar::disable();
     }
 }

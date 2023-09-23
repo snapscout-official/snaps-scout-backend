@@ -49,7 +49,15 @@ class AuthServiceProvider extends ServiceProvider
                     'hash' => sha1($notifiable->getEmailForVerification()),
                 ]
                 );
+            $parsedUrl = parse_url($temporarySignedUrl);
+            $id = $notifiable->getKey();
+            $hash = sha1($notifiable->getEmailForVerification());
+            $query = $parsedUrl['query'];
+
+            return "{$frontEndBaseUrl}/{$id}/{$hash}?{$query}";
+
         });
+
         
         VerifyEmail::toMailUsing(function(object $notifiable, string $url){
                 return (new MailMessage)
