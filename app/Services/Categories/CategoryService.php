@@ -5,6 +5,7 @@ namespace App\Services\Categories;
 use App\Models\SubCategory;
 use App\Models\ParentCategory;
 use App\Http\Requests\Admin\AdminRequest;
+use App\Http\Requests\CategoryRequest;
 
 class CategoryService {
     public function createCategory(AdminRequest $request)
@@ -87,5 +88,19 @@ class CategoryService {
         return response()->json([
             'categories' => $data,
         ]);
+    }
+    public function deleteCategory( int $id, CategoryRequest $request)
+    {
+        if ($request->categoryType::destroy($id))
+        {
+            return $request->expectsJson() ? response()->json([
+                'message' => "Category sucessfully deleted"
+            ]): response()->json(
+                [
+                    'message' => 'error'
+                ]
+            );
+        }
+        return ($request->checkCategoryType($id));
     }
 }

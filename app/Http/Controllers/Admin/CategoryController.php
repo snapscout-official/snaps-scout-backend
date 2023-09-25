@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminRequest;
+use App\Http\Requests\CategoryRequest;
 use App\Services\Categories\CategoryService;
 
 class CategoryController extends Controller
@@ -15,5 +16,9 @@ class CategoryController extends Controller
     public function create(CategoryService $categoryService)
     {
         return $categoryService->returnData();
+    }
+    public function destroy(int $categoryId,CategoryService $categoryService, CategoryRequest $request)
+    {
+        return $categoryService->deleteCategory($categoryId, $request);
     }
 }
