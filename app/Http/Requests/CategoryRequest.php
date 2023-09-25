@@ -12,7 +12,11 @@ class CategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return $this->user()->role_id === Role::SUPERADMIN;
+        if ($this->categoryType === 'ParentCategory' || $this->categoryType === 'SubCategory' || $this->categoryType === 'ThirdCategory')
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -23,11 +27,8 @@ class CategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            
+            'categoryType' => 'required|string',   
         ];
     }
-    public function checkCategoryType(int $id)
-    {
-        return $this->categoryType::destroy($id);
-    }
+
 }

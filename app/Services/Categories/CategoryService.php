@@ -91,16 +91,18 @@ class CategoryService {
     }
     public function deleteCategory( int $id, CategoryRequest $request)
     {
+        //get the category type base on the classname of the request
         if ($request->categoryType::destroy($id))
         {
-            return $request->expectsJson() ? response()->json([
+            return response()->json([
                 'message' => "Category sucessfully deleted"
-            ]): response()->json(
-                [
-                    'message' => 'error'
-                ]
-            );
+            ]);
         }
+        return response()->json(
+            [
+                'message' => 'error'
+            ]
+        );
         return ($request->checkCategoryType($id));
     }
 }
