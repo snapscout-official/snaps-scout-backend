@@ -49,32 +49,27 @@ Route::middleware('auth:sanctum')->group(function()
         });
     });
 
-    Route::middleware(['role:super_admin'])->group(function()
-    {
-        Route::prefix('admin')->group(function(){
-            
-            Route::post('/create-category', [CategoryController::class, 'store']);
-            Route::get('/create-category', [CategoryController::class, 'create']);
-            Route::delete('/third-category/{thirdId}', [CategoryController::class, 'destroyThird']);
-            Route::delete('/sub-category/{subId}', [CategoryController::class, 'destroySub'] );
-            Route::delete('/parent-category/{parentId}', [CategoryController::class, 'destroyParent']);
-        });
-        
+    Route::group(['middleware' => 'role:super_admin', 'prefix' => 'admin'], function(){
+        Route::post('/create-category', [CategoryController::class, 'store']);
+        Route::get('/create-category', [CategoryController::class, 'create']);
+        Route::delete('/third-category/{thirdId}', [CategoryController::class, 'destroyThird']);
+        Route::delete('/sub-category/{subId}', [CategoryController::class, 'destroySub'] );
+        Route::delete('/parent-category/{parentId}', [CategoryController::class, 'destroyParent']);
+    });
+
+    Route::middleware('signed')->group(function(){
+        Route::get('/email/verify/{id}/{hash}', function(EmailVerificationRequest $request) {
+            $request->fulfill();
+            return response()->json([
+                'verified' => true,
+                'message' => 'Email Verified'
+            ]);
+        })->name('verification.verify');
     });
     
-    Route::get('/email/verify/{id}/{hash}', function(EmailVerificationRequest $request) {
-        $request->fulfill();
-        return response()->json([
-            'verified' => true,
-            'message' => 'Email Verified'
-        ]);
-    })->middleware('signed')->name('verification.verify');
-
     Route::post('/email/verification-notification', function(Request $request)
     {
         $request->user()->sendEmailVerificationNotification();
-
-
     })->name('verification.send');
     
 });
