@@ -20,7 +20,7 @@ class AdminRequest extends FormRequest
 
     public function rules(): array
     {
-
+        $rules = [];
         // if the thirdCategory is not null then the parent field and subCategory field is expected
         if ($this->filled('thirdCategory'))
         {

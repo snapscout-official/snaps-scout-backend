@@ -5,9 +5,7 @@ namespace App\Services\Categories;
 use App\Models\SubCategory;
 use App\Models\ParentCategory;
 use App\Http\Requests\Admin\AdminRequest;
-use App\Http\Requests\CategoryRequest;
-use App\Models\ThirdCategory;
-use Illuminate\Support\Facades\Log;
+
 
 class CategoryService {
     public function createCategory(AdminRequest $request)
@@ -91,52 +89,23 @@ class CategoryService {
             'categories' => $data,
         ]);
     }
-    public function deleteThirdCategory( int $categoryId)
+
+    public function deleteCategory(int $categoryId, string $categoryType)
     {
-        //get the category type base on the classname of the request
-        if (ThirdCategory::destroy($categoryId))
+        $parsedCategory = explode('\\', $categoryType);
+        $categoryName = end($parsedCategory);
+        if ($categoryType::destroy($categoryId))
         {
             return response()->json([
-                'message' => "Category successfully deleted"
+                'message' => "{$categoryName} successfully deleted"
             ]);
         }
         return response()->json(
             [
-                'error' => "Third Category id {$categoryId} has error deleting"
+                'error' => "{$categoryName} id {$categoryId} has error deleting"
             ]
         );
+    }
 
-    }
-    public function deleteSubCategory(int $categoryId)
-    {
-        if (SubCategory::destroy($categoryId))
-        {
-            return response()->json(
-                [
-                    'message' => "Category successfully deleted"
-                ]
-            );
-        }
-        return response()->json(
-            [
-                'error' => "Sub Category id {$categoryId} has error deleting"
-            ]
-        );
-    }
-    public function deleteParentCategory(int $categoryId)
-    {
-        if (ParentCategory::destroy($categoryId))
-        {
-            return response()->json(
-                [
-                    'message' => "Category successfully deleted"
-                ]
-            );
-        }
-        return response()->json(
-            [
-                'error' => "Parent Category id {$categoryId} has error deleting"
-            ]
-        );
-    }
+    
 }

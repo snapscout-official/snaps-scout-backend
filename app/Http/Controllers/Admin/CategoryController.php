@@ -21,16 +21,16 @@ class CategoryController extends Controller
     {
         return $this->categoryService->returnData();
     }
-    public function destroyThird(int $thirdId, CategoryRequest $request)
+    public function destroyThird(int $thirdId)
     {
-        return $this->categoryService->deleteThirdCategory($thirdId, $request);
+        return $this->categoryService->deleteCategory($thirdId, 'App\Models\ThirdCategory');
     }
     public function destroySub(int $subId)
     {
-        return $this->categoryService->deleteSubCategory($subId);
+        return $this->categoryService->deleteCategory($subId, 'App\Models\SubCategory');
     }
     public function destroyParent(int $parentId)
     {
-        return $this->categoryService->deleteParentCategory($parentId);
+        return $this->categoryService->deleteCategory($parentId, 'App\Models\ParentCategory');
     }
 }
