@@ -6,6 +6,8 @@ use App\Models\SubCategory;
 use App\Models\ParentCategory;
 use App\Http\Requests\Admin\AdminRequest;
 use App\Http\Requests\CategoryRequest;
+use App\Models\ThirdCategory;
+use Illuminate\Support\Facades\Log;
 
 class CategoryService {
     public function createCategory(AdminRequest $request)
@@ -89,13 +91,13 @@ class CategoryService {
             'categories' => $data,
         ]);
     }
-    public function deleteCategory( int $id, CategoryRequest $request)
+    public function deleteCategory( int $categoryId, CategoryRequest $request)
     {
         //get the category type base on the classname of the request
-        if ($request->categoryType::destroy($id))
+        if (ThirdCategory::destroy($categoryId))
         {
             return response()->json([
-                'message' => "Category sucessfully deleted"
+                'message' => "Category successfully deleted"
             ]);
         }
         return response()->json(
@@ -103,6 +105,6 @@ class CategoryService {
                 'message' => 'error'
             ]
         );
-        return ($request->checkCategoryType($id));
+
     }
 }

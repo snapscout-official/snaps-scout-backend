@@ -9,16 +9,28 @@ use App\Services\Categories\CategoryService;
 
 class CategoryController extends Controller
 {
-    public function store(CategoryService $categoryService, AdminRequest $request)
+    public function __construct(private CategoryService $categoryService)
     {
-       return $categoryService->createCategory($request);
-    }  
-    public function create(CategoryService $categoryService)
-    {
-        return $categoryService->returnData();
+        
     }
-    public function destroy(int $categoryId,CategoryService $categoryService, CategoryRequest $request)
+    public function store( AdminRequest $request)
     {
-        return $categoryService->deleteCategory($categoryId, $request);
+       return $this->categoryService->createCategory($request);
+    }  
+    public function create()
+    {
+        return $this->categoryService->returnData();
+    }
+    public function destroyThird(int $thirdId, CategoryRequest $request)
+    {
+        return $this->categoryService->deleteCategory($thirdId, $request);
+    }
+    public function destroySub(int $subId)
+    {
+
+    }
+    public function destroyParent(int $parentId)
+    {
+
     }
 }

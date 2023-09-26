@@ -102,17 +102,17 @@ class DatabaseSeeder extends Seeder
         //         'role_name' => $role
         //     ]);
         // }
-        $roles = [
-            'merchant',
-            'agency',
-            'super_admin'
-        ];
-        foreach($roles as $role)
-        {
-            Role::create([
-                'role_name' => $role
-            ]);
-        }
+        // $roles = [
+        //     'merchant',
+        //     'agency',
+        //     'super_admin'
+        // ];
+        // foreach($roles as $role)
+        // {
+        //     Role::create([
+        //         'role_name' => $role
+        //     ]);
+        // }
         DB::beginTransaction();
         
         $date = Carbon::createFromFormat('F j, Y', 'June 11, 2002')
@@ -125,28 +125,28 @@ class DatabaseSeeder extends Seeder
             'tin_number' =>'1023131',
             'gender' => 'Female',
             'phone_number' =>'09918804161',
-            'email' =>'gio.gonzales@carsu.edu.ph',
+            'email' =>'mary.soliva@carsu.edu.ph',
             'password' => Hash::make('starmovies3144'),
             'role_id' => Role::SUPERADMIN
         ]);
-        $location = Location::create([
-            'building_name' =>'Bayawak building' ,
-            'street' => 'Purok 17',
-            'barangay' =>'Villa Kanangga',
-            'city' => 'Butuan City',
-            'province' =>'Agusan Del Norte',
-            'country' =>'Philippines',
-        ]);
-        $agencyCategory = AgencyCategory::create([
-            'agency_category_name' => 'Test'
-        ]);
+        // $location = Location::create([
+        //     'building_name' =>'Bayawak building' ,
+        //     'street' => 'Purok 17',
+        //     'barangay' =>'Villa Kanangga',
+        //     'city' => 'Butuan City',
+        //     'province' =>'Agusan Del Norte',
+        //     'country' =>'Philippines',
+        // ]);
+        // $agencyCategory = AgencyCategory::create([
+        //     'agency_category_name' => 'Test'
+        // ]);
 
-        $user->agency()->create([
-            'agency_name' =>'Navigatu',
-            'position' =>'Incubatee',
-            'location_id' => $location->location_id,
-            'category_id' => $agencyCategory->id,
-        ]);
+        // $user->agency()->create([
+        //     'agency_name' =>'Navigatu',
+        //     'position' =>'Incubatee',
+        //     'location_id' => $location->location_id,
+        //     'category_id' => $agencyCategory->id,
+        // ]);
         DB::commit();
        
     }

@@ -45,10 +45,11 @@ Route::middleware('auth:sanctum')->group(function()
             
             Route::post('/create-category', [CategoryController::class, 'store']);
             Route::get('/create-category', [CategoryController::class, 'create']);
-            Route::delete('/category/{categoryId}', [CategoryController::class, 'destroy']);
+            Route::delete('/third-category/{thirdId}', [CategoryController::class, 'destroyThird']);
+            Route::delete('/sub-category/{subId}', [CategoryController::class], 'destroySub');
+            Route::delete('/parent-category/{parentId}', [CategoryController::class]);
         });
         
-    
     });
     
     Route::get('/email/verify/{id}/{hash}', function(EmailVerificationRequest $request) {
