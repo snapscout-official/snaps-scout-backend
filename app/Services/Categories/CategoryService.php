@@ -91,7 +91,7 @@ class CategoryService {
             'categories' => $data,
         ]);
     }
-    public function deleteCategory( int $categoryId, CategoryRequest $request)
+    public function deleteThirdCategory( int $categoryId)
     {
         //get the category type base on the classname of the request
         if (ThirdCategory::destroy($categoryId))
@@ -102,9 +102,41 @@ class CategoryService {
         }
         return response()->json(
             [
-                'message' => 'error'
+                'error' => "Third Category id {$categoryId} has error deleting"
             ]
         );
 
+    }
+    public function deleteSubCategory(int $categoryId)
+    {
+        if (SubCategory::destroy($categoryId))
+        {
+            return response()->json(
+                [
+                    'message' => "Category successfully deleted"
+                ]
+            );
+        }
+        return response()->json(
+            [
+                'error' => "Sub Category id {$categoryId} has error deleting"
+            ]
+        );
+    }
+    public function deleteParentCategory(int $categoryId)
+    {
+        if (ParentCategory::destroy($categoryId))
+        {
+            return response()->json(
+                [
+                    'message' => "Category successfully deleted"
+                ]
+            );
+        }
+        return response()->json(
+            [
+                'error' => "Parent Category id {$categoryId} has error deleting"
+            ]
+        );
     }
 }

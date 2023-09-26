@@ -23,14 +23,14 @@ class CategoryController extends Controller
     }
     public function destroyThird(int $thirdId, CategoryRequest $request)
     {
-        return $this->categoryService->deleteCategory($thirdId, $request);
+        return $this->categoryService->deleteThirdCategory($thirdId, $request);
     }
     public function destroySub(int $subId)
     {
-
+        return $this->categoryService->deleteSubCategory($subId);
     }
     public function destroyParent(int $parentId)
     {
-
+        return $this->categoryService->deleteParentCategory($parentId);
     }
 }
