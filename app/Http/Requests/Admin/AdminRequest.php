@@ -10,18 +10,18 @@ class AdminRequest extends FormRequest
 
     public function authorize(): bool
     {
-        //checks if the user requesting on the api is a superAdmin
-        return $this->user()->role_id === Role::SUPERADMIN;
+        //checks if the request has either one of this fields. If not then not authorized to proceed to the controller logic
+        if ($this->filled('thirdCategory') || $this->filled('subCategory') || $this->filled('parentCategory'))
+        {
+            return true;
+        }
+        return false;
     }
 
     public function rules(): array
     {
-        $rules =  [
-            'parentCategory' => 'sometimes',
-            'subCategory' => 'sometimes|required|string',
-            'thirdCategory' => 'sometimes|required|string'
-        ];
-        //if the thirdCategory is not null then the parent field and subCategory field is expected
+
+        // if the thirdCategory is not null then the parent field and subCategory field is expected
         if ($this->filled('thirdCategory'))
         {
             //changes the rules for parentCategory to be sometimes

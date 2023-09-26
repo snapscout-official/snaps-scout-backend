@@ -14,10 +14,20 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Agency\AgencyAuthController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
+
+Route::prefix('agency')->group(function()
+{
+    Route::post('/register', [AgencyAuthController::class, 'register']);
+    Route::post('/login', [AgencyAuthController::class, 'login']);
+});
+
+Route::group(['middleware' => 'admin', 'prefix' => 'super-admin'], function(){
+    Route::post('/login', [AdminController::class, 'login']);
+    
+});
+
 Route::middleware('auth:sanctum')->group(function()
 {
-    
-
     Route::middleware('role:merchant')->group(function(){
         Route::get('/merchant/{merchant}', function(Merchant $merchant)
         {
@@ -28,11 +38,11 @@ Route::middleware('auth:sanctum')->group(function()
             
         });
     });
+
     Route::middleware('role:agency')->group(function()
     {
         Route::get('/agency',function()
         {
-        // Gate::authorize('view-agency');
             return response()->json([
                 'agencyUser' => auth()->user()->agency
             ]);
@@ -46,8 +56,8 @@ Route::middleware('auth:sanctum')->group(function()
             Route::post('/create-category', [CategoryController::class, 'store']);
             Route::get('/create-category', [CategoryController::class, 'create']);
             Route::delete('/third-category/{thirdId}', [CategoryController::class, 'destroyThird']);
-            Route::delete('/sub-category/{subId}', [CategoryController::class], 'destroySub');
-            Route::delete('/parent-category/{parentId}', [CategoryController::class]);
+            Route::delete('/sub-category/{subId}', [CategoryController::class, 'destroySub'] );
+            Route::delete('/parent-category/{parentId}', [CategoryController::class, 'destroyParent']);
         });
         
     });
@@ -60,12 +70,11 @@ Route::middleware('auth:sanctum')->group(function()
         ]);
     })->middleware('signed')->name('verification.verify');
 
-
     Route::post('/email/verification-notification', function(Request $request)
     {
         $request->user()->sendEmailVerificationNotification();
 
-        //return to something
+
     })->name('verification.send');
     
 });
@@ -102,19 +111,6 @@ Route::middleware('guest')->group(function(){
                         ? response()->json(['status' =>  __($status)])
                         : back()->withErrors(['email' => [__($status)]]);
         });
-});
-
-Route::prefix('agency')->group(function()
-{
-    Route::post('/register', [AgencyAuthController::class, 'register']);
-    Route::post('/login', [AgencyAuthController::class, 'login']);
-});
-
-Route::prefix('super-admin')->group(function(){
-    Route::middleware('admin')->group(function(){
-        Route::post('/login', [AdminController::class, 'login']);
-        
-    });
 });
 
 
