@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\AdminRequest;
-use App\Http\Requests\CategoryRequest;
 use App\Services\Categories\CategoryService;
 
 class CategoryController extends Controller

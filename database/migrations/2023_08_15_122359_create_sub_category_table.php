@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('sub_category', function (Blueprint $table) {
             $table->id('sub_id');
             $table->string('sub_name');
-            $table->foreignId('parent')->constrained('parent_category', 'parent_id');
+            $table->foreignId('parent')->constrained('parent_category', 'parent_id')
+                ->cascadeOnDelete();
             
         });
     }

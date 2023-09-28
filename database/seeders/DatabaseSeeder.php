@@ -101,18 +101,18 @@ class DatabaseSeeder extends Seeder
         //     Role::create([
         //         'role_name' => $role
         //     ]);
-        // }
-        // $roles = [
-        //     'merchant',
-        //     'agency',
-        //     'super_admin'
-        // ];
-        // foreach($roles as $role)
-        // {
-        //     Role::create([
-        //         'role_name' => $role
-        //     ]);
-        // }
+        
+        $roles = [
+            'merchant',
+            'agency',
+            'super_admin'
+        ];
+        foreach($roles as $role)
+        {
+            Role::create([
+                'role_name' => $role
+            ]);
+        }
         DB::beginTransaction();
         
         $date = Carbon::createFromFormat('F j, Y', 'June 11, 2002')

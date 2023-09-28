@@ -84,20 +84,26 @@ class CategoryService {
     public function returnData()
     {
         //retrieves the parentCategory with its subCategories and for each of its subCategories, gets their thirdCategory
+
+        //note: REFACTOR! result should be paginated for efficiency issue
         $data = ParentCategory::with('subCategories.thirdCategories')->get();
         return response()->json([
             'categories' => $data,
         ]);
     }
 
+    //general method for deleting of any type of category
     public function deleteCategory(int $categoryId, string $categoryType)
     {
+        //parses the passed string since it is a fully qualified classname
         $parsedCategory = explode('\\', $categoryType);
         $categoryName = end($parsedCategory);
+
+        //deletes the category base on its type
         if ($categoryType::destroy($categoryId))
         {
             return response()->json([
-                'message' => "{$categoryName} successfully deleted"
+                'message' => "{$categoryName} of id {$categoryId} successfully deleted"
             ]);
         }
         return response()->json(
@@ -107,5 +113,4 @@ class CategoryService {
         );
     }
 
-    
 }

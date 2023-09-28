@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('third_category', function (Blueprint $table) {
             $table->id('third_id');
             $table->string('third_name');
-            $table->foreignId('sub_id')->constrained('sub_category', 'sub_id');
+            $table->foreignId('sub_id')->constrained('sub_category', 'sub_id')
+                ->cascadeOnDelete();
            
         });
     }
