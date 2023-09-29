@@ -102,8 +102,10 @@ class CategoryService {
         //deletes the category base on its type
         if ($categoryType::destroy($categoryId))
         {
+            $data = ParentCategory::with('subCategories.thirdCategories')->get();   
             return response()->json([
-                'message' => "{$categoryName} of id {$categoryId} successfully deleted"
+                'message' => "{$categoryName} of id {$categoryId} successfully deleted",
+                'categories' => $data
             ]);
         }
         return response()->json(

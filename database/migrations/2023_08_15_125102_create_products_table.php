@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreign('sub_code')->references('sub_id')->on('sub_category');
             $table->unsignedBigInteger('third_code')->nullable();
             $table->foreign('third_code')->references('third_id')->on('third_category');
-            $table->text('description');    
+            $table->text('description');
             $table->timestamps();
         });
     }
