@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Agency\AgencyAuthController;
+use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
@@ -55,6 +56,7 @@ Route::middleware('auth:sanctum')->group(function()
         Route::delete('/third-category/{thirdId}', [CategoryController::class, 'destroyThird']);
         Route::delete('/sub-category/{subId}', [CategoryController::class, 'destroySub'] );
         Route::delete('/parent-category/{parentId}', [CategoryController::class, 'destroyParent']);
+        Route::get('/products', [ProductsController::class, 'retrieve']);
     });
 
     Route::middleware('signed')->group(function(){

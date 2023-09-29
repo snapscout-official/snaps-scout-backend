@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
@@ -32,8 +33,10 @@ class Product extends Model
     {
         return $this->belongsTo(ThirdCategory::class, 'third_code', 'third_id')->withDefault();
     }
-    public function variants():HasMany
+    public function specs():BelongsToMany
     {
-        return $this->hasMany(Variant::class, 'product_code', 'product_id');
+        return $this->belongsToMany(Spec::class,'product_specs_intermediary', 'product_id', 'spec_id', 'product_id', 'code')
+                    ->as('product');
     }
+    
 }

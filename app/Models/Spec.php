@@ -18,8 +18,10 @@ class Spec extends Model
     protected $table = 'product_specs';
     public $timestamps = false;
     protected $primaryKey = 'code';
-    public function variants():BelongsToMany
+    
+    public function products():BelongsToMany
     {
-        return $this->belongsToMany(Variant::class,'variant_specs','specs_id','variant_id','code','var_code');
+        return $this->belongsToMany(Product::class,'product_spec_intermediary','spec_id', 'product_id', 'code', 'product_id')
+                    ->as('product');
     }
 }
