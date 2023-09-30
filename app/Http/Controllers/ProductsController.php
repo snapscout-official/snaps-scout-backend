@@ -2,16 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\Products\StoreProductRequest;
+use App\Models\ParentCategory;
 use App\Models\Product;
+use App\Models\SubCategory;
 use App\Services\Products\ProductService;
-use Illuminate\Http\Request;
+
+use function PHPUnit\Framework\returnSelf;
 
 class ProductsController extends Controller
 {
     public function __construct(private ProductService $productService)
     {
         
+    }
+    public function read()
+    {
+        $subCategories = SubCategory::with('products')->get();
+        $parentCategories = ParentCategory::with('subCategories.products')->get();
+        return response()->json([
+            'ParentProducts' => $parentCategories
+        ]);
+    
     }
     public function retrieve()
     {
@@ -21,7 +33,7 @@ class ProductsController extends Controller
     }
     public function store(StoreProductRequest $request)
     {
-        
+        return $this->productService->storeProduct($request);
     }
     
 }

@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Models\Product;
+use App\Models\SubCategory;
 use App\Models\ThirdCategory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -21,10 +21,10 @@ class ParentCategory extends Model
     protected $table = 'parent_category';
     public $timestamps = false;
     protected $primaryKey = 'parent_id';
-    public function products():HasManyThrough
-    {
-        return $this->hasManyThrough(Product::class, SubCategory::class, 'parent', 'sub_code', 'parent_id', 'sub_id');
-    }
+    // public function products():HasManyThrough
+    // {
+    //     return $this->hasManyThrough(Product::class, SubCategory::class, 'parent', 'sub_code', 'parent_id', 'sub_id');
+    // }
 
     public function subCategories():HasMany
     {

@@ -3,9 +3,8 @@
 namespace App\Services\Products;
 
 use App\Models\SubCategory;
-use Illuminate\Http\Request;
 use App\Models\ThirdCategory;
-use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\Products\StoreProductRequest;
 
 class ProductService{
     public function storeProduct(StoreProductRequest $request)
@@ -14,7 +13,9 @@ class ProductService{
         {
             $thirdCategory = ThirdCategory::find($request->thirdCategoryId);
             $productCreated = $thirdCategory->products()->create([
+                'product_name' => $request->product_name,
                 'description' => $request->description,
+                'sub_code' => $request->subCategoryId
             ]);
             if (empty($thirdCategory))
             {
@@ -27,10 +28,10 @@ class ProductService{
                 'thirdCategory' => $thirdCategory->third_name,
                 'product' => $productCreated
             ]): $productCreated;
-
         }
         $subCategory = SubCategory::find($request->subCategoryId);
         $productCreated = $subCategory->products()->create([
+            'product_name' => $request->product_name,
             'description' => $request->description,
         ]);
         if (empty($subCategory))
@@ -46,5 +47,5 @@ class ProductService{
         ]); 
 
     }
-
+   
 }
