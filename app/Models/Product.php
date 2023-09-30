@@ -13,17 +13,16 @@ class Product extends Model
     use HasFactory;
 
     protected $fillable = [
-        'parent_code',
         'sub_code',
         'third_code',
         'description'
     ];
 
     protected $primaryKey = 'product_id';
-    // public function parentCategory():BelongsTo
-    // {
-    //     return $this->belongsTo(ParentCategory::class ,'parent_code', 'parent_id');
-    // }
+   public function getProductParent()
+   {
+    return $this->subCategory()->get()->parentCategory;
+   }
     
     public function subCategory():BelongsTo
     {
@@ -31,7 +30,7 @@ class Product extends Model
     }
     public function thirdCategory():BelongsTo
     {
-        return $this->belongsTo(ThirdCategory::class, 'third_code', 'third_id')->withDefault();
+        return $this->belongsTo(ThirdCategory::class, 'third_code', 'third_id');
     }
     public function specs():BelongsToMany
     {

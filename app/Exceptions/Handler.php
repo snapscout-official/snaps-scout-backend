@@ -25,7 +25,7 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-     
+        
         $this->renderable(function(AuthenticationException $e, Request $request){
             return $request->expectsJson() ? response()->json([
                 'error' => 'Unauthenticated',

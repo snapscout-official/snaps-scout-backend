@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreProductRequest;
 use App\Models\Product;
 use App\Services\Products\ProductService;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class ProductsController extends Controller
             'products' => Product::with('specs')->get()
         ]);
     }
-    public function store()
+    public function store(StoreProductRequest $request)
     {
         
     }
