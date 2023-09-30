@@ -18,4 +18,9 @@ class ProductsController extends Controller
             'products' => Product::with('specs')->get()
         ]);
     }
+    public function store()
+    {
+        
+    }
+    
 }

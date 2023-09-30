@@ -23,7 +23,7 @@ class AdminMiddleware
         {
             return response()->json([
                 'authenticated' => false,
-                'message' => 'You are not authorized to login as admin'
+                'error' => 'You are not authorized to login as admin'
             ], 401);
         }
         return $next($request);
