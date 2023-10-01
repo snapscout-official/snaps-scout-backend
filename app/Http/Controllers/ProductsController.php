@@ -8,7 +8,6 @@ use App\Models\Product;
 use App\Models\SubCategory;
 use App\Services\Products\ProductService;
 
-use function PHPUnit\Framework\returnSelf;
 
 class ProductsController extends Controller
 {

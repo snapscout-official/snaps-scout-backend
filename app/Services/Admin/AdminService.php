@@ -3,10 +3,8 @@
 namespace App\Services\Admin;
 
 use App\Models\User;
-use App\Models\SubCategory;
-use App\Models\ParentCategory;
+
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\Admin\AdminRequest;
 use App\Http\Requests\Admin\AdminLoginRequest;
 
 class AdminService
