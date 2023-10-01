@@ -11,7 +11,7 @@ class CategoryService {
     public function createCategory(AdminRequest $request)
     {
         //the method checks first if the request has a thirdcategory field that is not null
-        if ($request->filled('thirdCategory'))
+        if ($request->filleEd('thirdCategory'))
         {
             //first retrieves the subCategory since if it has a thirdCategory then a subCategory field that is not null is also expected
             $subCategory = SubCategory::where('sub_name', $request->subCategory)->first();

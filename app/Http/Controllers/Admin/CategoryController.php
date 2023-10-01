@@ -12,7 +12,7 @@ class CategoryController extends Controller
     {
         
     }
-    public function store( AdminRequest $request)
+    public function store(AdminRequest $request)
     {
        return $this->categoryService->createCategory($request);
     }  

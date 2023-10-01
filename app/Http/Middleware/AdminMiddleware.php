@@ -19,7 +19,7 @@ class AdminMiddleware
     {
         
         $user = User::where('email', $request->email)->first();
-        if (!$user||$user->role_id !== Role::SUPERADMIN)
+        if (!$user || $user->role_id !== Role::SUPERADMIN)
         {
             return response()->json([
                 'authenticated' => false,
