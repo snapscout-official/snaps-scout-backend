@@ -89,7 +89,7 @@ class CategoryService {
         $data = ParentCategory::with('subCategories.thirdCategories')->get();
         return response()->json([
             'categories' => $data,
-        ]);
+        ], 200);
     }
 
     //general method for deleting of any type of category

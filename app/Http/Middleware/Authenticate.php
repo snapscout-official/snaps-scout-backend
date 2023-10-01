@@ -12,8 +12,6 @@ class Authenticate extends Middleware
      */
     protected function redirectTo(Request $request): ?string
     {
-        return $request->expectsJson() ? response()->json([
-            'error' => 'You need to be authenticated'
-        ], 401) : route('login');
+        return $request->expectsJson() ? abort(403) : route('login');
     }
 }
