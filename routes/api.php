@@ -22,7 +22,7 @@ Route::prefix('agency')->group(function()
     Route::post('/login', [AgencyAuthController::class, 'login']);
 });
 
-Route::group(['middleware' => 'admin', 'prefix' => 'super-admin'], function(){
+Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function(){
     Route::post('/login', [AdminController::class, 'login']);
     
 });
