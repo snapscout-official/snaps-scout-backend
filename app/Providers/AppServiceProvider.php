@@ -8,6 +8,7 @@ use App\Test\MyService;
 use Barryvdh\Debugbar\Facades\Debugbar;
 use DebugBar\DebugBar as DebugBarDebugBar;
 use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -38,5 +39,6 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         // Debugbar::disable();
+        // RateLimiter::for()
     }
 }

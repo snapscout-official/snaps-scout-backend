@@ -9,6 +9,9 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Role extends Model
 {
     use HasFactory;
+    protected $fillable = [
+        'role_name',
+    ];
 
     public const MERCHANT = 1;
     public const AGENCY = 2;

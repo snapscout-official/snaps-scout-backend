@@ -11,40 +11,46 @@ class ProductService{
     {
         if ($request->filled('thirdCategoryId'))
         {
+            //if there is thirdCategoryId, then reference the thirdCategory
             $thirdCategory = ThirdCategory::find($request->thirdCategoryId);
-            $productCreated = $thirdCategory->products()->create([
-                'product_name' => $request->product_name,
-                'description' => $request->description,
-                'sub_code' => $request->subCategoryId
-            ]);
             if (empty($thirdCategory))
             {
                 return response()->json([
                     'error' => 'Product unsucessfully stored',
                 ]);
             }
+
+            $productCreated = $thirdCategory->products()->create([
+                'product_name' => $request->product_name,
+                'description' => $request->description,
+                'sub_code' => $thirdCategory->subCategory->sub_id,
+            ]);
+            
             return $request->expectsJson() ? response()->json([
                 'message' => 'Successfully added the product',
                 'thirdCategory' => $thirdCategory->third_name,
                 'product' => $productCreated
-            ]): $productCreated;
+            ],201): $productCreated;
         }
         $subCategory = SubCategory::find($request->subCategoryId);
-        $productCreated = $subCategory->products()->create([
-            'product_name' => $request->product_name,
-            'description' => $request->description,
-        ]);
         if (empty($subCategory))
         {
             return response()->json([
                 'error' => 'Product unsucessfully stored',
             ]);
         }
+
+        $productCreated = $subCategory->products()->create([
+            'product_name' => $request->product_name,
+            'description' => $request->description,
+        ]);
+
+       
         return response()->json([
             'message' => 'Successfully added the product',
             'subCategory' => $subCategory->sub_name,
             'product' => $productCreated
-        ]); 
+        ],201); 
 
     }
    

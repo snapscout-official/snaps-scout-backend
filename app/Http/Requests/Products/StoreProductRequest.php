@@ -29,6 +29,7 @@ class StoreProductRequest extends FormRequest
         if ($this->filled('thirdCategoryId'))
         {
             $rules['thirdCategoryId'] = 'required';
+            $rules['subCategoryId'] = 'sometimes';
             return $rules;
         }
         

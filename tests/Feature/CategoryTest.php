@@ -2,16 +2,26 @@
 
 namespace Tests\Feature;
 
-use App\Models\ParentCategory;
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\ParentCategory;
+use App\Models\Role;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 
 class CategoryTest extends TestCase
 {
-    // use RefreshDatabase;
+    use RefreshDatabase;
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Artisan::call('db:seed', ['--class' => 'RoleSeeder']);
+        // dd(Role::all());
+    }
     public function test_action_requires_authentication():void
     {
+        // $this->withoutExceptionHandling();
         $response = $this->getJson('/api/admin/create-category');
         $response->assertStatus(403);
     }
@@ -19,6 +29,7 @@ class CategoryTest extends TestCase
     public function test_authenticated_user_can_perform_action():void
     {
         $user = User::factory()->create();
+        // dd(Role::all());
         $response = $this->actingAs($user, 'sanctum')
                         ->getJson('api/admin/create-category');
         
@@ -48,10 +59,18 @@ class CategoryTest extends TestCase
                 ]);
             
     }
-    public function test_admin_can_delete_parent_category():void
+    public function test_authenticated_admin_can_delete_parent_category():void
+    {
+        
+        $parentCategory = ParentCategory::factory()->create();
+        $user = User::factory()->create();
+        $response = $this->actingAs($user)->delete("api/admin/parent-category/{$parentCategory->parent_id}");
+        $this->assertDatabaseMissing('parent_category', ['parent_id' => $parentCategory->parent_id]);
+    }
+    public function test_unauthenticated_admin_cannot_delete_parent_category():void
     {
         $parentCategory = ParentCategory::factory()->create();
         $response = $this->delete("api/admin/parent-category/{$parentCategory->parent_id}");
-        $this->assertDatabaseMissing('parent_category', ['parent_id' => $parentCategory->parent_id]);
+        $response->assertStatus(403);
     }
 }
