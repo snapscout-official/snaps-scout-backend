@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SubCategory;
 use App\Models\ThirdCategory;
 use App\Models\ParentCategory;
+use App\Models\Product;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
@@ -19,15 +20,23 @@ class HomeController extends Controller
         $categories = ParentCategory::with('subCategories.thirdCategories')->get();
         // dd($categories);
         
-        $subCategories = [];
-        foreach($categories as $key => $category)
-        {
+        // $subCategories = [];
+        // foreach($categories as $key => $category)
+        // {
                 
-            $subCategories[$key] = Arr::flatten($category->subCategories); 
+        //     $subCategories[$key] = Arr::flatten($category->subCategories); 
 
+        // }
+        Product::factory()->count(20)->create();
+        $products = Product::with(['thirdCategory', 'subCategory'])->get();
+        foreach($products as $key => $product)
+        {
+            if ($product->thirdCategory === null)
+            {
+                // dump($product->subCategory);
+            }    
         }
-        
-        dd($subCategories);
+        dd($products);
         DB::rollBack();
            
     }

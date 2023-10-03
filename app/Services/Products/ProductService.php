@@ -2,16 +2,14 @@
 
 namespace App\Services\Products;
 
+use App\Models\Product;
 use App\Models\SubCategory;
 use App\Models\ThirdCategory;
 use App\Http\Requests\Products\StoreProductRequest;
 
 class ProductService{
-    public function storeProduct(StoreProductRequest $request)
-    {
-        if ($request->filled('thirdCategoryId'))
-        {
-            
+    public function storeProductWithThirdCategory(StoreProductRequest $request)
+    {       
             $thirdCategory = ThirdCategory::find($request->thirdCategoryId);
             if (empty($thirdCategory))
             {
@@ -32,6 +30,10 @@ class ProductService{
                 'product' => $productCreated
             ],201): $productCreated;
         }
+        
+    
+    public function storeProductWithoutThirdCategory(StoreProductRequest $request)
+    {
         $subCategory = SubCategory::find($request->subCategoryId);
         if (empty($subCategory))
         {
@@ -51,6 +53,29 @@ class ProductService{
             'subCategory' => $subCategory->sub_name,
             'product' => $productCreated
         ],201); 
+
+    }
+    public function filterProducts($products):array
+    {
+        // $products = Product::with(['thirdCategory', 'subCategory'])->get();
+        $filteredProducts = [];
+        foreach($products as $product)
+        {
+            if ($product->thirdCategory === null)
+            {
+                $filteredProducts[$product->product_id] = [
+                    'product' => $product, 
+                    'thirdCategory' => null,
+                    'subCategory' => $product->subCategory,
+                ];
+            }
+            $filteredProducts[$product->product_id] = [
+                'product' => $product,
+                'thirdCategory' => $product->thirdCategory,
+                'subCategory' => $product->subCategory
+            ];
+        }
+        return $filteredProducts;
 
     }
    

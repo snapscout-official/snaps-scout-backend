@@ -17,10 +17,10 @@ class ProductsController extends Controller
     }
     public function read()
     {
-        $subCategories = SubCategory::with('products')->get();
-        $parentCategories = ParentCategory::with('subCategories.products')->get();
-        return response()->json([
-            'ParentProducts' => $parentCategories
+        $products = Product::with(['thirdCategory', 'subCategory']);
+        $filteredProducts = $this->productService->filterProducts($products);
+                return response()->json([
+            'products' => $filteredProducts
         ]);
     
     }
@@ -32,7 +32,11 @@ class ProductsController extends Controller
     }
     public function store(StoreProductRequest $request)
     {
-        return $this->productService->storeProduct($request);
+        if ($request->filled('thirdCategoryId'))
+        {
+            return $this->productService->storeProductWithThirdCategory($request);
+        }
+        return $this->productService->storeProductWithoutThirdCategory($request);
     }
     
 }
