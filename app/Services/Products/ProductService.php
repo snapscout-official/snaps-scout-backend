@@ -11,7 +11,7 @@ class ProductService{
     {
         if ($request->filled('thirdCategoryId'))
         {
-            //if there is thirdCategoryId, then reference the thirdCategory
+            
             $thirdCategory = ThirdCategory::find($request->thirdCategoryId);
             if (empty($thirdCategory))
             {

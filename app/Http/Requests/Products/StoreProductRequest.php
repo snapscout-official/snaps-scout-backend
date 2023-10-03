@@ -22,6 +22,7 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
+            'product_name' => 'bail|required|string',
             'description' => 'required|string',
             'subCategoryId' => 'required',
         ];

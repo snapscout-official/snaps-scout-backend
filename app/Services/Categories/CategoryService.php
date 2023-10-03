@@ -5,7 +5,7 @@ namespace App\Services\Categories;
 use App\Models\SubCategory;
 use App\Models\ParentCategory;
 use App\Http\Requests\Admin\AdminRequest;
-
+use Illuminate\Support\Arr;
 
 class CategoryService {
     public function createCategory(AdminRequest $request)
@@ -87,8 +87,14 @@ class CategoryService {
 
         //note: REFACTOR! result should be paginated for efficiency issue
         $data = ParentCategory::with('subCategories.thirdCategories')->get();
+        $subCategories = [];
+        foreach($data as $key => $parentCategory)
+        {
+            $subCategories[$key] = Arr::flatten($parentCategory->subCategories);
+        }
         return response()->json([
             'categories' => $data,
+            'subCategories' => $subCategories,
         ], 200);
     }
 

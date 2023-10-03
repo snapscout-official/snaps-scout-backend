@@ -26,7 +26,11 @@ class ProductTest extends TestCase
                             'description' => 'blablablabla',
                             'product_name' => 'testName',
                             'subCategoryId' => $subCategory->sub_id
-                        ]);
+                        ],
+                        [
+                            'Accept' => 'application/json'
+                        ]
+                        );
         $response->assertStatus(201);
         $this->assertDatabaseCount('products', 1);
     }
@@ -48,5 +52,15 @@ class ProductTest extends TestCase
                         ]);
         $response->assertStatus(201);
         $this->assertDatabaseCount('products', 1);
+    }
+    public function test_check_arr_methods()
+    {
+        $this->seed(RoleSeeder::class);
+        User::factory()->count(2)->create();
+        $parentCategories = ParentCategory::factory()->count(20)->create();
+        $subCategory = SubCategory::factory()->count(30)->create();
+        dd($subCategory);
+        
+
     }
 }

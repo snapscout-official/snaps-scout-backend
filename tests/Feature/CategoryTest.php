@@ -55,7 +55,22 @@ class CategoryTest extends TestCase
                                 ]
         
                             ]
-                    ]        
+                        ],
+                    'subCategories' => [
+                        '*' => [
+                            'sub_id',
+                            'sub_name',
+                            'parent',
+                            'third_categories' => [
+                                '*' => [
+                                    'third_id',
+                                    'third_name',
+                                    'sub_id'
+                                ]
+                            ]
+
+                        ]
+                    ]
                 ]);
             
     }
