@@ -17,10 +17,12 @@ class ProductsController extends Controller
     }
     public function read()
     {
-        $products = Product::with(['thirdCategory', 'subCategory']);
+        $products = Product::with(['thirdCategory', 'subCategory'])->get();
         $filteredProducts = $this->productService->filterProducts($products);
-                return response()->json([
-            'products' => $filteredProducts
+        return response()->json([
+            'products' => $filteredProducts,
+
+        
         ]);
     
     }

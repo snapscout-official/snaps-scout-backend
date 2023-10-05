@@ -27,7 +27,8 @@ class ProductService{
             return $request->expectsJson() ? response()->json([
                 'message' => 'Successfully added the product',
                 'thirdCategory' => $thirdCategory->third_name,
-                'product' => $productCreated
+                'product' => $productCreated,
+                'subCategory' => $thirdCategory->sub_name,
             ],201): $productCreated;
         }
         
@@ -57,7 +58,7 @@ class ProductService{
     }
     public function filterProducts($products):array
     {
-        // $products = Product::with(['thirdCategory', 'subCategory'])->get();
+        
         $filteredProducts = [];
         foreach($products as $product)
         {
