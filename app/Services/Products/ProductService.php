@@ -80,4 +80,22 @@ class ProductService{
 
     }
    
+
+    public function deleteProduct(int $productId)
+    {
+        
+        if (Product::destroy($productId))
+        {
+            $products = Product::with(['thirdCategory', 'subCategory'])->get();
+            $filteredProducts = $this->filterProducts($products);
+            return response()->json([
+            'products' => $filteredProducts,
+            ]);    
+        }
+        return response()->json([
+            'error' => 'Product Unsuccessfully deleted',
+        ], 500);
+        
+        
+    }
 }

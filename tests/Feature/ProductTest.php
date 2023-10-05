@@ -89,14 +89,15 @@ class ProductTest extends TestCase
                 ]);
 
     }
-    public function test_check_arr_methods()
-    {
+    // public function test_check_arr_methods()
+    // {
 
-        //wapa nahuman
-        $this->seed(RoleSeeder::class);User::factory()->count(2)->create();
-        $subCategory = SubCategory::all();
-        dd($subCategory);
+    //     //wapa nahuman
+    //     $this->seed(RoleSeeder::class);User::factory()->count(2)->create();
+    //     $subCategory = SubCategory::all();
+    //     dd($subCategory);
         
 
-    }
+    // }
+    
 }

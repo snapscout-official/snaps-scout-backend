@@ -58,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function()
         Route::delete('/parent-category/{parentId}', [CategoryController::class, 'destroyParent']);
         Route::get('/products', [ProductsController::class, 'read']);
         Route::post('/add-products', [ProductsController::class, 'store']);
+        Route::delete('/products/{productId}', [ProductsController::class, 'destroy'])->where('productId', '[0-9]+');
     });
 
     Route::middleware('signed')->group(function(){

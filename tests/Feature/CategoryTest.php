@@ -6,7 +6,6 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\ParentCategory;
 use App\Models\Role;
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 
@@ -16,7 +15,8 @@ class CategoryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Artisan::call('db:seed', ['--class' => 'RoleSeeder']);
+        // Artisan::call('db:seed', ['--class' => 'RsoleSeeder']);
+        $this->seed(Role::class);
         // dd(Role::all());
     }
     public function test_action_requires_authentication():void

@@ -22,84 +22,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // DB::beginTransaction();
-
-        // $user = User::create([
-        //     'first_name' => 'Gio',
-        //     'last_name' => 'Gonzales',
-        //     'birth_date' => now()->subYear(21),
-        //     'tin_number' => '1023131',
-        //     'gender' => 'Male',
-        //     'phone_number' => '09918804161',
-        //     'email' => 'gio.gonzales@carsu.edu.ph',
-        //     'password' => Hash::make('starmovies3144'),
-        //     'role_id' => Role::MERCHANT
-        // ]);
-        // $location = Location::create([
-        //     'building_name' => 'Bayawak building',
-        //     'street' => 'Purok 17',
-        //     'barangay' => 'San Vicente',
-        //     'city' => 'Butuan City',
-        //     'province' => 'Agusan Del Norte',
-        //     'country' => 'Philippines'
-        // ]);
-        // $merchantCat = MerchantCategory::create([
-        //     'name' => 'Ambot'
-        // ]);
-        // $philgeps = Philgep::create([
-        //     'type' => 'Ambot sab lage'
-        // ]);
-        // Merchant::create([
-        //     'merchant_id' => $user->id,
-        //     'business_name' => 'Ohweed',
-        //     'location_id' => $location->location_id,
-        //     'category_id' => $merchantCat->id,
-        //     'philgeps_id' => $philgeps->id
-        // ]);
-        // DB::commit();
-        // DB::beginTransaction();
-
-        // $user = User::create([
-        //     'first_name' => 'Mary',
-        //     'last_name' => 'Soliva',
-        //     'birth_date' => now()->subYear(21),
-        //     'tin_number' => '222222',
-        //     'gender' => 'Female',
-        //     'phone_number' => '09916464633',
-        //     'email' => 'mary.soliva@carsu.edu.ph',
-        //     'password' => Hash::make('starmovies3144'),
-        //     'role_id' => Role::AGENCY
-        // ]);
-        // $location = Location::create([
-        //     'building_name' => 'Bayawak building',
-        //     'street' => 'Purok 17',
-        //     'barangay' => 'Villa Kanangga',
-        //     'city' => 'Butuan City',
-        //     'province' => 'Agusan Del Norte',
-        //     'country' => 'Philippines'
-        // ]);
-        // $agencyCat = AgencyCategory::create([
-        //     'name' => 'Test'
-        // ]);
-        // Agency::create([
-        //     'agency_id' => $user->id,
-        //     'name' => 'Navigatu',
-        //     'location_id' => $location->location_id,
-        //     'category_id' => $agencyCat->id,
-        //     'position' => 'Incubatee'
-            
-        // ]);
-        // DB::commit();
-        // $roles = [
-        //     'merchant',
-        //     'agency'
-        // ];
-        // foreach($roles as $role)
-        // {
-        //     Role::create([
-        //         'role_name' => $role
-        //     ]);
-        
+    
         $roles = [
             'merchant',
             'agency',
@@ -131,25 +54,6 @@ class DatabaseSeeder extends Seeder
         SubCategory::factory()->count(20)->create();
         ThirdCategory::factory()->count(20)->create();
         Product::factory()->count(20)->create();
-
-        // $location = Location::create([
-        //     'building_name' =>'Bayawak building' ,
-        //     'street' => 'Purok 17',
-        //     'barangay' =>'Villa Kanangga',
-        //     'city' => 'Butuan City',
-        //     'province' =>'Agusan Del Norte',
-        //     'country' =>'Philippines',
-        // ]);
-        // $agencyCategory = AgencyCategory::create([
-        //     'agency_category_name' => 'Test'
-        // ]);
-
-        // $user->agency()->create([
-        //     'agency_name' =>'Navigatu',
-        //     'position' =>'Incubatee',
-        //     'location_id' => $location->location_id,
-        //     'category_id' => $agencyCategory->id,
-        // ]);
         DB::commit();
        
     }

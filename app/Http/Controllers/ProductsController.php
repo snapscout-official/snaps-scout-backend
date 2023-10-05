@@ -40,5 +40,10 @@ class ProductsController extends Controller
         }
         return $this->productService->storeProductWithoutThirdCategory($request);
     }
-    
+    public function destroy(int $productId)
+    {
+        
+        return $this->productService->deleteProduct($productId);
+        
+    }
 }
