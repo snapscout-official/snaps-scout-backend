@@ -1,7 +1,9 @@
 <?php
 
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
+use Maatwebsite\Excel\ExcelServiceProvider;
 
 return [
 
@@ -156,18 +158,12 @@ return [
     */
 
     'providers' => ServiceProvider::defaultProviders()->merge([
-        /*
-         * Package Service Providers...
-         */
-
-        /*
-         * Application Service Providers...
-         */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        ExcelServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -183,6 +179,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'Excel' => Excel::class,
     ])->toArray(),
 
 ];
