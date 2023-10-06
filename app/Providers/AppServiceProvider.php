@@ -10,6 +10,7 @@ use DebugBar\DebugBar as DebugBarDebugBar;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\ServiceProvider;
+use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -40,5 +41,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // Debugbar::disable();
         // RateLimiter::for()
+        // // HeadingRowFormatter::default('custom')
+        // HeadingRowFormatter::extend('customized', function($value, $key){
+        //     return 
+        // })
     }
 }
