@@ -15,7 +15,7 @@ class AdminRequest extends FormRequest
         {
             return true;
         }
-        return false;
+        return true;
     }
 
     public function rules(): array
