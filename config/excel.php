@@ -112,6 +112,7 @@ return [
         */
         'heading_row' => [
             'formatter' => 'slug',
+            
         ],
 
         /*
