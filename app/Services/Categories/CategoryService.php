@@ -6,6 +6,7 @@ use App\Models\SubCategory;
 use App\Models\ParentCategory;
 use App\Http\Requests\Admin\AdminRequest;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Cache;
 
 class CategoryService {
     public function createCategory(AdminRequest $request)
@@ -86,15 +87,21 @@ class CategoryService {
         //retrieves the parentCategory with its subCategories and for each of its subCategories, gets their thirdCategory
 
         //note: REFACTOR! result should be paginated for efficiency issue
-        $data = ParentCategory::with('subCategories.thirdCategories')->get();
-        $subCategories = [];
-        foreach($data as $key => $parentCategory)
+        
+        $data = Cache::remember('categories', 600, function()
         {
-            $subCategories[$key] = Arr::flatten($parentCategory->subCategories);
-        }
+            $data = ParentCategory::with('subCategories.thirdCategories')->get();
+            $subCategories = [];  
+            foreach($data as $key => $parentCategory)
+            {
+                $subCategories[$key] = Arr::flatten($parentCategory->subCategories);
+            }
+            return ['data' => $data, 'subCategories' => $subCategories];
+        });
+        
         return response()->json([
-            'categories' => $data,
-            'subCategories' => $subCategories,
+            'categories' => $data['data'],
+            'subCategories' => $data['subCategories'],
         ], 200);
     }
 
@@ -106,9 +113,16 @@ class CategoryService {
         $categoryName = end($parsedCategory);
 
         //deletes the category base on its type
+        //update the cache manually change to 
         if ($categoryType::destroy($categoryId))
         {
-            $data = ParentCategory::with('subCategories.thirdCategories')->get();   
+            Cache::forget('categories');
+            $data = Cache::remember('categories', 600, function()
+            {
+                return ParentCategory::with('subCategories.thirdCategories')->get();
+            });
+            
+
             return response()->json([
                 'message' => "{$categoryName} of id {$categoryId} successfully deleted",
                 'categories' => $data

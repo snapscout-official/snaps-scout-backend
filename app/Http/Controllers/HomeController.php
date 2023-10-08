@@ -47,10 +47,15 @@ class HomeController extends Controller
 
         dump($headings = Arr::collapse($headings));
         $headings = array_flip($headings);
-        dump($headings);
+        // dump($headings[TestImport::GENERAL]);
         $data =  Excel::toArray(new TestImport, storage_path('app/public/SnapScout(2).xlsx'))[1];
-        $data = array_slice($data, 1, count($data));
+        $data = array_slice($data, 1, count($data) - 1);
         dump($data);
+        foreach($data as $product)
+        {
+        //   dump(explode(',', $product[TestImport::GENERAL]));
+        }
+
         
     }
 }
