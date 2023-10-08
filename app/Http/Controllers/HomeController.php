@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use App\Imports\TestImport;
 use App\Models\SubCategory;
+use Illuminate\Support\Arr;
 use App\Models\ThirdCategory;
 use App\Models\ParentCategory;
-use App\Models\Product;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Cache;
 use Maatwebsite\Excel\HeadingRowImport;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
@@ -43,20 +44,33 @@ class HomeController extends Controller
         // dd($products);
         // DB::rollBack();
         
-        $headings = (new HeadingRowImport(TestImport::HEADINGROW))->toArray(storage_path('app/public/SnapScout(2).xlsx'))[1];
+        // $headings = (new HeadingRowImport(TestImport::HEADINGROW))->toArray(storage_path('app/public/SnapScout(2).xlsx'))[1];
 
-        dump($headings = Arr::collapse($headings));
-        $headings = array_flip($headings);
-        // dump($headings[TestImport::GENERAL]);
-        $data =  Excel::toArray(new TestImport, storage_path('app/public/SnapScout(2).xlsx'))[1];
-        $data = array_slice($data, 1, count($data) - 1);
-        dump($data);
-        foreach($data as $product)
+        // dump($headings = Arr::collapse($headings));
+        // $headings = array_flip($headings);
+        // // dump($headings[TestImport::GENERAL]);
+        // $data =  Excel::toArray(new TestImport, storage_path('app/public/SnapScout(2).xlsx'))[1];
+        // $data = array_slice($data, 1, count($data) - 1);
+        // dump($data);
+        // foreach($data as $product)
+        // {
+        // //   dump(explode(',', $product[TestImport::GENERAL]));
+        // }
+
+        $data = Cache::remember('categories', 600, function()
         {
-        //   dump(explode(',', $product[TestImport::GENERAL]));
-        }
-
+            $data = ParentCategory::with('subCategories.thirdCategories')->get();
+            $subCategories = [];  
+            foreach($data as $key => $parentCategory)
+            {
+                $subCategories[$key] = Arr::flatten($parentCategory->subCategories);
+            }
+            return ['data' => $data, 'subCategories' => $subCategories];
+        });
+        return $data;
+        // return $data['data'];
         
+        // return $data;
     }
 }
 

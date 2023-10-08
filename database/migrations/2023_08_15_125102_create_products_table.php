@@ -15,9 +15,11 @@ return new class extends Migration
             $table->id('product_id')->from(1000);
             $table->string('product_name')->unique();
             $table->unsignedBigInteger('sub_code');
-            $table->foreign('sub_code')->references('sub_id')->on('sub_category');
+            $table->foreign('sub_code')->references('sub_id')->on('sub_category')
+                ->cascadeOnDelete();
             $table->unsignedBigInteger('third_code')->nullable();
-            $table->foreign('third_code')->references('third_id')->on('third_category');
+            $table->foreign('third_code')->references('third_id')->on('third_category')
+                ->cascadeOnDelete();
             $table->text('description');
             $table->timestamps();
         });

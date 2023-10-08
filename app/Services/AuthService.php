@@ -147,9 +147,6 @@ class AuthService
 
         if (Auth::attempt($request->only(['email', 'password'])))
         {
-        
-            
-            
             event(new Registered($user));
         
             return  $request->expectsJson() ? response()->json([

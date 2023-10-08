@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\CategoryDeleted;
 use App\Events\PasswordReset;
 use App\Events\UserRegistered;
+use App\Listeners\DeleteCategoriesCache;
 use App\Listeners\PasswordResetSuccess;
 use App\Listeners\SendEmailNotification;
 use Illuminate\Auth\Events\Registered;
@@ -24,7 +26,10 @@ class EventServiceProvider extends ServiceProvider
         ],
         PasswordReset::class => [
             PasswordResetSuccess::class
-        ]
+        ],
+        CategoryDeleted::class => [
+            DeleteCategoriesCache::class
+        ],     
 
     ];
 

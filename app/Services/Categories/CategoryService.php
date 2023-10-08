@@ -2,11 +2,13 @@
 
 namespace App\Services\Categories;
 
+use App\Events\CategoryDeleted;
 use App\Models\SubCategory;
-use App\Models\ParentCategory;
-use App\Http\Requests\Admin\AdminRequest;
 use Illuminate\Support\Arr;
+use App\Models\ParentCategory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
+use App\Http\Requests\Admin\AdminRequest;
 
 class CategoryService {
     public function createCategory(AdminRequest $request)
@@ -98,7 +100,7 @@ class CategoryService {
             }
             return ['data' => $data, 'subCategories' => $subCategories];
         });
-        
+
         return response()->json([
             'categories' => $data['data'],
             'subCategories' => $data['subCategories'],
@@ -113,15 +115,15 @@ class CategoryService {
         $categoryName = end($parsedCategory);
 
         //deletes the category base on its type
-        //update the cache manually change to 
+        //update the cache manually change to
         if ($categoryType::destroy($categoryId))
         {
-            Cache::forget('categories');
+
+            event(new CategoryDeleted());
             $data = Cache::remember('categories', 600, function()
             {
                 return ParentCategory::with('subCategories.thirdCategories')->get();
             });
-            
 
             return response()->json([
                 'message' => "{$categoryName} of id {$categoryId} successfully deleted",
