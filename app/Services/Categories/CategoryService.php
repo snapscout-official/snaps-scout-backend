@@ -90,17 +90,7 @@ class CategoryService {
 
         //note: REFACTOR! result should be paginated for efficiency issue
         
-        $data = Cache::remember('categories', 600, function()
-        {
-            $data = ParentCategory::with('subCategories.thirdCategories')->get();
-            $subCategories = [];  
-            foreach($data as $key => $parentCategory)
-            {
-                $subCategories[$key] = Arr::flatten($parentCategory->subCategories);
-            }
-            return ['data' => $data, 'subCategories' => $subCategories];
-        });
-
+        $data = $this->cacheCategories();
         return response()->json([
             'categories' => $data['data'],
             'subCategories' => $data['subCategories'],
@@ -120,14 +110,11 @@ class CategoryService {
         {
 
             event(new CategoryDeleted());
-            $data = Cache::remember('categories', 600, function()
-            {
-                return ParentCategory::with('subCategories.thirdCategories')->get();
-            });
+            $data = $this->cacheCategories();
 
             return response()->json([
                 'message' => "{$categoryName} of id {$categoryId} successfully deleted",
-                'categories' => $data
+                'categories' => $data['data']
             ]);
         }
         return response()->json(
@@ -135,6 +122,20 @@ class CategoryService {
                 'error' => "{$categoryName} id {$categoryId} has error deleting"
             ]
         );
+    }
+    private function cacheCategories()
+    {
+        $data = Cache::remember('categories', 600, function()
+        {
+            $data = ParentCategory::with('subCategories.thirdCategories')->get();
+            $subCategories = [];  
+            foreach($data as $key => $parentCategory)
+            {
+                $subCategories[$key] = Arr::flatten($parentCategory->subCategories);
+            }
+            return ['data' => $data, 'subCategories' => $subCategories];
+        });
+        return $data;
     }
 
 }
