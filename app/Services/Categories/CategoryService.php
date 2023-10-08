@@ -125,7 +125,7 @@ class CategoryService {
     }
     private function cacheCategories()
     {
-        $data = Cache::remember('categories', 600, function()
+        return Cache::remember('categories', 600, function()
         {
             $data = ParentCategory::with('subCategories.thirdCategories')->get();
             $subCategories = [];  
@@ -135,7 +135,7 @@ class CategoryService {
             }
             return ['data' => $data, 'subCategories' => $subCategories];
         });
-        return $data;
+        
     }
 
 }

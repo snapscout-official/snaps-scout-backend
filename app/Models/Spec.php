@@ -12,7 +12,7 @@ class Spec extends Model
 
     protected $fillable = [
         'specs_name',
-        'specs_value'
+        
     ];
 
     protected $table = 'product_specs';
