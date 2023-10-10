@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Events\CategoryAdded;
 use App\Events\CategoryDeleted;
 use App\Events\PasswordReset;
 use App\Events\UserRegistered;
 use App\Listeners\DeleteCategoriesCache;
 use App\Listeners\PasswordResetSuccess;
 use App\Listeners\SendEmailNotification;
+use App\Listeners\UpdateCategoryCache;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -30,6 +32,9 @@ class EventServiceProvider extends ServiceProvider
         CategoryDeleted::class => [
             DeleteCategoriesCache::class
         ],     
+        CategoryAdded::class => [
+            UpdateCategoryCache::class
+        ]
 
     ];
 

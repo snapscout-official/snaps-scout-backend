@@ -98,6 +98,7 @@ class CategoryService {
         return response()->json([
             'categories' => $data['data'],
             'subCategories' => $data['subCategories'],
+           
         ], 200);
     }
 
