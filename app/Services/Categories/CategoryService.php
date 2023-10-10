@@ -2,11 +2,11 @@
 
 namespace App\Services\Categories;
 
+use App\Events\CategoryAdded;
 use App\Events\CategoryDeleted;
 use App\Models\SubCategory;
 use Illuminate\Support\Arr;
 use App\Models\ParentCategory;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\AdminRequest;
 
@@ -30,7 +30,9 @@ class CategoryService {
                     'message' => 'unsucessful third Category creation'
                 ], 422);
             }
+            event(new CategoryAdded());
             //if the creation is sucessful then return the important fields
+            //CHANGE CACHE AFTER INSERTION
             return response()->json([
                 'message' => 'sucessfully created third category',
                 'thirdCategory' => $thirdCategoryResult,
@@ -54,6 +56,7 @@ class CategoryService {
                     'message' => 'unsucessful sub category creation'
                 ], 422);
             }
+            event(new CategoryAdded());
             //for success, return important fields
             return response()->json([
                 'message' => 'sucessfully created sub category',
@@ -76,6 +79,7 @@ class CategoryService {
                     'message' => 'unsucessfully created parent category'
                 ], 422);
             }
+            event(new CategoryAdded());
             //if creation is success, return important fields
             return response()->json([
                 'message' => 'sucessfully created parent category',
