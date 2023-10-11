@@ -16,5 +16,5 @@ class ProductSpecs extends Model
     ];
 
     protected $table = 'product_specs';
-    protected $timestamps = false;
+    public $timestamps = false;
 }

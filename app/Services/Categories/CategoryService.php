@@ -9,7 +9,6 @@ use Illuminate\Support\Arr;
 use App\Models\ParentCategory;
 use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\AdminRequest;
-
 class CategoryService {
     public function createCategory(AdminRequest $request)
     {
@@ -95,6 +94,7 @@ class CategoryService {
         //note: REFACTOR! result should be paginated for efficiency issue
         
         $data = $this->cacheCategories();
+        // Logger($data);
         return response()->json([
             'categories' => $data['data'],
             'subCategories' => $data['subCategories'],

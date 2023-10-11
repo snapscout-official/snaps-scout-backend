@@ -5,10 +5,12 @@ namespace App\Providers;
 use App\Events\CategoryAdded;
 use App\Events\CategoryDeleted;
 use App\Events\PasswordReset;
+use App\Events\TestEvent;
 use App\Events\UserRegistered;
 use App\Listeners\DeleteCategoriesCache;
 use App\Listeners\PasswordResetSuccess;
 use App\Listeners\SendEmailNotification;
+use App\Listeners\TestListener;
 use App\Listeners\UpdateCategoryCache;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -34,7 +36,11 @@ class EventServiceProvider extends ServiceProvider
         ],     
         CategoryAdded::class => [
             UpdateCategoryCache::class
+        ],
+        TestEvent::class => [
+            TestListener::class
         ]
+
 
     ];
 

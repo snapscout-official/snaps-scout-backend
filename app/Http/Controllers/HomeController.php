@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\Authentication\LoginSuperAdmin;
 use App\Models\Product;
 use App\Imports\TestImport;
 use App\Models\SubCategory;
 use Illuminate\Support\Arr;
 use App\Models\ThirdCategory;
 use App\Models\ParentCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Cache;
@@ -16,7 +18,7 @@ use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 
 class HomeController extends Controller
 {
-    public function __invoke()
+    public function __invoke(Request $request)
     {
         // DB::beginTransaction();
         // $parentCategory = ParentCategory::factory()->count(10)->create();
@@ -56,21 +58,10 @@ class HomeController extends Controller
         // {
         // //   dump(explode(',', $product[TestImport::GENERAL]));
         // }
-
-        $data = Cache::remember('categories', 600, function()
-        {
-            $data = ParentCategory::with('subCategories.thirdCategories')->get();
-            $subCategories = [];  
-            foreach($data as $key => $parentCategory)
-            {
-                $subCategories[$key] = Arr::flatten($parentCategory->subCategories);
-            }
-            return ['data' => $data, 'subCategories' => $subCategories];
-        });
-        return $data;
-        // return $data['data'];
         
-        // return $data;
+        // LoginSuperAdmin::make();
+        $obj = app(LoginSuperAdmin::class);
+        echo $obj->handle($request);
     }
 }
 
