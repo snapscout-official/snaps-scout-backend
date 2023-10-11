@@ -26,4 +26,15 @@ class ThirdCategory extends Model
     {
         return $this->belongsTo(SubCategory::class, 'sub_id', 'sub_id');
     }
+    public static function returnThirdCategoryWithParentSub()
+    {
+        $thirdCategories = static::with('subCategory.parentCategory')->get();
+        foreach($thirdCategories as $thirdCategory)
+        {
+            $thirdCategory['subName'] = $thirdCategory->subCategory->sub_name;
+            $thirdCategory['parentName'] = $thirdCategory->subCategory->parentCategory->parent_name;
+            unset($thirdCategory->subCategory);
+        }
+        return $thirdCategories;
+    }
 }

@@ -51,8 +51,8 @@ Route::middleware('auth:sanctum')->group(function()
     });
 
     Route::group(['middleware' => 'role:super_admin', 'prefix' => 'admin'], function(){
-        Route::post('/create-category', [CategoryController::class, 'store']);
         Route::get('/create-category', [CategoryController::class, 'create']);
+        Route::post('/create-category', [CategoryController::class, 'store']);
         Route::delete('/third-category/{thirdId}', [CategoryController::class, 'destroyThird']);
         Route::delete('/sub-category/{subId}', [CategoryController::class, 'destroySub'] );
         Route::delete('/parent-category/{parentId}', [CategoryController::class, 'destroyParent']);
@@ -65,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function()
             'error' => 'Product does not exist'
         ], 500) : 'product does not exist';
     });
+        
     });
 
     Route::middleware('signed')->group(function(){

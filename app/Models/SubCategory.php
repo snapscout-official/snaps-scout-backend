@@ -32,5 +32,17 @@ class SubCategory extends Model
     {
         return $this->hasMany(Product::class, 'sub_code', 'sub_id');
     }
+    public static function getSubCategoriesWithParent()
+    {
+        $subCategories = static::with('parentCategory')->get();
+        foreach($subCategories as $subCategory)
+        {
+            
+            $subCategory['parent_category'] = $subCategory->parentCategory->parent_name;
+            unset($subCategory->parentCategory);
+            unset($subCategory->parent);
+        }
+        return $subCategories;
+    } 
     
 }

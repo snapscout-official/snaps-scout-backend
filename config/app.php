@@ -1,5 +1,7 @@
 <?php
 
+use Barryvdh\Debugbar\Facades\Debugbar;
+use Barryvdh\Debugbar\ServiceProvider as DebugbarServiceProvider;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Facade;
 use Illuminate\Support\ServiceProvider;
@@ -164,6 +166,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         ExcelServiceProvider::class,
+        DebugbarServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -180,6 +183,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Excel' => Excel::class,
+        'Debugbar' => Debugbar::class
     ])->toArray(),
 
 ];

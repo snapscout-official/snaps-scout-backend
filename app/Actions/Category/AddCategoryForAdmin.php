@@ -5,6 +5,7 @@ namespace App\Actions\Category;
 use App\Models\SubCategory;
 use App\Events\CategoryAdded;
 use App\Models\ParentCategory;
+use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\AdminRequest;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -80,6 +81,7 @@ class AddCategoryForAdmin
                 ], 422);
             }
             event(new CategoryAdded());
+            
             //if creation is success, return important fields
             return response()->json([
                 'message' => 'sucessfully created parent category',

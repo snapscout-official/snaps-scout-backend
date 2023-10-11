@@ -2,8 +2,8 @@
 
 namespace App\Actions\Category;
 
-use App\Events\CategoryDeleted;
 use Lorisleiva\Actions\Concerns\AsAction;
+use App\Events\CategoryDeleted;
 
 class DeleteCategoryForAdmin
 {
@@ -25,7 +25,7 @@ class DeleteCategoryForAdmin
 
             return response()->json([
                 'message' => "{$categoryName} of id {$categoryId} successfully deleted",
-                'categories' => $data['data']
+                'parentCategories' => $data['parentCategories']
             ]);
         }
         return response()->json(

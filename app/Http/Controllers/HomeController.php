@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\Authentication\LoginSuperAdmin;
+use App\Actions\Category\ReturnCategoryDataForAdmin;
 use App\Models\Product;
 use App\Imports\TestImport;
 use App\Models\SubCategory;
@@ -15,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Cache;
 use Maatwebsite\Excel\HeadingRowImport;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
+use PhpParser\Node\Stmt\Return_;
 
 class HomeController extends Controller
 {
@@ -58,10 +60,13 @@ class HomeController extends Controller
         // {
         // //   dump(explode(',', $product[TestImport::GENERAL]));
         // }
+        $parentCategories = ParentCategory::all();
+        $subCategories = SubCategory::getSubCategoriesWithParent();
+        $thirdCategories = ThirdCategory::returnThirdCategoryWithParentSub();
         
-        // LoginSuperAdmin::make();
-        $obj = app(LoginSuperAdmin::class);
-        echo $obj->handle($request);
+        return [$parentCategories, $thirdCategories];
+        
+        
     }
 }
 

@@ -2,6 +2,7 @@
 
 namespace App\Listeners;
 
+use App\Actions\Category\CacheCategoryData;
 use Illuminate\Support\Arr;
 use App\Models\ParentCategory;
 use Illuminate\Support\Facades\Cache;
@@ -24,14 +25,7 @@ class UpdateCategoryCache
     public function handle(object $event): void
     {
         Cache::forget('categories',);
-        //query the database of the fresh data
-        $categories = ParentCategory::with('subCategories.thirdCategories')->get();
-        $subCategories = [];
-        foreach($categories as $key => $parentCategory)
-            {
-                $subCategories[$key] = Arr::flatten($parentCategory->subCategories);
-            }
-        Cache::put('categories', ['data' => $categories, 'subCategories' => $subCategories]);
+        CacheCategoryData::run();
     }
 
 }

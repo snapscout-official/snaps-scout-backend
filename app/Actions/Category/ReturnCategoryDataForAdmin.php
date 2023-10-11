@@ -2,6 +2,7 @@
 
 namespace App\Actions\Category;
 
+use App\Models\ParentCategory;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class ReturnCategoryDataForAdmin
@@ -11,9 +12,12 @@ class ReturnCategoryDataForAdmin
     public function handle()
     {
         $data = CacheCategoryData::run();
+        
         return response()->json([
-            'categories' => $data['data'],
+            'parentCategories' => $data['parentCategories'],
             'subCategories' => $data['subCategories'],
+            'thirdCategories' => $data['thirdCategories'],
         ], 200);
+      
     }
 }
