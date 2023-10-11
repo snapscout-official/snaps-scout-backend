@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Product\deleteProduct;
+use App\Actions\Product\DeleteProduct;
 use App\Actions\Product\FilterProducts;
 use App\Actions\Product\StoreProductsWithOutThirdCategory;
 use App\Actions\Product\StoreProductsWithThirdCategory;
@@ -40,9 +40,7 @@ class ProductsController extends Controller
     }
     public function destroy(int $productId)
     {
-        
-        return deleteProduct::run($productId);
-        
+        return DeleteProduct::run($productId);
     }
     public function addSpecs(Product $product,AddSpecRequest $request)
     {
@@ -54,8 +52,7 @@ class ProductsController extends Controller
             ]);
             $specIds[] = $spec->code;
         }
-        
-        $product->specs()->syncWithoutDetaching($specIds);
+        $product->specs()->syncWithoutDetaching($specIds);  
         return response()->json([
             'product' => $product,
             // 'specs' => $product->specs,

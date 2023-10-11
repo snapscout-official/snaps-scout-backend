@@ -29,6 +29,7 @@ class CategoryController extends Controller
     }
     public function destroyParent(int $parentId)
     {
+        
         return DeleteCategoryForAdmin::run($parentId, 'App\Models\ParentCategory');
     }
 }

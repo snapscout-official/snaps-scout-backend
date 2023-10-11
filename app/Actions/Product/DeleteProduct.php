@@ -5,7 +5,7 @@ namespace App\Actions\Product;
 use App\Models\Product;
 use Lorisleiva\Actions\Concerns\AsAction;
 
-class deleteProduct
+class DeleteProduct
 {
     use AsAction;
 
