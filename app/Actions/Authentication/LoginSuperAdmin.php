@@ -2,16 +2,32 @@
 
 namespace App\Actions\Authentication;
 
-use App\Events\TestEvent;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Lorisleiva\Actions\Concerns\AsAction;
+use App\Http\Requests\Admin\AdminLoginRequest;
 
 class LoginSuperAdmin
 {
     use AsAction;
     
-    public function handle()
+    public function handle(AdminLoginRequest $request)
     {
-        event(new TestEvent());
-        return "Hello world";
+        if (!Auth::attempt($request->only(['email', 'password'])))
+        {
+            return $request->expectsJson() ? response()->json([
+                'authenticated' => false,
+                'message' => 'credentials error',
+            ]) : null; 
+        }
+        $user = User::where('email', $request->email)->first();
+        // event(new Registered($user));
+        return $request->expectsJson() ? response()->json([
+            'authenticated' => true,
+            'message' => 'Sucessfully authenticated',
+            'admin' =>  $user,
+            'accessToken' => $user->createToken('auth-token')->plainTextToken
+        ]) : null;
+
     }
 }

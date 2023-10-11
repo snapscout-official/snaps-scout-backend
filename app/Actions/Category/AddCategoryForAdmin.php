@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Services\Categories;
+namespace App\Actions\Category;
 
-use App\Events\CategoryAdded;
-use App\Events\CategoryDeleted;
 use App\Models\SubCategory;
-use Illuminate\Support\Arr;
+use App\Events\CategoryAdded;
 use App\Models\ParentCategory;
-use Illuminate\Support\Facades\Cache;
 use App\Http\Requests\Admin\AdminRequest;
-class CategoryService {
-    public function createCategory(AdminRequest $request)
+use Lorisleiva\Actions\Concerns\AsAction;
+
+class AddCategoryForAdmin
+{
+    use AsAction;
+
+    public function handle(AdminRequest $request)
     {
-        //the method checks first if the request has a thirdcategory field that is not null
         if ($request->filled('thirdCategory'))
         {
             //first retrieves the subCategory since if it has a thirdCategory then a subCategory field that is not null is also expected
@@ -86,61 +87,4 @@ class CategoryService {
             ]);
         }
     }
-    //service method that returns all the category data with its associated relationship
-    public function returnData()
-    {
-        //retrieves the parentCategory with its subCategories and for each of its subCategories, gets their thirdCategory
-
-        //note: REFACTOR! result should be paginated for efficiency issue
-        
-        $data = $this->cacheCategories();
-        // Logger($data);
-        return response()->json([
-            'categories' => $data['data'],
-            'subCategories' => $data['subCategories'],
-           
-        ], 200);
-    }
-
-    //general method for deleting of any type of category
-    public function deleteCategory(int $categoryId, string $categoryType)
-    {
-        //parses the passed string since it is a fully qualified classname
-        $parsedCategory = explode('\\', $categoryType);
-        $categoryName = end($parsedCategory);
-
-        //deletes the category base on its type
-        //update the cache manually change to
-        if ($categoryType::destroy($categoryId))
-        {
-
-            event(new CategoryDeleted());
-            $data = $this->cacheCategories();
-
-            return response()->json([
-                'message' => "{$categoryName} of id {$categoryId} successfully deleted",
-                'categories' => $data['data']
-            ]);
-        }
-        return response()->json(
-            [
-                'error' => "{$categoryName} id {$categoryId} has error deleting"
-            ]
-        );
-    }
-    private function cacheCategories()
-    {
-        return Cache::remember('categories', 600, function()
-        {
-            $data = ParentCategory::with('subCategories.thirdCategories')->get();
-            $subCategories = [];  
-            foreach($data as $key => $parentCategory)
-            {
-                $subCategories[$key] = Arr::flatten($parentCategory->subCategories);
-            }
-            return ['data' => $data, 'subCategories' => $subCategories];
-        });
-        
-    }
-
 }
