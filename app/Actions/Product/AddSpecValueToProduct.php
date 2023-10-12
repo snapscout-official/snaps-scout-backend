@@ -8,7 +8,6 @@ use App\Models\SpecValue;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\AddSpecRequest;
 use App\Http\Resources\ProductSpecValueResource;
-use Illuminate\Log\Logger;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class AddSpecValueToProduct
@@ -29,7 +28,6 @@ class AddSpecValueToProduct
                 ]);
                 $specValueArray[] = $value->id;
             }
-            Logger($specValueArray);
             $product->specs()->syncWithoutDetaching([$spec->code]);
             $spec->value()->syncWithOutDetaching($specValueArray);
             $product = Product::with('specs.value')->find($product->product_id);
@@ -37,7 +35,9 @@ class AddSpecValueToProduct
         });
         extract($data);
 
-        return (new ProductSpecValueResource($product))
+        return empty($product) ? response()->json([
+            'error' => 'error adding spec and specs value',
+        ]) : (new ProductSpecValueResource($product))
             ->additional(['message' => "successfully added spec {$spec->specs_name}"]);
     }
 }
