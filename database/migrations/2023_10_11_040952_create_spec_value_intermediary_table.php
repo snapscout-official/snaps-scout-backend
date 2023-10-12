@@ -18,7 +18,7 @@ return new class extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->foreignId('spec_value_id')
-                ->constrained('specs_value')
+                ->constrained('specs_value', 'id')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
         });

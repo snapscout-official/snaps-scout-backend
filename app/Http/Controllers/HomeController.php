@@ -11,6 +11,7 @@ use Illuminate\Support\Arr;
 use App\Models\ThirdCategory;
 use App\Models\ParentCategory;
 use Illuminate\Http\Request;
+use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Cache;
@@ -28,11 +29,11 @@ class HomeController extends Controller
         // $thirdCategory = ThirdCategory::factory()->count(40)->create();
         // $categories = ParentCategory::with('subCategories.thirdCategories')->get();
         // // dd($categories);
-        
+
         // // $subCategories = [];
         // // foreach($categories as $key => $category)
         // // {
-                
+
         // //     $subCategories[$key] = Arr::flatten($category->subCategories); 
 
         // // }
@@ -47,7 +48,7 @@ class HomeController extends Controller
         // }
         // dd($products);
         // DB::rollBack();
-        
+
         // $headings = (new HeadingRowImport(TestImport::HEADINGROW))->toArray(storage_path('app/public/SnapScout(2).xlsx'))[1];
 
         // dump($headings = Arr::collapse($headings));
@@ -63,10 +64,11 @@ class HomeController extends Controller
         $parentCategories = ParentCategory::all();
         $subCategories = SubCategory::getSubCategoriesWithParent();
         $thirdCategories = ThirdCategory::returnThirdCategoryWithParentSub();
-        
-        return [$parentCategories, $thirdCategories];
-        
-        
+
+        // return [$parentCategories, $thirdCategories];
+        Logger('redirected to HomeCOntroler');
+        return response()->json([
+            'test' => 'Hello world'
+        ]);
     }
 }
-

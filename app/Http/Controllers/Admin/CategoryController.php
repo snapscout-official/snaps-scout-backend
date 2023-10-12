@@ -2,19 +2,20 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
+use App\Http\Requests\AddSpecRequest;
+use App\Http\Requests\Admin\AdminRequest;
 use App\Actions\Category\AddCategoryForAdmin;
 use App\Actions\Category\DeleteCategoryForAdmin;
 use App\Actions\Category\ReturnCategoryDataForAdmin;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\AdminRequest;
-use App\Services\Categories\CategoryService;
+use App\Models\Product;
 
 class CategoryController extends Controller
 {
     public function store(AdminRequest $request)
     {
-       return AddCategoryForAdmin::run($request);
-    }  
+        return AddCategoryForAdmin::run($request);
+    }
     public function create()
     {
         return ReturnCategoryDataForAdmin::run();
@@ -29,7 +30,7 @@ class CategoryController extends Controller
     }
     public function destroyParent(int $parentId)
     {
-        
+
         return DeleteCategoryForAdmin::run($parentId, 'App\Models\ParentCategory');
     }
 }

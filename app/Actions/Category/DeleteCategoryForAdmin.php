@@ -4,6 +4,7 @@ namespace App\Actions\Category;
 
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Events\CategoryDeleted;
+use Illuminate\Support\Facades\Cache;
 
 class DeleteCategoryForAdmin
 {
@@ -17,10 +18,9 @@ class DeleteCategoryForAdmin
 
         //deletes the category base on its type
         //update the cache manually change to
-        if ($categoryType::destroy($categoryId))
-        {
+        if ($categoryType::destroy($categoryId)) {
 
-            event(new CategoryDeleted());
+            Cache::forget('categories');
             $data = CacheCategoryData::run();
 
             return response()->json([

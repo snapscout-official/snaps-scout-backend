@@ -12,20 +12,20 @@ class Spec extends Model
 
     protected $fillable = [
         'specs_name',
-        
+
     ];
 
     protected $table = 'product_specs';
     public $timestamps = false;
     protected $primaryKey = 'code';
-    
-    public function products():BelongsToMany
+
+    public function products(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class,'product_spec_intermediary','spec_id', 'product_id', 'code', 'product_id')
-                    ->as('product');
+        return $this->belongsToMany(Product::class, 'product_spec_intermediary', 'spec_id', 'product_id', 'code', 'product_id')
+            ->as('product');
     }
-    public function value():BelongsToMany
+    public function value(): BelongsToMany
     {
-        return $this->belongsToMany(SpecValue::class,'spec_value_intermediary', 'spec_id', 'spec_value_id', 'code', 'id');
+        return $this->belongsToMany(SpecValue::class, 'spec_value_intermediary', 'spec_id', 'spec_value_id', 'code', 'id');
     }
 }

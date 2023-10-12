@@ -24,7 +24,7 @@ class UpdateCategoryCache
      */
     public function handle(object $event): void
     {
-        Cache::forget('categories',);
+        Cache::forget('categories');
         CacheCategoryData::run();
     }
 

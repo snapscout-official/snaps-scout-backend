@@ -22,7 +22,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-    
+
         // $roles = [
         //     'merchant',
         //     'agency',
@@ -35,10 +35,10 @@ class DatabaseSeeder extends Seeder
         //     ]);
         // }
         // DB::beginTransaction();
-        
+
         // $date = Carbon::createFromFormat('F j, Y', 'June 11, 2002')
         //             ->format('Y-m-d');
-        
+
         // $user = User::create([
         //     'first_name' => 'Mary',
         //     'last_name' => 'Soliva',
@@ -50,11 +50,11 @@ class DatabaseSeeder extends Seeder
         //     'password' => Hash::make('starmovies3144'),
         //     'role_id' => Role::SUPERADMIN
         // ]);
-        // ParentCategory::factory()->count(10)->create();
-        // SubCategory::factory()->count(20)->create();
-        ThirdCategory::factory()->count(20)->create();
-        // Product::factory()->count(20)->create();
+        // ParentCategory::factory()->count(5)->create();
+        // SubCategory::factory()->count(5)->create();
+        // ThirdCategory::factory()->count(5)->create();
+        Product::factory()->count(20)->create();
         // DB::commit();
-       
+
     }
 }

@@ -22,8 +22,8 @@ class AddSpecRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'specName' => 'string|required',
-            'specValues' => 'array|required',
+            'specName' => 'required|string',
+            'specValues' => 'required|array',
         ];
     }
 }

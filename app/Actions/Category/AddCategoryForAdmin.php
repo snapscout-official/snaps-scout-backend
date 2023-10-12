@@ -81,7 +81,6 @@ class AddCategoryForAdmin
                 ], 422);
             }
             event(new CategoryAdded());
-            
             //if creation is success, return important fields
             return response()->json([
                 'message' => 'sucessfully created parent category',

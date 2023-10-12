@@ -27,14 +27,12 @@ class StoreProductRequest extends FormRequest
             'subCategoryId' => 'required',
         ];
         //if thirdCategoryId is present then add rules for thirdCategory else then return the initial rules as the final rule for the product
-        if ($this->filled('thirdCategoryId'))
-        {
+        if ($this->filled('thirdCategoryId')) {
             $rules['thirdCategoryId'] = 'required';
             $rules['subCategoryId'] = 'sometimes';
             return $rules;
         }
-        
+
         return $rules;
-        
     }
 }

@@ -33,7 +33,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         CategoryDeleted::class => [
             DeleteCategoriesCache::class
-        ],     
+        ],
         CategoryAdded::class => [
             UpdateCategoryCache::class
         ],
@@ -49,7 +49,9 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Event::listen(UserRegistered::class,
-        [SendEmailNotification::class, 'handle']);
+        Event::listen(
+            UserRegistered::class,
+            [SendEmailNotification::class, 'handle']
+        );
     }
 }

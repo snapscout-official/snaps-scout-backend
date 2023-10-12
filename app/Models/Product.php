@@ -20,23 +20,22 @@ class Product extends Model
     ];
 
     protected $primaryKey = 'product_id';
-   public function getProductParent()
-   {
-    return $this->subCategory()->get()->parentCategory;
-   }
-    
-    public function subCategory():BelongsTo
+    public function getProductParent()
+    {
+        return $this->subCategory()->get()->parentCategory;
+    }
+
+    public function subCategory(): BelongsTo
     {
         return $this->belongsTo(SubCategory::class, 'sub_code', 'sub_id');
     }
-    public function thirdCategory():BelongsTo
+    public function thirdCategory(): BelongsTo
     {
         return $this->belongsTo(ThirdCategory::class, 'third_code', 'third_id');
     }
-    public function specs():BelongsToMany
+    public function specs(): BelongsToMany
     {
-        return $this->belongsToMany(Spec::class,'product_specs_intermediary', 'product_id', 'spec_id', 'product_id', 'code')
-                    ->as('product');
+        return $this->belongsToMany(Spec::class, 'product_specs_intermediary', 'product_id', 'spec_id', 'product_id', 'code')
+            ->as('product');
     }
-    
 }
