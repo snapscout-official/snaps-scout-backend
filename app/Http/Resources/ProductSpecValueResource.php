@@ -26,7 +26,7 @@ class ProductSpecValueResource extends JsonResource
                     return [
                         'code' => $spec->code,
                         'spec_name' => $spec->specs_name,
-                        'value' => $spec->value->map(function ($specValue) {
+                        'values' => $spec->value->map(function ($specValue) {
                             return [
                                 'id' => $specValue->id,
                                 'spec_value' => $specValue->spec_value,
