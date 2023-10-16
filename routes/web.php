@@ -17,6 +17,6 @@ Route::prefix('agency')->group(function () {
     Route::post('/login', [AgencyAuthController::class, 'login']);
 });
 
-// Route::get('/', HomeController::class);
+Route::get('/', HomeController::class);
 Route::get('/create', [PhotoController::class, 'create'])->name('upload');
 Route::post('/create', [PhotoController::class, 'store']);
