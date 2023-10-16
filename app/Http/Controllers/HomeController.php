@@ -61,14 +61,15 @@ class HomeController extends Controller
         // {
         // //   dump(explode(',', $product[TestImport::GENERAL]));
         // }
-        $parentCategories = ParentCategory::all();
-        $subCategories = SubCategory::getSubCategoriesWithParent();
-        $thirdCategories = ThirdCategory::returnThirdCategoryWithParentSub();
+        // $parentCategories = ParentCategory::all();
+        // $subCategories = SubCategory::getSubCategoriesWithParent();
+        // $thirdCategories = ThirdCategory::returnThirdCategoryWithParentSub();
 
-        // return [$parentCategories, $thirdCategories];
-        Logger('redirected to HomeCOntroler');
-        return response()->json([
-            'test' => 'Hello world'
-        ]);
+        // // return [$parentCategories, $thirdCategories];
+        // Logger('redirected to HomeCOntroler');
+        // return response()->json([
+        //     'test' => 'Hello world'
+        // ]);
+        return "Pangit si sir Pacot";
     }
 }
