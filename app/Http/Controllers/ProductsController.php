@@ -11,17 +11,12 @@ use App\Models\Product;
 use App\Http\Requests\AddSpecRequest;
 use App\Http\Requests\Products\StoreProductRequest;
 use App\Http\Resources\ProductResource;
-use Illuminate\Log\Logger;
 
 class ProductsController extends Controller
 {
     public function read()
     {
         $products = Product::with(['thirdCategory', 'subCategory'])->get();
-        // $filteredProducts = FilterProducts::run($products);
-        // return response()->json([
-        //     'products' => $filteredProducts,
-        // ]);
         return ProductResource::collection($products);
     }
 
