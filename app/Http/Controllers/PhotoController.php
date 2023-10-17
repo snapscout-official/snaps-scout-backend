@@ -10,39 +10,32 @@ use Illuminate\Support\Facades\Storage;
 
 class PhotoController extends Controller
 {
-    public function create():View
+    public function create(): View
     {
         return view('photo.index');
     }
-    
+
     public function store(Request $request)
     {
-        
+
         $file = $request->file('image');
         $path = $request->image->storeAs('public/images', $file->getClientOriginalName());
-        
+
         $document = ProposalDocument::create([
             'title' => $file->getClientOriginalName(),
             'size' => (string)$file->getSize(),
             'doc_agency' => auth()->user()->id
         ]);
-        if (is_null($document))
-        {
+        if (is_null($document)) {
             return response()->json([
                 'message' => 'Error',
-                
+
             ]);
         }
 
         return response()->json([
             'message' => "Success",
             'document' => $document
-        ],200);
-        
-        // dump(Storage::path('public/images/' . $request->file('image')->getClientOriginalName()));
-        // return Storage::download('public/images/2Z5D2ZeUkFnO2J10PC2cXqJOw3KQepe1UTMmwSMR.png');
-        // dd($request->file('image')->getClientOriginalName());
-
-        
+        ], 200);
     }
 }
