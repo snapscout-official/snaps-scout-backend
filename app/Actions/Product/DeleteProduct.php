@@ -11,18 +11,13 @@ class DeleteProduct
 
     public function handle(int $productId)
     {
-        if (Product::destroy($productId))
-        {
-            $products = Product::with(['thirdCategory', 'subCategory'])->get();
-            $filteredProducts = FilterProducts::run($products);
+        if (Product::destroy($productId)) {
             return response()->json([
-            'products' => $filteredProducts,
-            ]);    
+                'message' => 'successfully deleted the product'
+            ]);
         }
         return response()->json([
             'error' => 'Product Unsuccessfully deleted',
         ], 500);
-        
-
     }
 }

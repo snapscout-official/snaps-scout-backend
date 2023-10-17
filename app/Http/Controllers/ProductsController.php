@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Actions\Product\AddSpecValueToProduct;
 use App\Actions\Product\DeleteProduct;
+use App\Actions\Product\GetSpecOfProduct;
 use App\Actions\Product\StoreProductsWithOutThirdCategory;
 use App\Actions\Product\StoreProductsWithThirdCategory;
 use App\Models\Product;
 use App\Http\Requests\AddSpecRequest;
 use App\Http\Requests\Products\StoreProductRequest;
 use App\Http\Resources\ProductResource;
+use Illuminate\Log\Logger;
 
 class ProductsController extends Controller
 {
@@ -44,5 +46,10 @@ class ProductsController extends Controller
     public function addSpecs(Product $product, AddSpecRequest $request)
     {
         return AddSpecValueToProduct::run($product, $request);
+        return;
+    }
+    public function getProductSpecs(Product $productWithSpecs)
+    {
+        return GetSpecOfProduct::run($productWithSpecs);
     }
 }

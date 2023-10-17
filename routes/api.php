@@ -50,13 +50,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::delete('/sub-category/{subId}', [CategoryController::class, 'destroySub']);
         Route::delete('/parent-category/{parentId}', [CategoryController::class, 'destroyParent']);
         Route::get('/products', [ProductsController::class, 'read']);
-        Route::post('/add-products', [ProductsController::class, 'store']);
-        Route::delete('/products/{productId}', [ProductsController::class, 'destroy'])->where('productId', '[0-9]+');
-        Route::post('/add-specs/{product}', [ProductsController::class, 'addSpecs'])->where('product', '[0-9]+')->missing(function (Request $request) {
+        Route::post('/add-product', [ProductsController::class, 'store']);
+        Route::delete('/product/{productId}', [ProductsController::class, 'destroy'])->where('productId', '[0-9]+');
+        Route::post('/add-spec/{product}', [ProductsController::class, 'addSpecs'])->where('product', '[0-9]+')->missing(function (Request $request) {
             return $request->expectsJson() ? response()->json([
                 'error' => 'Product does not exist'
             ], 500) : 'product does not exist';
-        });;
+        });
+        Route::get('/product-spec/{productWithSpecs}', [ProductsController::class, 'getProductSpecs']);
     });
 
     Route::middleware('signed')->group(function () {

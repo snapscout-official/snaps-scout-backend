@@ -24,7 +24,7 @@ class Spec extends Model
         return $this->belongsToMany(Product::class, 'product_spec_intermediary', 'spec_id', 'product_id', 'code', 'product_id')
             ->as('product');
     }
-    public function value(): BelongsToMany
+    public function values(): BelongsToMany
     {
         return $this->belongsToMany(SpecValue::class, 'spec_value_intermediary', 'spec_id', 'spec_value_id', 'code', 'id');
     }

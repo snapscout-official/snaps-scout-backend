@@ -7,7 +7,7 @@ use App\Models\Product;
 use App\Models\SpecValue;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\AddSpecRequest;
-use App\Http\Resources\ProductSpecValueResource;
+use App\Http\Resources\ProductSpecResource;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class AddSpecValueToProduct
@@ -21,23 +21,25 @@ class AddSpecValueToProduct
                 'specs_name' => $request->specName,
             ]);
 
+            if (empty($spec)) {
+                //throw an exception learn how to throw a custom exception
+            }
+
             $specValueArray = [];
-            foreach ($request->specValues as $key => $specVal) {
-                $value = SpecValue::firstOrCreate([
-                    'spec_value' => $specVal
+            foreach ($request->specValues as $key => $value) {
+                $result = SpecValue::firstOrCreate([
+                    'spec_value' => $value
                 ]);
-                $specValueArray[] = $value->id;
+                $specValueArray[] = $result->id;
             }
             $product->specs()->syncWithoutDetaching([$spec->code]);
-            $spec->value()->syncWithOutDetaching($specValueArray);
-            $product = Product::with('specs.value')->find($product->product_id);
+            $spec->values()->syncWithOutDetaching($specValueArray);
+            $product = Product::with('specs.values')->find($product->product_id);
             return ['spec' => $spec, 'product' => $product];
         });
         extract($data);
-
         return empty($product) ? response()->json([
             'error' => 'error adding spec and specs value',
-        ]) : (new ProductSpecValueResource($product))
-            ->additional(['message' => "successfully added spec {$spec->specs_name}"]);
+        ]) : response()->json(new ProductSpecResource($product), 201);
     }
 }
