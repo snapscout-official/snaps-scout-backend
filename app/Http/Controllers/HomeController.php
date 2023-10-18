@@ -70,6 +70,6 @@ class HomeController extends Controller
         // return response()->json([
         //     'test' => 'Hello world'
         // ]);
-        return "Pangit si sir Pacot";
+        return "Snapscout";
     }
 }

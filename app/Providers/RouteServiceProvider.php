@@ -38,6 +38,7 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
+
         //bind for product route parameter
         Route::bind('product', function (string $value) {
 
