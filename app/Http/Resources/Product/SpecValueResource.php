@@ -16,6 +16,7 @@ class SpecValueResource extends JsonResource
     {
         static::withoutWrapping();
         return [
+            'id' => $this->code,
             'spec_name' => $this->specs_name,
             'values' => $this->whenLoaded('values', function () {
                 return $this->values->map(function ($value) {

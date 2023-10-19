@@ -3,8 +3,6 @@
 namespace App\Actions\Product;
 
 use App\Models\Product;
-use App\Models\SpecValue;
-use Illuminate\Log\Logger;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class DeleteProductSpecValue
