@@ -10,6 +10,8 @@ use App\Models\SubCategory;
 use Illuminate\Support\Arr;
 use App\Models\ThirdCategory;
 use App\Models\ParentCategory;
+use App\Models\ProductSpec;
+use App\Models\Spec;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\DB;
@@ -70,6 +72,14 @@ class HomeController extends Controller
         // return response()->json([
         //     'test' => 'Hello world'
         // ]);
+        $products = Product::with('specs')->get();
+        foreach ($products as $product) {
+            // dump($product->specs->spec_values);
+            foreach ($product->specs as $productSpec) {
+                dump($productSpec->spec_values->spec_value);
+            }
+        }
+        dd($products);
         return "Snapscout";
     }
 }

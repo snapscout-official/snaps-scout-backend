@@ -10,6 +10,8 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use App\Models\ParentCategory;
 use App\Models\Product;
+use App\Models\Spec;
+use App\Models\SpecValue;
 use App\Models\SubCategory;
 use App\Models\ThirdCategory;
 use Illuminate\Support\Facades\DB;
@@ -50,11 +52,24 @@ class DatabaseSeeder extends Seeder
         //     'password' => Hash::make('starmovies3144'),
         //     'role_id' => Role::SUPERADMIN
         // ]);
-        // ParentCategory::factory()->count(5)->create();
-        // SubCategory::factory()->count(5)->create();
-        // ThirdCategory::factory()->count(5)->create();
-        Product::factory()->count(20)->create();
-        // DB::commit();
+        DB::transaction(function () {
+            ParentCategory::factory()->count(5)->create();
+            SubCategory::factory()->count(5)->create();
+            ThirdCategory::factory()->count(5)->create();
+            $products = Product::factory()->count(20)->create();
+            Spec::factory()->count(10)->create();
+            SpecValue::factory()->count(10)->create();
 
+
+            foreach ($products as $product) {
+                $specs = Spec::inRandomOrder()->take(rand(0, 3))->pluck('code');
+                $product->specs()->attach($specs, ['spec_value_id' => SpecValue::inRandomOrder()->first()->id]);
+            }
+        });
+
+        // foreach ($specNames as $name) {
+        //     $values = SpecValue::inRandomOrder()->take(rand(1, 4))->pluck('id');
+        //     $name->values()->attach($values, ['productid' => Product::inRandomOrder()->first()->product_id]);
+        // }
     }
 }

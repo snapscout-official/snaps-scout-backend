@@ -35,7 +35,14 @@ class Product extends Model
     }
     public function specs(): BelongsToMany
     {
-        return $this->belongsToMany(Spec::class, 'product_specs_intermediary', 'product_id', 'spec_id', 'product_id', 'code')
-            ->as('product');
+        return $this->belongsToMany(Spec::class, 'spec_value_intermediary', 'productid', 'spec_id', 'product_id', 'code')
+            ->as('spec_values')
+            ->using(SpecValuePivot::class)
+            ->withPivot('spec_value_id');
     }
+
+    // public function productSpecs(): HasMany
+    // {
+    //     return $this->hasMany(ProductSpecIntermediate::class, 'productid', 'product_id');
+    // }
 }

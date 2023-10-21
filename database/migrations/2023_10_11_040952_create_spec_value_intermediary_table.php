@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('spec_value_intermediary', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('productid')->constrained('products', 'product_id')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
             $table->foreignId('spec_id')
                 ->constrained('product_specs', 'code')
                 ->cascadeOnDelete()
