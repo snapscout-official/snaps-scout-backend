@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Product;
 
+use App\Models\SpecValuePivot;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -18,13 +19,13 @@ class SpecValueResource extends JsonResource
         return [
             'id' => $this->code,
             'spec_name' => $this->specs_name,
-            'values' => $this->whenLoaded('values', function () {
-                return $this->values->map(function ($value) {
-                    return [
-                        'value' => $value->spec_value
-                    ];
-                });
-            })
+            'values' => $this->whenPivotLoadedAs('spec_values', 'spec_value_intermediary', function () {
+                return $this->spec_values->spec_value;
+            }),
         ];
     }
 }
+
+// $this->whenPivotLoaded(new SpecValuePivot, function () {
+//     return $this->spec_values->spec_value;
+// })

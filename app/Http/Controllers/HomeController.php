@@ -79,7 +79,9 @@ class HomeController extends Controller
                 dump($productSpec->spec_values->spec_value);
             }
         }
-        dd($products);
+        return response()->json([
+            'data' => $products,
+        ]);
         return "Snapscout";
     }
 }

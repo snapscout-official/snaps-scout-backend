@@ -12,8 +12,6 @@ use App\Models\Product;
 use App\Http\Requests\AddSpecRequest;
 use App\Http\Requests\Products\StoreProductRequest;
 use App\Http\Resources\ProductResource;
-use App\Models\Spec;
-use App\Models\SpecValue;
 
 class ProductsController extends Controller
 {
