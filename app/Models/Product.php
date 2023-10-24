@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithPivotTable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -36,14 +37,6 @@ class Product extends Model
     }
     public function specs(): BelongsToMany
     {
-        return $this->belongsToMany(Spec::class, 'spec_value_intermediary', 'productid', 'spec_id', 'product_id', 'code')
-            ->as('spec_values')
-            ->using(SpecValuePivot::class)
-            ->withPivot('spec_value_id');
+        return $this->belongsToMany(SpecValue::class, 'product_specs_intermediate', 'product_id', 'specs_value_id', 'product_id', 'id');
     }
-
-    // public function productSpecs(): HasMany
-    // {
-    //     return $this->hasMany(ProductSpecIntermediate::class, 'productid', 'product_id');
-    // }
 }

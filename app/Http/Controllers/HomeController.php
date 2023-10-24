@@ -11,7 +11,9 @@ use Illuminate\Support\Arr;
 use App\Models\ThirdCategory;
 use App\Models\ParentCategory;
 use App\Models\ProductSpec;
+use App\Models\ProductSpecIntermediary;
 use App\Models\Spec;
+use App\Models\SpecValue;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\DB;
@@ -72,16 +74,22 @@ class HomeController extends Controller
         // return response()->json([
         //     'test' => 'Hello world'
         // ]);
-        $products = Product::with('specs')->get();
-        foreach ($products as $product) {
-            // dump($product->specs->spec_values);
-            foreach ($product->specs as $productSpec) {
-                dump($productSpec->spec_values->spec_value);
-            }
-        }
-        return response()->json([
-            'data' => $products,
+
+        //toAdd
+        //create the many to many relationship of the specValue
+        $product = Product::find(1000);
+        $arr = ['2gb', '3gb', '4gb'];
+        $spec = Spec::create([
+            'specs_name' => 'Ram',
         ]);
+        foreach ($arr as $value) {
+            $res[] = $spec->values()->create([
+                'spec_value' => $value
+            ])->id;
+        }
+        $product->specs()->syncWithoutDetaching($res);
+        return Product::with('specs')->find(1000);
+
         return "Snapscout";
     }
 }

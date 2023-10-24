@@ -56,12 +56,27 @@ class DatabaseSeeder extends Seeder
         SubCategory::factory()->count(5)->create();
         ThirdCategory::factory()->count(5)->create();
         $products = Product::factory()->count(20)->create();
-        Spec::factory()->count(10)->create();
-        SpecValue::factory()->count(10)->create();
-        foreach ($products as $product) {
-            $specs = Spec::inRandomOrder()->take(rand(0, 3))->pluck('code');
-            $product->specs()->attach($specs, ['spec_value_id' => SpecValue::inRandomOrder()->first()->id]);
+        // $specs = Spec::factory()->count(10)->create();
+        // $values =  SpecValue::factory()->count(10)->create();
+        $arr = ['large', 'medium', 'small'];
+        $res = [];
+        $spec = Spec::create([
+            'specs_name' => 'size'
+        ]);
+        foreach ($arr as $value) {
+            $res[] = $spec->values()->create([
+                'spec_value' => $value
+            ])->id;
         }
+        $products[0]->specs()->syncWithoutDetaching($res);
+        // $products[0]->productSpecs()->create([
+        //     'spec_id' => Spec::inRandomOrder()->first()->code,
+        //     'spec_value_id' => SpecValue::inRandomOrder()->first()->id,
+        // ]);
+        // foreach($specs as $spec)
+        // {
+        //     $spec->values
+        // }
         DB::commit();
     }
 }

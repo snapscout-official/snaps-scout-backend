@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class SpecValue extends Model
@@ -11,12 +12,17 @@ class SpecValue extends Model
     use HasFactory;
     protected $fillable = [
         'spec_value',
+        'spec_name_id',
     ];
     protected $table = 'specs_value';
     public $timestamps = false;
 
-    // public function spec_name(): BelongsToMany
-    // {
-    //     return $this->belongsToMany(Spec::class, 'spec_value_intermediary', 'spec_value_id', 'spec_id', 'id', 'code');
-    // }
+    public function specName(): BelongsTo
+    {
+        return $this->belongsTo(Spec::class, 'spec_name_id', 'id');
+    }
+    public function products(): BelongsToMany
+    {
+        return $this->belongsToMany(Product::class, 'product_specs_intermediate', 'specs_value_id', 'product_id', 'id', 'product_id');
+    }
 }
