@@ -60,7 +60,7 @@ class DatabaseSeeder extends Seeder
         // $values =  SpecValue::factory()->count(10)->create();
         $arr = ['large', 'medium', 'small'];
         $res = [];
-        $spec = Spec::create([
+        $spec = Spec::firstOrcreate([
             'specs_name' => 'size'
         ]);
         foreach ($arr as $value) {

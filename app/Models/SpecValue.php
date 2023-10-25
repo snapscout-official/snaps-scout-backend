@@ -19,7 +19,7 @@ class SpecValue extends Model
 
     public function specName(): BelongsTo
     {
-        return $this->belongsTo(Spec::class, 'spec_name_id', 'id');
+        return $this->belongsTo(Spec::class, 'spec_name_id', 'code');
     }
     public function products(): BelongsToMany
     {

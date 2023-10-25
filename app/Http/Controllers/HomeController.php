@@ -79,7 +79,7 @@ class HomeController extends Controller
         //create the many to many relationship of the specValue
         $product = Product::find(1000);
         $arr = ['2gb', '3gb', '4gb'];
-        $spec = Spec::create([
+        $spec = Spec::firstOrCreate([
             'specs_name' => 'Ram',
         ]);
         foreach ($arr as $value) {
@@ -88,7 +88,7 @@ class HomeController extends Controller
             ])->id;
         }
         $product->specs()->syncWithoutDetaching($res);
-        return Product::with('specs')->find(1000);
+        return Product::with('specs.specName')->find(1000);
 
         return "Snapscout";
     }
