@@ -17,9 +17,10 @@ class SpecValue extends Model
     protected $table = 'specs_value';
     public $timestamps = false;
 
-    public function specName(): BelongsTo
+    public function specNames(): BelongsToMany
     {
-        return $this->belongsTo(Spec::class, 'spec_name_id', 'code');
+        return $this->belongsToMany(Spec::class, 'products_specs_values', 'spec_value_id', 'spec_name_id', 'id', 'code')
+            ->withPivot('product_id');
     }
     public function products(): BelongsToMany
     {

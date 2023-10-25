@@ -8,20 +8,20 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class SpecValueResource extends JsonResource
 {
-    /**
-     * Transform the resource into an array.
-     *
-     * @return array<string, mixed>
-     */
+    private $specs;
+    public function __construct($resource, $specs)
+    {
+        parent::__construct($resource);
+        $this->specs = $specs;
+    }
     public function toArray(Request $request): array
     {
         static::withoutWrapping();
+
         return [
             'id' => $this->code,
-            'spec_name' => $this->specs_name,
-            'values' => $this->whenPivotLoadedAs('spec_values', 'spec_value_intermediary', function () {
-                return $this->spec_values->spec_value;
-            }),
+            'spec_name' => $this->specName->specs_name,
+            // 'values' => $this->specs[$this->specName->specs_name],
         ];
     }
 }

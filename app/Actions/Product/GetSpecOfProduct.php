@@ -12,6 +12,7 @@ class GetSpecOfProduct
 
     public function handle(Product $product)
     {
+        // dd($product);
         return (new ProductSpecResource($product));
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('specs_value', function (Blueprint $table) {
             $table->id();
             $table->string('spec_value');
-            $table->foreignId('spec_name_id')->constrained('product_specs', 'code');
+            // $table->foreignId('spec_name_id')->constrained('product_specs', 'code');
         });
     }
 

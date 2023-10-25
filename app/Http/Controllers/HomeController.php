@@ -14,6 +14,7 @@ use App\Models\ProductSpec;
 use App\Models\ProductSpecIntermediary;
 use App\Models\Spec;
 use App\Models\SpecValue;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,7 @@ use Illuminate\Support\Facades\Cache;
 use Maatwebsite\Excel\HeadingRowImport;
 use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 use PhpParser\Node\Stmt\Return_;
+use Random\Engine\Secure;
 
 class HomeController extends Controller
 {
@@ -77,18 +79,17 @@ class HomeController extends Controller
 
         //toAdd
         //create the many to many relationship of the specValue
-        $product = Product::find(1000);
-        $arr = ['2gb', '3gb', '4gb'];
-        $spec = Spec::firstOrCreate([
-            'specs_name' => 'Ram',
-        ]);
-        foreach ($arr as $value) {
-            $res[] = $spec->values()->create([
-                'spec_value' => $value
-            ])->id;
-        }
-        $product->specs()->syncWithoutDetaching($res);
-        return Product::with('specs.specName')->find(1000);
+        $product = Product::all()[1];
+        $values = SpecValue::inRandomOrder()->take(rand(1, 5))->pluck('id');
+        $specs = Spec::all();
+        $spec = $specs[1];
+        $spec->values()->syncWithPivotValues([8, 1, 7], ['product_id' => $product->product_id], false);
+
+        return $spec->whereHas('values', function (Builder $query) use ($product) {
+            $query->where('product_id', $product->product_id);
+        })->with(['values' => function (Builder $query) use ($product) {
+            $query->where('product_id', $product->product_id);
+        }])->get();
 
         return "Snapscout";
     }

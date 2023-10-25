@@ -2,6 +2,7 @@
 
 namespace App\Actions\Product;
 
+use App\Exceptions\TestException;
 use App\Models\Spec;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -22,11 +23,12 @@ class AddSpecValueToProduct
 
             //if creation fails throw an exception learn how to throw a custom exception
             if (empty($spec)) {
+                throw new TestException('specs is emtpy');
             }
             $arrIds = [];
             //attach the specName and  each specValues to the intermediary table
             foreach ($request->specValues as $value) {
-                $id = $spec->values()->create([
+                $id = $spec->values()->firstOrCreate([
                     'spec_value' => $value,
                 ])->id;
                 $arrIds[] = $id;

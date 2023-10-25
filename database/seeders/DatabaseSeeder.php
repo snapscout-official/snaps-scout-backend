@@ -55,20 +55,13 @@ class DatabaseSeeder extends Seeder
         ParentCategory::factory()->count(5)->create();
         SubCategory::factory()->count(5)->create();
         ThirdCategory::factory()->count(5)->create();
-        $products = Product::factory()->count(20)->create();
-        // $specs = Spec::factory()->count(10)->create();
-        // $values =  SpecValue::factory()->count(10)->create();
-        $arr = ['large', 'medium', 'small'];
-        $res = [];
-        $spec = Spec::firstOrcreate([
-            'specs_name' => 'size'
-        ]);
-        foreach ($arr as $value) {
-            $res[] = $spec->values()->create([
-                'spec_value' => $value
-            ])->id;
-        }
-        $products[0]->specs()->syncWithoutDetaching($res);
+        $product = Product::factory()->count(20)->create()[0];
+        $specs = Spec::factory()->count(10)->create();
+        SpecValue::factory()->count(10)->create();
+        $values = SpecValue::inRandomOrder()->take(rand(1, 5))->pluck('id');
+
+        $spec = $specs[0];
+        $spec->values()->syncWithPivotValues($values, ['product_id' => $product->product_id], false);
         // $products[0]->productSpecs()->create([
         //     'spec_id' => Spec::inRandomOrder()->first()->code,
         //     'spec_value_id' => SpecValue::inRandomOrder()->first()->id,

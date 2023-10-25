@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Spec extends Model
 {
@@ -23,9 +22,10 @@ class Spec extends Model
     protected $primaryKey = 'code';
 
 
-    public function values(): HasMany
+    public function values(): BelongsToMany
     {
-        return $this->hasMany(SpecValue::class, 'spec_name_id', 'code');
+        return $this->belongsToMany(SpecValue::class, 'products_specs_values', 'spec_name_id', 'spec_value_id', 'code', 'id')
+            ->withPivot('product_id');
     }
     protected static function newFactory(): Factory
     {
