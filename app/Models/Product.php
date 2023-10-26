@@ -35,8 +35,4 @@ class Product extends Model
     {
         return $this->belongsTo(ThirdCategory::class, 'third_code', 'third_id');
     }
-    public function specs(): BelongsToMany
-    {
-        return $this->belongsToMany(SpecValue::class, 'product_specs_intermediate', 'product_id', 'specs_value_id', 'product_id', 'id');
-    }
 }

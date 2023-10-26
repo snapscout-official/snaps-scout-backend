@@ -43,9 +43,9 @@ class ProductsController extends Controller
     {
         return AddSpecValueToProduct::run($product, $request);
     }
-    public function getProductSpecs(Product $productWithSpecs)
+    public function getProductSpecs(Product $product)
     {
-        return GetSpecOfProduct::run($productWithSpecs);
+        return GetSpecOfProduct::run($product);
     }
     public function deleteSpec(Product $product, int $specId)
 

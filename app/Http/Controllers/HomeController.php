@@ -79,12 +79,11 @@ class HomeController extends Controller
 
         //toAdd
         //create the many to many relationship of the specValue
-        $product = Product::all()[1];
+        $product = Product::all()[0];
         $values = SpecValue::inRandomOrder()->take(rand(1, 5))->pluck('id');
         $specs = Spec::all();
-        $spec = $specs[1];
-        $spec->values()->syncWithPivotValues([8, 1, 7], ['product_id' => $product->product_id], false);
-
+        $spec = $specs[0];
+        $spec->values()->syncWithPivotValues([2, 10, 5], ['product_id' => $product->product_id], false);
         return $spec->whereHas('values', function (Builder $query) use ($product) {
             $query->where('product_id', $product->product_id);
         })->with(['values' => function (Builder $query) use ($product) {

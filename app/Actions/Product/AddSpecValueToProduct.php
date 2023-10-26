@@ -15,7 +15,7 @@ class AddSpecValueToProduct
     use AsAction;
     public function handle(Product $product, AddSpecRequest $request)
     {
-
+        //refactor
         $product = DB::transaction(function () use ($product, $request) {
             $spec = Spec::firstOrCreate([
                 'specs_name' => $request->specName,
@@ -40,8 +40,8 @@ class AddSpecValueToProduct
             $product = Product::with('specs.specName')->find($product->product_id);
             return $product;
         });
-        return empty($product) ? response()->json([
-            'error' => 'error adding spec and specs value',
-        ]) : response()->json(new ProductSpecResource($product), 201);
+        // return empty($product) ? response()->json([
+        //     'error' => 'error adding spec and specs value',
+        // ]) : response()->json(new ProductSpecResource($product), 201);
     }
 }

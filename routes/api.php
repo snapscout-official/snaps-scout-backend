@@ -57,7 +57,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 'error' => 'Product does not exist'
             ], 500) : 'product does not exist';
         });
-        Route::get('/product-spec/{productWithSpecs}', [ProductsController::class, 'getProductSpecs']);
+        Route::get('/product-spec/{product}', [ProductsController::class, 'getProductSpecs']);
         Route::delete('/product-spec/{product}/{specId}', [ProductsController::class, 'deleteSpec'])->where('product', '[0-9]+');
     });
 

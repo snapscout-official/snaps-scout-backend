@@ -42,7 +42,7 @@ class RouteServiceProvider extends ServiceProvider
         //bind for product route parameter
         Route::bind('product', function (string $value) {
 
-            return Product::with('specs')->find($value);
+            return Product::find($value);
         });
         Route::bind('productWithSpecs', function (string $value) {
             return Product::with('specs.specName')->find($value);
