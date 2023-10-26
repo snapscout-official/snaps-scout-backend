@@ -48,7 +48,6 @@ class ProductsController extends Controller
         return GetSpecOfProduct::run($product);
     }
     public function deleteSpec(Product $product, int $specId)
-
     {
         return DeleteProductSpecValue::run($product, $specId);
     }

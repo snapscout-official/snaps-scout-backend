@@ -6,7 +6,6 @@ use App\Http\Resources\Product\SpecValueResource;
 use App\Models\SpecValue;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Log\Logger;
 
 class ProductSpecResource extends JsonResource
 {

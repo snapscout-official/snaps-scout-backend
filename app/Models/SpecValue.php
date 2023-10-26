@@ -12,7 +12,6 @@ class SpecValue extends Model
     use HasFactory;
     protected $fillable = [
         'spec_value',
-        'spec_name_id',
     ];
     protected $table = 'specs_value';
     public $timestamps = false;
