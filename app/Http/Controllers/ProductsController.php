@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Product\AddSpecValueToProduct;
-use App\Actions\Product\DeleteProduct;
-use App\Actions\Product\DeleteProductSpecValue;
-use App\Actions\Product\GetSpecOfProduct;
-use App\Actions\Product\StoreProductsWithOutThirdCategory;
-use App\Actions\Product\StoreProductsWithThirdCategory;
 use App\Models\Product;
 use App\Http\Requests\AddSpecRequest;
-use App\Http\Requests\Products\StoreProductRequest;
+use App\Actions\Product\DeleteProduct;
 use App\Http\Resources\ProductResource;
+use App\Actions\Product\GetSpecOfProduct;
+use App\Actions\Product\AddSpecValueToProduct;
+use App\Actions\Product\DeleteOneSpecValue;
+use App\Actions\Product\DeleteProductSpecValues;
+use App\Http\Requests\Products\StoreProductRequest;
+use App\Actions\Product\StoreProductsWithThirdCategory;
+use App\Actions\Product\StoreProductsWithOutThirdCategory;
+use App\Models\Spec;
 
 class ProductsController extends Controller
 {
@@ -47,8 +49,12 @@ class ProductsController extends Controller
     {
         return GetSpecOfProduct::run($product);
     }
-    public function deleteSpec(Product $product, int $specId)
+    public function deleteSpecValues(Product $product, Spec $spec)
     {
-        return DeleteProductSpecValue::run($product, $specId);
+        return DeleteProductSpecValues::run($product,  $spec);
+    }
+    public function deleteSpecValue(Product $product, Spec $spec, int $specValueId)
+    {
+        return DeleteOneSpecValue::run($product, $spec, $specValueId);
     }
 }

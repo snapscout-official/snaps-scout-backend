@@ -14,7 +14,7 @@ class ProductException extends Exception
     }
     public function render(Request $request)
     {
-        return $request->expectsJson() ? $request->json([
+        return $request->expectsJson() ? response()->json([
             'error' => $this->getMessage(),
         ], 400) : $this->message;
     }

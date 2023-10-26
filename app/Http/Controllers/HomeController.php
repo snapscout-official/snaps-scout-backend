@@ -82,8 +82,9 @@ class HomeController extends Controller
         $product = Product::all()[0];
         $values = SpecValue::inRandomOrder()->take(rand(1, 5))->pluck('id');
         $specs = Spec::all();
-        $spec = $specs[0];
-        $spec->values()->syncWithPivotValues([2, 10, 5], ['product_id' => $product->product_id], false);
+        $spec = $specs[10];
+        // $spec->values()->syncWithPivotValues([2, 10, 5], ['product_id' => $product->product_id], false);
+        $spec->values()->wherePivot('product_id', 1000)->detach();
         return $spec->whereHas('values', function (Builder $query) use ($product) {
             $query->where('product_id', $product->product_id);
         })->with(['values' => function (Builder $query) use ($product) {

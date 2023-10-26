@@ -14,7 +14,6 @@ class Spec extends Model
 
     protected $fillable = [
         'specs_name',
-
     ];
 
     protected $table = 'product_specs';

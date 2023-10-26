@@ -34,7 +34,7 @@ class AddSpecValueToProduct
                 ])->id;
             }
             //attach to intermediate the spec and values with a desired product 
-            $spec->values()->syncWithPivotValues($arrId, ['product_id' => $product->product_id], false);
+            $spec->values()->attach($arrId, ['product_id' => $product->product_id]);
             DB::commit();
             $spec->refresh();
             $productSpecs = GetSpecOfProduct::loadProductSpecs($spec, $product);

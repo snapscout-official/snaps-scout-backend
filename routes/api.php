@@ -57,8 +57,11 @@ Route::middleware('auth:sanctum')->group(function () {
                 'error' => 'Product does not exist'
             ], 500) : 'product does not exist';
         });
-        Route::get('/product-spec/{product}', [ProductsController::class, 'getProductSpecs']);
-        Route::delete('/product-spec/{product}/{specId}', [ProductsController::class, 'deleteSpec'])->where('product', '[0-9]+');
+
+        Route::delete('/product-spec/{product}/{spec}', [ProductsController::class, 'deleteSpecValues'])
+            ->where(['product' =>  '[0-9]+', 'spec' => '[0-9]+']);
+        Route::delete('/product-spec/{product}/{spec}/{specValueId}', [ProductsController::class, 'deleteSpecValue'])
+            ->where(['product' =>  '[0-9]+', 'spec' => '[0-9]+']);
     });
 
     Route::middleware('signed')->group(function () {
@@ -108,3 +111,6 @@ Route::middleware('guest')->group(function () {
             : back()->withErrors(['email' => [__($status)]]);
     });
 });
+
+//
+Route::get('/product-spec/{product}', [ProductsController::class, 'getProductSpecs']);
