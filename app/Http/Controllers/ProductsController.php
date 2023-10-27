@@ -37,9 +37,9 @@ class ProductsController extends Controller
         }
         return StoreProductsWithOutThirdCategory::run($request);
     }
-    public function destroy(int $productId)
+    public function destroy(int $product)
     {
-        return DeleteProduct::run($productId);
+        return DeleteProduct::run($product);
     }
     public function addSpecs(Product $product, AddSpecRequest $request)
     {

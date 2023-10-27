@@ -2,20 +2,20 @@
 
 namespace App\Actions\Product;
 
+use App\Exceptions\ProductCategoryException;
 use App\Models\ThirdCategory;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Http\Requests\Products\StoreProductRequest;
+use App\Http\Resources\Product\CreateProductResource;
 
 class StoreProductsWithThirdCategory
 {
     use AsAction;
     public function handle(StoreProductRequest $request)
     {
-        $thirdCategory = ThirdCategory::find($request->thirdCategoryId);
+        $thirdCategory = ThirdCategory::with('subCategory')->find($request->thirdCategoryId);
         if (empty($thirdCategory)) {
-            return response()->json([
-                'error' => 'Product unsucessfully stored',
-            ]);
+            throw new ProductCategoryException("third category id does not exist on the database");
         }
 
         $productCreated = $thirdCategory->products()->create([
@@ -23,12 +23,10 @@ class StoreProductsWithThirdCategory
             'description' => $request->description,
             'sub_code' => $thirdCategory->subCategory->sub_id,
         ]);
-
-        return $request->expectsJson() ? response()->json([
-            'message' => 'Successfully added the product',
-            'thirdCategory' => $thirdCategory->third_name,
-            'product' => $productCreated,
-            'subCategory' => $thirdCategory->sub_name,
-        ], 201) : $productCreated;
+        if (is_null($productCreated)) {
+            throw new ProductCategoryException("creating product {$request->product_name} results an error on the server");
+        }
+        return $request->expectsJson() ? response()
+            ->json(new CreateProductResource($productCreated, $thirdCategory->subCategory->sub_name, $thirdCategory->third_name), 201) : $productCreated;
     }
 }

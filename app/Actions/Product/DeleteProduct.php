@@ -17,7 +17,7 @@ class DeleteProduct
             ]);
         }
         return response()->json([
-            'error' => 'Product Unsuccessfully deleted',
-        ], 500);
+            'error' => 'product Unsuccessfully deleted',
+        ], 400);
     }
 }

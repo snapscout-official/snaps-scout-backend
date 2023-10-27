@@ -43,25 +43,25 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
-    Route::group(['middleware' => 'role:super_admin', 'prefix' => 'admin'], function () {
+    Route::group(['middleware' => ['role:super_admin', 'throttle:api'], 'prefix' => 'admin'], function () {
         Route::get('/create-category', [CategoryController::class, 'create']);
         Route::post('/create-category', [CategoryController::class, 'store']);
         Route::delete('/third-category/{thirdId}', [CategoryController::class, 'destroyThird']);
         Route::delete('/sub-category/{subId}', [CategoryController::class, 'destroySub']);
         Route::delete('/parent-category/{parentId}', [CategoryController::class, 'destroyParent']);
-        Route::get('/products', [ProductsController::class, 'read']);
-        Route::post('/add-product', [ProductsController::class, 'store']);
-        Route::delete('/product/{productId}', [ProductsController::class, 'destroy'])->where('productId', '[0-9]+');
-        Route::post('/add-spec/{product}', [ProductsController::class, 'addSpecs'])->where('product', '[0-9]+')->missing(function (Request $request) {
-            return $request->expectsJson() ? response()->json([
-                'error' => 'Product does not exist'
-            ], 500) : 'product does not exist';
+        Route::controller(ProductsController::class)->group(function () {
+            Route::get('/products', 'read');
+            Route::post('/add-product', 'store');
+            Route::delete('/product/{product}', 'destroy');
+            Route::post('/add-spec/{product}', 'addSpecs')->missing(function (Request $request) {
+                return $request->expectsJson() ? response()->json([
+                    'error' => 'Product does not exist'
+                ], 500) : 'product does not exist';
+            });
+            Route::get('/product-specs/{product}', 'getProductSpecs');
+            Route::delete('/product-spec/{product}/{spec}', 'deleteSpecValues');
+            Route::delete('/product-spec/{product}/{spec}/{specValueId}', 'deleteSpecValue');
         });
-
-        Route::delete('/product-spec/{product}/{spec}', [ProductsController::class, 'deleteSpecValues'])
-            ->where(['product' =>  '[0-9]+', 'spec' => '[0-9]+']);
-        Route::delete('/product-spec/{product}/{spec}/{specValueId}', [ProductsController::class, 'deleteSpecValue'])
-            ->where(['product' =>  '[0-9]+', 'spec' => '[0-9]+']);
     });
 
     Route::middleware('signed')->group(function () {
@@ -112,5 +112,4 @@ Route::middleware('guest')->group(function () {
     });
 });
 
-//
-Route::get('/product-spec/{product}', [ProductsController::class, 'getProductSpecs']);
+Route::get('/product-specs/{product}', [ProductsController::class, 'getProductSpecs']);

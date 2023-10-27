@@ -2,6 +2,7 @@
 
 namespace App\Actions\Product;
 
+use App\Exceptions\ProductException;
 use App\Models\Spec;
 use App\Models\Product;
 use Lorisleiva\Actions\Concerns\AsAction;
@@ -18,6 +19,9 @@ class GetSpecOfProduct
         $spec = Spec::first();
         //first filter the specNames that has the productID column value of the product we desire to retrieve
         //next eagerload with a filter query also same as the first filter query
+        if (is_null($spec)) {
+            throw new ProductException("error retrieving specs on product {$product->product_name}");
+        }
         $productSpecs = self::loadProductSpecs($spec, $product);
         return (new ProductSpecResource($product, $productSpecs));
     }

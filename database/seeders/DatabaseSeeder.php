@@ -4,8 +4,12 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\ParentCategory;
+use App\Models\Product;
 use Carbon\Carbon;
 use App\Models\Role;
+use App\Models\SubCategory;
+use App\Models\ThirdCategory;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -46,5 +50,9 @@ class DatabaseSeeder extends Seeder
             'role_id' => Role::SUPERADMIN
         ]);
         DB::commit();
+        ParentCategory::factory(5)->create();
+        SubCategory::factory(5)->create();
+        ThirdCategory::factory(4)->create();
+        Product::factory(5)->create();
     }
 }

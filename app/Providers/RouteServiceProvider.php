@@ -38,7 +38,10 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
         });
 
-
+        //global patterns
+        Route::pattern('spec', '[0-9]+');
+        Route::pattern('product', '[0-9]+');
+        Route::pattern('specValueId', '[0-9]+');
         //bind for product route parameter
         Route::bind('product', function (string $value) {
 
