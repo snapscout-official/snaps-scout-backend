@@ -8,12 +8,6 @@ use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use App\Models\ParentCategory;
-use App\Models\Product;
-use App\Models\Spec;
-use App\Models\SpecValue;
-use App\Models\SubCategory;
-use App\Models\ThirdCategory;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -37,7 +31,7 @@ class DatabaseSeeder extends Seeder
         }
         DB::beginTransaction();
 
-        $date = Carbon::createFromFormat('F j, Y', 'June 11, 2002')
+        $date = Carbon::createFromFormat('F j, Y', 'March 21, 2002')
             ->format('Y-m-d');
 
         $user = User::create([
@@ -51,25 +45,6 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('starmovies3144'),
             'role_id' => Role::SUPERADMIN
         ]);
-
-        ParentCategory::factory()->count(5)->create();
-        SubCategory::factory()->count(5)->create();
-        ThirdCategory::factory()->count(5)->create();
-        $product = Product::factory()->count(20)->create()[0];
-        $specs = Spec::factory()->count(10)->create();
-        SpecValue::factory()->count(10)->create();
-        $values = SpecValue::inRandomOrder()->take(rand(1, 5))->pluck('id');
-
-        $spec = $specs[0];
-        $spec->values()->syncWithPivotValues($values, ['product_id' => $product->product_id], false);
-        // $products[0]->productSpecs()->create([
-        //     'spec_id' => Spec::inRandomOrder()->first()->code,
-        //     'spec_value_id' => SpecValue::inRandomOrder()->first()->id,
-        // ]);
-        // foreach($specs as $spec)
-        // {
-        //     $spec->values
-        // }
         DB::commit();
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Actions\Product;
 
 use App\Exceptions\ProductException;
-use App\Exceptions\TestException;
 use App\Models\Spec;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
@@ -26,15 +25,16 @@ class AddSpecValueToProduct
             if (empty($spec)) {
                 throw new ProductException("error adding spec value on spec {$request->specName}");
             }
+            //get the current spec values of the product
             $existingProductValuesName = $spec->values()->wherePivot('product_id', $product->product_id)
                 ->get()
                 ->map(function ($value) {
                     return $value->spec_value;
                 })->toArray();
-            // dd($existingProductValuesName);
             //store each id of the specValue into an array
             $arrId = [];
             foreach ($request->specValues as $value) {
+                //if the currently to be inserted value is already in the table then skip and proceed to the next value
                 if (in_array($value, $existingProductValuesName)) {
                     continue;
                 }
@@ -50,7 +50,7 @@ class AddSpecValueToProduct
 
             return ['product' => $product, 'productSpecs' => $productSpecs];
         });
-
+        //extract the associative array
         extract($data);
         return empty($product) ? response()->json([
             'error' => 'error adding spec and specs value',

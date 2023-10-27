@@ -17,6 +17,7 @@ class DeleteProductSpecValues
             throw new ProductException("error deleting spec id{$spec->code}");
         }
         $result = $spec->values()->wherePivot('product_id', $product->product_id)->detach();
+        //if there is no deleted values then throw the exception
         if ($result <= 0) {
             throw new ProductException("error deleting a spec on product {$product->product_name}");
         }
