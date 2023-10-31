@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Http\Middleware\AdminMiddleware;
 use App\Test\MyService;
 use Illuminate\Support\Str;
 use Barryvdh\Debugbar\Facades\Debugbar;
@@ -16,23 +17,13 @@ use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 class AppServiceProvider extends ServiceProvider
 {
 
-    public $singletons = [
-
-    ];
+    public $singletons = [];
     /**
      * Register any application services.
      */
     public function register(): void
     {
-        $this->app->singleton(CategoryService::class, function(Application $app)
-        {
-            return new CategoryService();
-        });
-
-        $this->app->singleton(ProductService::class, function(Application $app)
-        {
-            return new ProductService();
-        });
+        $this->app->singleton(AdminMiddleware::class);
     }
 
     /**
@@ -42,9 +33,9 @@ class AppServiceProvider extends ServiceProvider
     {
         // Debugbar::disable();
         // RateLimiter::for()
-        
-        HeadingRowFormatter::extend('custom', function($value, $key){
-            return Str::slug($value); 
+
+        HeadingRowFormatter::extend('custom', function ($value, $key) {
+            return Str::slug($value);
         });
         HeadingRowFormatter::default('slug');
     }

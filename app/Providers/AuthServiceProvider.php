@@ -8,6 +8,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Models\Agency;
 use App\Models\Merchant;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Gate;
@@ -27,19 +28,17 @@ class AuthServiceProvider extends ServiceProvider
     protected $policies = [
         //
     ];
-    
+
     public function boot(): void
-    {        
-        Gate::define('view-merchant', function(Merchant $merchant){
+    {
+        Gate::define('view-merchant', function (Merchant $merchant) {
             return (auth()->user()->id === $merchant->merchant_id && auth()->user()->role_id === Role::MERCHANT);
         });
-    
-        Gate::define('view-agency', function()
-        {
+
+        Gate::define('view-agency', function () {
             return  auth()->user()->role_id === Role::AGENCY;
         });
-        VerifyEmail::createUrlUsing(function($notifiable)
-        {
+        VerifyEmail::createUrlUsing(function ($notifiable) {
             $frontEndBaseUrl = 'http://localhost:5173/verify-email';
             $temporarySignedUrl = URL::temporarySignedRoute(
                 'verification.verify',
@@ -48,23 +47,24 @@ class AuthServiceProvider extends ServiceProvider
                     'id' => $notifiable->getKey(),
                     'hash' => sha1($notifiable->getEmailForVerification()),
                 ]
-                );
+            );
             $parsedUrl = parse_url($temporarySignedUrl);
             $id = $notifiable->getKey();
             $hash = sha1($notifiable->getEmailForVerification());
             $query = $parsedUrl['query'];
 
             return "{$frontEndBaseUrl}/{$id}/{$hash}?{$query}";
-
         });
 
-        
-        VerifyEmail::toMailUsing(function(object $notifiable, string $url){
-                return (new MailMessage)
-                    ->subject('Verify Email Address')
-                    ->line('Click the button below to verify your email address')
-                    ->action('Verify Email Address', $url);
+        VerifyEmail::toMailUsing(function (object $notifiable, string $url) {
+            return (new MailMessage)
+                ->subject('Verify Email Address')
+                ->line('Click the button below to verify your email address')
+                ->action('Verify Email Address', $url);
         });
-       
+
+        ResetPassword::createUrlUsing(function (User $user, string $token) {
+            return 'https://www.snap-scout.com/reset-password?token=' . $token;
+        });
     }
 }

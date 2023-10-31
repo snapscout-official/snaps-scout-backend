@@ -17,5 +17,4 @@ class TestImport implements WithHeadingRow, SkipsEmptyRows, WithStartRow
     {
         return 2;
     }
-    
 }

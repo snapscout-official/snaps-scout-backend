@@ -9,10 +9,10 @@ use Maatwebsite\Excel\Imports\HeadingRowFormatter;
 class UsersImport implements ToModel
 {
     /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
+     * @param array $row
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
     // HeadingRowFormatter::default('none');
     public function model(array $row)
     {

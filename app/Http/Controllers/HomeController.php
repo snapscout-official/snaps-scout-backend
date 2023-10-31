@@ -2,83 +2,55 @@
 
 namespace App\Http\Controllers;
 
-use App\Actions\Authentication\LoginSuperAdmin;
-use App\Actions\Category\ReturnCategoryDataForAdmin;
-use App\Models\Product;
 use App\Imports\TestImport;
-use App\Models\SubCategory;
 use Illuminate\Support\Arr;
-use App\Models\ThirdCategory;
-use App\Models\ParentCategory;
-use App\Models\ProductSpec;
-use App\Models\ProductSpecIntermediary;
-use App\Models\Spec;
-use App\Models\SpecValue;
-use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Log\Logger;
-use Illuminate\Support\Facades\DB;
+use App\Imports\SecondSheetImport;
+use App\Imports\CategoryTestImport;
+use App\Models\Product;
+use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Support\Facades\Cache;
 use Maatwebsite\Excel\HeadingRowImport;
-use Maatwebsite\Excel\Imports\HeadingRowFormatter;
-use PhpParser\Node\Stmt\Return_;
-use Random\Engine\Secure;
 
 class HomeController extends Controller
 {
     public function __invoke(Request $request)
     {
-        // DB::beginTransaction();
-        // $parentCategory = ParentCategory::factory()->count(10)->create();
-        // $subCategory = SubCategory::factory()->count(30)->create();
-        // $thirdCategory = ThirdCategory::factory()->count(40)->create();
-        // $categories = ParentCategory::with('subCategories.thirdCategories')->get();
-        // // dd($categories);
 
-        // // $subCategories = [];
-        // // foreach($categories as $key => $category)
-        // // {
-
-        // //     $subCategories[$key] = Arr::flatten($category->subCategories); 
-
-        // // }
-        // Product::factory()->count(20)->create();
-        // $products = Product::with(['thirdCategory', 'subCategory'])->get();
-        // foreach($products as $key => $product)
-        // {
-        //     if ($product->thirdCategory === null)
-        //     {
-        //         // dump($product->subCategory);
-        //     }    
-        // }
-        // dd($products);
-        // DB::rollBack();
-
-        // $headings = (new HeadingRowImport(TestImport::HEADINGROW))->toArray(storage_path('app/public/SnapScout(2).xlsx'))[1];
-
-        // dump($headings = Arr::collapse($headings));
-        // $headings = array_flip($headings);
-        // // dump($headings[TestImport::GENERAL]);
-        // $data =  Excel::toArray(new TestImport, storage_path('app/public/SnapScout(2).xlsx'))[1];
-        // $data = array_slice($data, 1, count($data) - 1);
-        // dump($data);
-        // foreach($data as $product)
-        // {
-        // //   dump(explode(',', $product[TestImport::GENERAL]));
-        // }
-        // $parentCategories = ParentCategory::all();
-        // $subCategories = SubCategory::getSubCategoriesWithParent();
-        // $thirdCategories = ThirdCategory::returnThirdCategoryWithParentSub();
-
-        // // return [$parentCategories, $thirdCategories];
-        // Logger('redirected to HomeCOntroler');
-        // return response()->json([
-        //     'test' => 'Hello world'
-        // ]);
-
-        //toAdd
-        //create the many to many relationship of the specValue
-        return "Snapscout";
+        //gets the headings of the csv file
+        $headings = (new HeadingRowImport(SecondSheetImport::HEADER))->toArray(storage_path('app/public/SnapScout(2).xlsx'))[1][0];
+        //headings is an array so destructure its value with corresponding header Name
+        [$generalDesc, $unitMeasure, $quantity] = $headings;
+        $categoryTestimport = new CategoryTestImport();
+        $categoryTestimport->onlySheets('sheet2');
+        //transform in to an associative with a column/value pair
+        $importArray =  $categoryTestimport->toArray(storage_path('app/public/SnapScout(2).xlsx'))[1];
+        //sanitize or filter the import array closing and opening parenthesis
+        $products = Product::with('subCategory.parentCategory')->get();
+        $first = Arr::first($products, function ($value, int $key) {
+            return $value->product_name;
+        });
+        $categorized = [];
+        foreach ($importArray as $row) {
+            $productName = Str::replace(['(', ')'], [',', ','], $row[$generalDesc]);
+            $productName = Str::lower(explode(',', $productName)[0]);
+            $first = Arr::first($products, function ($value, int $key) use ($productName) {
+                return $value->product_name === $productName;
+            });
+            //if 
+            if (is_null($first)) {
+                $categorized['others'][] = $productName;
+                continue;
+            }
+            if (array_key_exists($first->subCategory->parentCategory->parent_name, $categorized) && in_array($productName, $categorized[$first->subCategory->parentCategory->parent_name])) {
+                continue;
+            }
+            $categorized[$first->subCategory->parentCategory->parent_name][] = $productName;
+            // dd($first);
+            // dump($productName);
+        }
+        return $categorized;
+        // return URL::temporarySignedRoute('delete', now()->addMinutes(1), ['product' => 1, 'spec' => 2]);
     }
 }

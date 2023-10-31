@@ -19,6 +19,7 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+
         return [
             'product_name' => fake()->name(),
             'sub_code' => SubCategory::inRandomOrder()->first()->sub_id,
@@ -26,7 +27,7 @@ class ProductFactory extends Factory
                 ThirdCategory::inRandomOrder()->first()->third_id,
                 null
             ]),
-            'description' => fake()->sentence(),       
+            'description' => fake()->sentence(),
         ];
     }
 }

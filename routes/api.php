@@ -43,12 +43,16 @@ Route::middleware('auth:sanctum')->group(function () {
         });
     });
 
+
     Route::group(['middleware' => ['role:super_admin', 'throttle:api'], 'prefix' => 'admin'], function () {
-        Route::get('/create-category', [CategoryController::class, 'create']);
-        Route::post('/create-category', [CategoryController::class, 'store']);
-        Route::delete('/third-category/{thirdId}', [CategoryController::class, 'destroyThird']);
-        Route::delete('/sub-category/{subId}', [CategoryController::class, 'destroySub']);
-        Route::delete('/parent-category/{parentId}', [CategoryController::class, 'destroyParent']);
+        Route::controller(CategoryController::class)->group(function () {
+            Route::get('/create-category', 'create');
+            Route::post('/create-category',  'store');
+            Route::delete('/third-category/{thirdId}', 'destroyThird');
+            Route::delete('/sub-category/{subId}', 'destroySub');
+            Route::delete('/parent-category/{parentId}', 'destroyParent');
+        });
+
         Route::controller(ProductsController::class)->group(function () {
             Route::get('/products', 'read');
             Route::post('/add-product', 'store');
@@ -58,11 +62,12 @@ Route::middleware('auth:sanctum')->group(function () {
                     'error' => 'Product does not exist'
                 ], 500) : 'product does not exist';
             });
-            Route::get('/product-specs/{product}', 'getProductSpecs');
-            Route::delete('/product-spec/{product}/{spec}', 'deleteSpecValues');
+            Route::get('/product-specs/{product}', 'getProductSpecs')->withoutMiddleware(['role:super_admin', 'auth:sanctum'])->middleware('admin');
+            Route::delete('/product-spec/{product}/{spec}', 'deleteSpecValues')->name('delete');
             Route::delete('/product-spec/{product}/{spec}/{specValueId}', 'deleteSpecValue');
         });
     });
+
 
     Route::middleware('signed')->group(function () {
         Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -111,5 +116,3 @@ Route::middleware('guest')->group(function () {
             : back()->withErrors(['email' => [__($status)]]);
     });
 });
-
-Route::get('/product-specs/{product}', [ProductsController::class, 'getProductSpecs']);

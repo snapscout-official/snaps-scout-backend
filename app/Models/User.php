@@ -3,7 +3,8 @@
 namespace App\Models;
 
 use App\Notifications\ResetPasswordNotification;
-use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Auth\Passwords\CanResetPassword as PasswordsCanResetPassword;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
@@ -12,9 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
 {
-    use HasApiTokens, HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable, PasswordsCanResetPassword;
 
     protected $fillable = [
         'first_name',
@@ -40,31 +41,30 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function hasRole(string $role)
     {
-        
-        if ($this->role->role_name === $role)
-        {
+
+        if ($this->role->role_name === $role) {
             return true;
         }
         return false;
     }
 
-   public function merchant():HasOne
-   {
-    return $this->hasOne(Merchant::class, 'merchant_id', 'id');
-   }
+    public function merchant(): HasOne
+    {
+        return $this->hasOne(Merchant::class, 'merchant_id', 'id');
+    }
 
-   public function agency():HasOne
-   {
-    return $this->hasOne(Agency::class, 'agency_id', 'id');
-   }
+    public function agency(): HasOne
+    {
+        return $this->hasOne(Agency::class, 'agency_id', 'id');
+    }
 
-   public function role():BelongsTo
-   {
-    return $this->belongsTo(Role::class, 'role_id');
-   }
-   public function sendPasswordResetNotification($token)
-   {
-     $url = 'http://localhost:5173/reset-token/token=' . $token;
-     $this->notify(new ResetPasswordNotification($url));
-   }
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+    public function sendPasswordResetNotification($token)
+    {
+        $url = 'https://www.snap-scout.com/reset-password?token=' . $token;
+        $this->notify(new ResetPasswordNotification($url));
+    }
 }

@@ -17,16 +17,17 @@ class AdminMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        
-        $user = User::where('email', $request->email)->first();
-        if (!$user || $user->role_id !== Role::SUPERADMIN)
-        {
-            return response()->json([
-                'authenticated' => false,
-                'error' => 'You are not authorized to login as admin'
-            ], 401);
-        }
+
+        // $user = User::where('email', $request->email)->first();
+        // if (!$user || $user->role_id !== Role::SUPERADMIN) {
+        //     return response()->json([
+        //         'authenticated' => false,
+        //         'error' => 'You are not authorized to login as admin'
+        //     ], 401);
+        // }
         return $next($request);
-    
+    }
+    public function terminate(Request $request, Response $response)
+    {
     }
 }
