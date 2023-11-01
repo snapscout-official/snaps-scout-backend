@@ -28,27 +28,32 @@ class HomeController extends Controller
         $importArray =  $categoryTestimport->toArray(storage_path('app/public/SnapScout(2).xlsx'))[1];
         //sanitize or filter the import array closing and opening parenthesis
         $products = Product::with('subCategory.parentCategory')->get();
-        $first = Arr::first($products, function ($value, int $key) {
-            return $value->product_name;
-        });
         $categorized = [];
+        $quantity = [];
         foreach ($importArray as $row) {
-            $productName = Str::replace(['(', ')'], [',', ','], $row[$generalDesc]);
+            $productName = Str::replace(['(', ')', ' '], ',', $row[$generalDesc]);
             $productName = Str::lower(explode(',', $productName)[0]);
             $first = Arr::first($products, function ($value, int $key) use ($productName) {
                 return $value->product_name === $productName;
             });
-            //if 
+            //if is null or it means that the productName does not exist on the database meaning it has no category associated
+            //add it to the others category 
             if (is_null($first)) {
                 $categorized['others'][] = $productName;
                 continue;
             }
+            //if the key already exist in the array of the categorized and if it is already in the array
             if (array_key_exists($first->subCategory->parentCategory->parent_name, $categorized) && in_array($productName, $categorized[$first->subCategory->parentCategory->parent_name])) {
                 continue;
             }
-            $categorized[$first->subCategory->parentCategory->parent_name][] = $productName;
-            // dd($first);
-            // dump($productName);
+            //if it passes all of this conditional then it means that we can add it and map it to the parentCategory key/value pair
+            // categoryName => ['products' => [array of products], 'quantity => realNumber ]
+            $categorized[$first->subCategory->parentCategory->parent_name]['products'][] = $productName;
+            if (!isset($categorized[$first->subCategory->parentCategory->parent_name]['quantity'])) {
+                $categorized[$first->subCategory->parentCategory->parent_name]['quantity'] = $row['quantitysize'];
+                continue;
+            }
+            $categorized[$first->subCategory->parentCategory->parent_name]['quantity'] += $row['quantitysize'];
         }
         return $categorized;
         // return URL::temporarySignedRoute('delete', now()->addMinutes(1), ['product' => 1, 'spec' => 2]);
