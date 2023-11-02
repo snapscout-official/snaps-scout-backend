@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\CategoryExport;
 use App\Imports\TestImport;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -29,33 +30,41 @@ class HomeController extends Controller
         //sanitize or filter the import array closing and opening parenthesis
         $products = Product::with('subCategory.parentCategory')->get();
         $categorized = [];
-        $quantity = [];
+        $code = 1;
         foreach ($importArray as $row) {
+            //replace parenthesis with commas in order for the explode 
             $productName = Str::replace(['(', ')', ' '], ',', $row[$generalDesc]);
             $productName = Str::lower(explode(',', $productName)[0]);
             $first = Arr::first($products, function ($value, int $key) use ($productName) {
                 return $value->product_name === $productName;
             });
+
             //if is null or it means that the productName does not exist on the database meaning it has no category associated
             //add it to the others category 
             if (is_null($first)) {
-                $categorized['others'][] = $productName;
+                $categorized['others']['products'][] = [$code, $row[$generalDesc], $row[$unitMeasure], $row[$quantity]];
+                $code++;
+                if (!isset($categorized['others']['quantity'])) {
+                    $categorized['others']['quantity'] = $row['quantitysize'];
+                    continue;
+                }
+                $categorized['others']['quantity'] += $row['quantitysize'];
                 continue;
             }
-            //if the key already exist in the array of the categorized and if it is already in the array
-            if (array_key_exists($first->subCategory->parentCategory->parent_name, $categorized) && in_array($productName, $categorized[$first->subCategory->parentCategory->parent_name])) {
-                continue;
-            }
+            $parentName = $first->subCategory->parentCategory->parent_name;
             //if it passes all of this conditional then it means that we can add it and map it to the parentCategory key/value pair
             // categoryName => ['products' => [array of products], 'quantity => realNumber ]
-            $categorized[$first->subCategory->parentCategory->parent_name]['products'][] = $productName;
-            if (!isset($categorized[$first->subCategory->parentCategory->parent_name]['quantity'])) {
-                $categorized[$first->subCategory->parentCategory->parent_name]['quantity'] = $row['quantitysize'];
+            $categorized[$parentName]['products'][] = [$code, $row[$generalDesc], $row[$unitMeasure], $row[$quantity]];
+            $code++;
+            if (!isset($categorized[$parentName]['quantity'])) {
+                $categorized[$parentName]['quantity'] = $row['quantitysize'];
                 continue;
             }
-            $categorized[$first->subCategory->parentCategory->parent_name]['quantity'] += $row['quantitysize'];
+            $categorized[$parentName]['quantity'] += $row['quantitysize'];
         }
-        return $categorized;
+
+        // return $categorized;
+        return Excel::download(new CategoryExport($categorized), 'category.xlsx');
         // return URL::temporarySignedRoute('delete', now()->addMinutes(1), ['product' => 1, 'spec' => 2]);
     }
 }
