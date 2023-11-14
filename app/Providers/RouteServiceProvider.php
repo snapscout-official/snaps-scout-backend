@@ -43,10 +43,6 @@ class RouteServiceProvider extends ServiceProvider
         Route::pattern('product', '[0-9]+');
         Route::pattern('specValueId', '[0-9]+');
         //bind for product route parameter
-        Route::bind('product', function (string $value) {
-
-            return Product::find($value);
-        });
         Route::bind('productWithSpecs', function (string $value) {
             return Product::with('specs.specName')->find($value);
         });

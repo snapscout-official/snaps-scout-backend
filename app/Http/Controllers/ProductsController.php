@@ -23,13 +23,6 @@ class ProductsController extends Controller
         return ProductResource::collection($products);
     }
 
-    public function retrieve()
-    {
-        return response()->json([
-            'products' => Product::with('specs')->get()
-        ]);
-    }
-
     public function store(StoreProductRequest $request)
     {
         if ($request->filled('thirdCategoryId')) {

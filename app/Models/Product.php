@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\Models\SpecValuePivot;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\Concerns\InteractsWithPivotTable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Product extends Model
 {
@@ -34,5 +35,20 @@ class Product extends Model
     public function thirdCategory(): BelongsTo
     {
         return $this->belongsTo(ThirdCategory::class, 'third_code', 'third_id');
+    }
+    //casts/mutators for product Name
+    protected function productName(): Attribute
+    {
+        return Attribute::make(
+            get: fn (string $value) => ucwords($value),
+            set: function (string $value) {
+                $stringArr = explode(' ', $value);
+                foreach ($stringArr as &$string) {
+                    $string = lcfirst($string);
+                }
+                $value = implode(' ', $stringArr);
+            },
+
+        );
     }
 }

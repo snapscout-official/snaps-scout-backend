@@ -27,5 +27,4 @@ class UpdateCategoryCache
         Cache::forget('categories');
         CacheCategoryData::run();
     }
-
 }

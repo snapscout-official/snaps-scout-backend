@@ -2,12 +2,11 @@
 
 namespace App\Actions\Product;
 
-use App\Exceptions\ProductException;
 use App\Models\Spec;
 use App\Models\Product;
+use App\Exceptions\ProductException;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Http\Resources\ProductSpecResource;
-use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class GetSpecOfProduct
 {
@@ -28,9 +27,9 @@ class GetSpecOfProduct
 
     public static function loadProductSpecs($spec, $product)
     {
-        $productSpecs =  $spec->whereHas('values', function (Builder $query) use ($product) {
+        $productSpecs =  $spec->whereHas('values', function ($query) use ($product) {
             $query->where('product_id', $product->product_id);
-        })->with(['values' => function (Builder $query) use ($product) {
+        })->with(['values' => function ($query) use ($product) {
             $query->where('product_id', $product->product_id);
         }])->get();
         return $productSpecs;

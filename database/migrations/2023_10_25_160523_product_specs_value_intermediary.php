@@ -13,9 +13,15 @@ return new class extends Migration
     {
         Schema::create('products_specs_values', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('spec_name_id')->constrained('product_specs', 'code');
-            $table->foreignId('spec_value_id')->constrained('specs_value');
-            $table->foreignId('product_id')->constrained('products', 'product_id');
+            $table->foreignId('spec_name_id')->constrained('product_specs', 'code')
+                ->cascadeOnDelete()
+                ->cascadeOnDelete();
+            $table->foreignId('spec_value_id')->constrained('specs_value')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
+            $table->foreignId('product_id')->constrained('products', 'product_id')
+                ->cascadeOnDelete()
+                ->cascadeOnUpdate();
         });
     }
 

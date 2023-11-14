@@ -14,8 +14,7 @@ class CacheCategoryData
     use AsAction;
     public function handle()
     {
-        return Cache::remember('categories', 600, function()
-        {
+        return Cache::remember('categories', 600, function () {
             $parentCategories = ParentCategory::all();
             $subCategories = SubCategory::getSubCategoriesWithParent();
             $thirdCategories = ThirdCategory::returnThirdCategoryWithParentSub();

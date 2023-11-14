@@ -13,7 +13,6 @@ class DeleteCategoriesCache
      */
     public function __construct()
     {
-        //
     }
 
     /**

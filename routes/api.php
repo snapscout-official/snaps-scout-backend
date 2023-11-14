@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Agency\AgencyAuthController;
+use App\Http\Controllers\Agency\DocumentController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -40,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
             return response()->json([
                 'agencyUser' => auth()->user()->agency
             ]);
+            Route::post('/upload/document', [DocumentController::class, '']);
         });
     });
 

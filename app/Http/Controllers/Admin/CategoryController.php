@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AddSpecRequest;
 use App\Http\Requests\Admin\AdminRequest;
 use App\Actions\Category\AddCategoryForAdmin;
 use App\Actions\Category\DeleteCategoryForAdmin;
 use App\Actions\Category\ReturnCategoryDataForAdmin;
-use App\Models\Product;
 
 class CategoryController extends Controller
 {
