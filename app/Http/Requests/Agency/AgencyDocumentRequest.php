@@ -2,17 +2,20 @@
 
 namespace App\Http\Requests\Agency;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Imports\SecondSheetImport;
 use Illuminate\Validation\Rules\File;
+use Maatwebsite\Excel\HeadingRowImport;
+use Illuminate\Foundation\Http\FormRequest;
 
 class AgencyDocumentRequest extends FormRequest
 {
+    public $headings;
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -29,4 +32,12 @@ class AgencyDocumentRequest extends FormRequest
     }
     //create a method that checks if the file format or the structure of the file is good. If not then return an error
     //indicating that there is something wrong with the uploaded file
+    public function fileIsValid()
+    {
+        $this->headings = (new HeadingRowImport(SecondSheetImport::HEADER))->toArray($this->file('document'))[1][0];
+        if (in_array('general_description', $this->headings) && in_array('quantitysize', $this->headings)  && in_array('unit_of_measure', $this->headings)) {
+            return true;
+        }
+        return false;
+    }
 }

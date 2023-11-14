@@ -70,7 +70,7 @@ class HomeController extends Controller
         }
         return $categorized;
         // return $categorized;
-        return Excel::download(new CategoryExport($categorized), 'category.xlsx');
+        // return Excel::download(new CategoryExport($categorized), 'category.xlsx');
         // return URL::temporarySignedRoute('delete', now()->addMinutes(1), ['product' => 1, 'spec' => 2]);
     }
 }
