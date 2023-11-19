@@ -42,4 +42,8 @@ class Agency extends Model
     {
         return $this->hasMany(CategorizedDocument::class, 'agency_id', 'agency_id');
     }
+    public function documents(): HasMany
+    {
+        return $this->hasMany(AgencyDocument::class, 'agency_owner', 'agency_id');
+    }
 }

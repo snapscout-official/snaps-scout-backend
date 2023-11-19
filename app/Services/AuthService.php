@@ -23,56 +23,55 @@ class AuthService
 
     public function authenticateRegisterMerchant(MerchantRegisterRequest $request)
     {
-            DB::beginTransaction();
+        DB::beginTransaction();
 
-            $user = User::create([
-                'first_name' => $request->firstName,
-                'last_name' => $request->lastName,
-                'birth_date' => $request->dateOfBirth,
-                'tin_number' => $request->tinNumber,
-                'gender' => $request->gender,
-                'phone_number' => $request->phoneNumber,
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'role_id' => Role::MERCHANT,
-            ]);
-            
-            $location = Location::create([
-                'building_name' => $request->building,
-                'street' => $request->street,
-                'barangay' => $request->barangay,
-                'city' => $request->city,
-                'province' => $request->province,
-                'country' => $request->country
-            ]);
+        $user = User::create([
+            'first_name' => $request->firstName,
+            'last_name' => $request->lastName,
+            'birth_date' => $request->dateOfBirth,
+            'tin_number' => $request->tinNumber,
+            'gender' => $request->gender,
+            'phone_number' => $request->phoneNumber,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => Role::MERCHANT,
+        ]);
 
-            $category = MerchantCategory::create([
-                'merchant_name' => $request->category,
-            ]);
-            $philgeps = Philgep::create([
-                'type' => $request->philgeps
-            ]);
-            $user->merchant()->create([
-                'business_name' => $request->businessName,
-                'location_id' => $location->location_id,
-                'category_id' => $category->id,
-                'philgeps_id' => $philgeps->id,
-            ]);
+        $location = Location::create([
+            'building_name' => $request->building,
+            'street' => $request->street,
+            'barangay' => $request->barangay,
+            'city' => $request->city,
+            'province' => $request->province,
+            'country' => $request->country
+        ]);
+
+        $category = MerchantCategory::create([
+            'merchant_name' => $request->category,
+        ]);
+        $philgeps = Philgep::create([
+            'type' => $request->philgeps
+        ]);
+        $user->merchant()->create([
+            'business_name' => $request->businessName,
+            'location_id' => $location->location_id,
+            'category_id' => $category->id,
+            'philgeps_id' => $philgeps->id,
+        ]);
 
         DB::commit();
-        if (!Auth::attempt($request->only(['email', 'password'])))
-        {
-            return $request->expectsJson() ? 
+        if (!Auth::attempt($request->only(['email', 'password']))) {
+            return $request->expectsJson() ?
                 response()->json([
                     'authenticated' => false,
                     'message' => 'failed to register merchant user',
 
-                ]): null;
+                ]) : null;
         }
 
         event(new Registered($user));
 
-        return $request->expectsJson() ? 
+        return $request->expectsJson() ?
             response()->json([
                 'authenticated' => true,
                 'user' => $user,
@@ -84,21 +83,19 @@ class AuthService
     {
         $user = User::where('email', $request->email)->first();
 
-        if ($user->role_id !== Role::MERCHANT)
-        {
+        if ($user->role_id !== Role::MERCHANT) {
             return response()->json([
                 'authenticated' => false,
                 'message' => 'You are not authorized to login as Merchant'
             ], 402);
         }
-        if (!Auth::attempt($request->only(['email', 'password'])))
-        {
+        if (!Auth::attempt($request->only(['email', 'password']))) {
             return $request->expectsJson() ?  response()->json([
                 'authenticated' => false,
                 'Message' => 'Invalid credentials'
             ]) : null;
         }
-        
+
         return $request->expectsJson() ?  response()->json([
             'authenticated' => true,
             'User' => auth()->user(),
@@ -109,10 +106,10 @@ class AuthService
 
     public function  authenticateRegisterAgency(AgencyRegister $request)
     {
-      
+
         DB::beginTransaction();
 
-        
+
         $user = User::create([
             'first_name' => $request->firstName,
             'last_name' => $request->lastName,
@@ -125,40 +122,37 @@ class AuthService
             'role_id' => Role::AGENCY
         ]);
 
-       $location = Location::create([
-            'building_name' =>$request->buildingName ,
+        $location = Location::create([
+            'building_name' => $request->buildingName,
             'street' => $request->street,
-            'barangay' =>$request->barangay,
+            'barangay' => $request->barangay,
             'city' => $request->city,
-            'province' =>$request->province,
-            'country' =>$request->country,
-       ]);
+            'province' => $request->province,
+            'country' => $request->country,
+        ]);
         $agencyCategory = AgencyCategory::create([
             'agency_category_name' => $request->agencyCategory
-             ]);
-        
+        ]);
+
         $agency = $user->agency()->create([
-        'agency_name' =>$request->agencyName,
-        'position' =>$request->position,
-        'location_id' => $location->location_id,
-        'category_id' => $agencyCategory->id,
-    ]);
+            'agency_name' => $request->agencyName,
+            'position' => $request->position,
+            'location_id' => $location->location_id,
+            'category_id' => $agencyCategory->id,
+        ]);
         DB::commit();
 
-        if (Auth::attempt($request->only(['email', 'password'])))
-        {
+        if (Auth::attempt($request->only(['email', 'password']))) {
             event(new Registered($user));
-        
+
             return  $request->expectsJson() ? response()->json([
-                'authenticated'=> true,
+                'authenticated' => true,
                 'agencyUser' => auth()->user(),
                 'message' => 'Sucessfully authenticated',
                 'emailVerificationUrl' => 'localhost:5173',
                 'accessToken' => $user->createToken('auth-token')->plainTextToken,
                 'agencyInfo' => $agency
             ]) : null;
-
-            
         }
         return $request->expectsJson() ?  response()->json([
             'authenticated' => false,
@@ -166,21 +160,19 @@ class AuthService
         ]) : null;
     }
 
-    
+
     public function authenticateAgencyLogin(AgencyLoginRequest $request)
     {
         $user = User::where('email', $request->email)->first();
-        if ($user->role_id !== Role::AGENCY)
-        {   
+        if ($user->role_id !== Role::AGENCY) {
             return  $request->expectsJson() ?  response()->json([
                 'authenticated' => false,
                 'message' => 'You are not authorized to login as agency'
             ], 402) : null;
         }
-        
-        if (Auth::attempt($request->only(['email', 'password'])))
-        {
-           
+
+        if (Auth::attempt($request->only(['email', 'password']))) {
+
             return  $request->expectsJson() ? response()->json([
                 'authenticated' => true,
                 'user' => $user,
@@ -193,6 +185,5 @@ class AuthService
             'authenticated' => false,
             'message' => 'Unable to authenticate credentials'
         ]) : null;
-
     }
 }

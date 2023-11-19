@@ -40,4 +40,8 @@ class AgencyDocumentRequest extends FormRequest
         }
         return false;
     }
+    public function getAgencyName()
+    {
+        return $this->user()->agency->agency_name;
+    }
 }

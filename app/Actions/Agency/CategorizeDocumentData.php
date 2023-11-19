@@ -13,6 +13,7 @@ class CategorizeDocumentData
     use AsAction;
     public function handle(AgencyDocumentRequest $request)
     {
+        //document name should be queried from the local disk and get the appropriate document name using agencyId and original document name
         [$generalDesc, $unitMeasure, $quantity] = $request->headings;
         $categoryTestimport = new CategoryTestImport();
         $categoryTestimport->onlySheets('sheet2');
@@ -71,7 +72,7 @@ class CategorizeDocumentData
         foreach ($categorized as $category => $value) {
             $overallTotalProducts += $value['totalProducts'];
 
-            $data[] = ['parentCategoryName' => $category, 'products' => $value['products'], 'productNumber' => '', 'isComplete' => false, 'totalQuantity' => $value['totalProducts']];
+            $data[] = ['parentCategoryName' => $category, 'products' => $value['products'], 'productNumber' => $value['totalProducts'], 'isComplete' => false, 'totalQuantity' => $value['quantity']];
         }
         return [$data, $overallTotalProducts];
     }

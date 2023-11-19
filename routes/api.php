@@ -42,6 +42,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 'agencyUser' => auth()->user()->agency
             ]);
         });
+        Route::post('/upload/document', [DocumentController::class, 'upload']);
     });
 
 
@@ -117,4 +118,4 @@ Route::middleware('guest')->group(function () {
             : back()->withErrors(['email' => [__($status)]]);
     });
 });
-Route::post('/upload/document', [DocumentController::class, 'upload']);
+Route::post('/categorize/document', [DocumentController::class, 'categorize']);

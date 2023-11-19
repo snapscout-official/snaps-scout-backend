@@ -46,6 +46,7 @@ class Product extends Model
                     $string = lcfirst($string);
                 }
                 $value = implode(' ', $stringArr);
+                return $value;
             },
 
         );

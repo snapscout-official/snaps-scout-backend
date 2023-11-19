@@ -55,14 +55,19 @@ class DatabaseSeeder extends Seeder
         // ParentCategory::factory(5)->create();
         // SubCategory::factory(5)->create();
         // ThirdCategory::factory(4)->create();
-        // Product::factory(5)->create();
-        $products = ['CALCULATOR', 'CARBON FILM', 'CHALK'];
-        foreach ($products as $product) {
-            Product::create([
-                'product_name' => Str::lower($product),
-                'sub_code' => rand(1, 5),
-                'third_code' => Arr::random([null, rand(1, 4)]),
-                'description' => fake()->sentence()
+        // $products = ['Calculator', 'Carbon Film', 'Chalk'];
+        // foreach ($products as $product) {
+        //     Product::create([
+        //         'product_name' => $product,
+        //         'sub_code' => rand(1, 5),
+        //         'third_code' => Arr::random([null, rand(1, 4)]),
+        //         'description' => fake()->sentence()
+        //     ]);
+        // }
+        $roles = ['merchant', 'agency', 'super_admin'];
+        foreach ($roles as $role) {
+            Role::create([
+                'role_name' => $role
             ]);
         }
     }
