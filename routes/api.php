@@ -71,6 +71,16 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::delete('/product-spec/{product}/{spec}', 'deleteSpecValues')->name('delete');
             Route::delete('/product-spec/{product}/{spec}/{specValueId}', 'deleteSpecValue');
         });
+        Route::post('/logout', function (Request $request) {
+            $user = $request->user();
+            $delete = $user->currentAccessToken()->delete();
+            return $delete ? response()->json([
+                'message' => 'successfully logged out the user'
+            ]) : response()->json([
+                'error' => 'error logging out user',
+                'userFull' => $user->first_name . ' ' .  $user->last_name
+            ]);
+        });
     });
 
 
