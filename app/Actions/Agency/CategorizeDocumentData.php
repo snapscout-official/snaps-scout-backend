@@ -6,19 +6,20 @@ use App\Models\Product;
 use Illuminate\Support\Str;
 use App\Imports\CategoryTestImport;
 use Lorisleiva\Actions\Concerns\AsAction;
-use App\Http\Requests\Agency\AgencyDocumentRequest;
+use App\Http\Requests\Agency\CategorizeDocumentRequest;
+use Illuminate\Support\Facades\Storage;
 
 class CategorizeDocumentData
 {
     use AsAction;
-    public function handle(AgencyDocumentRequest $request)
+    public function handle(CategorizeDocumentRequest $request)
     {
         //document name should be queried from the local disk and get the appropriate document name using agencyId and original document name
-        [$generalDesc, $unitMeasure, $quantity] = $request->headings;
+        [$generalDesc, $unitMeasure, $quantity] = $request->getHeadings();
         $categoryTestimport = new CategoryTestImport();
         $categoryTestimport->onlySheets('sheet2');
         //transform in to an associative with a column/value pair
-        $importArray =  $categoryTestimport->toArray($request->file('document'))[1];
+        $importArray =  $categoryTestimport->toArray(Storage::path($request->documentName))[1];
         //sanitize or filter the import array closing and opening parenthesis
         $categorized = [];
         $code = 1;

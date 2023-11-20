@@ -6,10 +6,11 @@ use App\Actions\Agency\CategorizeDocumentData;
 use App\Actions\Agency\StoreAgencyDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Agency\AgencyDocumentRequest;
+use App\Http\Requests\Agency\CategorizeDocumentRequest;
 
 class DocumentController extends Controller
 {
-    public function categorize(AgencyDocumentRequest $request)
+    public function categorize(CategorizeDocumentRequest $request)
     {
 
 

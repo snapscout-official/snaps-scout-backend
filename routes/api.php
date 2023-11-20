@@ -15,7 +15,7 @@ use App\Http\Controllers\Agency\AgencyAuthController;
 use App\Http\Controllers\Agency\DocumentController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-
+use League\CommonMark\Node\Block\Document;
 
 Route::prefix('agency')->group(function () {
     Route::post('/register', [AgencyAuthController::class, 'register']);
@@ -42,7 +42,10 @@ Route::middleware('auth:sanctum')->group(function () {
                 'agencyUser' => auth()->user()->agency
             ]);
         });
-        Route::post('/upload/document', [DocumentController::class, 'upload']);
+        Route::controller(DocumentController::class)->group(function () {
+            Route::post('/upload/document', 'upload');
+            Route::post('/categorize/document', 'categorize');
+        });
     });
 
 
@@ -118,4 +121,3 @@ Route::middleware('guest')->group(function () {
             : back()->withErrors(['email' => [__($status)]]);
     });
 });
-Route::post('/categorize/document', [DocumentController::class, 'categorize']);
