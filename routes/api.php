@@ -15,7 +15,6 @@ use App\Http\Controllers\Agency\AgencyAuthController;
 use App\Http\Controllers\Agency\DocumentController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
-use League\CommonMark\Node\Block\Document;
 
 Route::prefix('agency')->group(function () {
     Route::post('/register', [AgencyAuthController::class, 'register']);

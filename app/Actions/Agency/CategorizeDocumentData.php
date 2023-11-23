@@ -28,9 +28,9 @@ class CategorizeDocumentData
             $productName = Str::replace(['(', ')'], ',', $row[$generalDesc]);
             //modify to lower case each word and then upper case word after
             $productName = Str::lower(explode(',', $productName)[0]);
-            $productName  = ucfirst($productName);
-            //gets the product from the product table of our admin 
 
+            $productName  = ucwords($productName);
+            //gets the product from the product table of our admin 
             //on each product retrieved from the imported array, we query it to the database to check if it has a match
             //eager load also the retrieved product
             $matchedProduct = Product::where('product_name', $productName)->with('subCategory.parentCategory')

@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Agency;
 
 use App\Imports\SecondSheetImport;
+use App\Models\AgencyDocument;
 use Maatwebsite\Excel\HeadingRowImport;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Storage;
@@ -37,5 +38,9 @@ class CategorizeDocumentRequest extends FormRequest
     public function getHeadings()
     {
         return (new HeadingRowImport(SecondSheetImport::HEADER))->toArray(Storage::path($this->documentName))[1][0];
+    }
+    public function documentId()
+    {
+        return AgencyDocument::where('document_name', $this->documentName)->first()->id;
     }
 }

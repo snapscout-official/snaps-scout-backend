@@ -7,6 +7,7 @@ use App\Actions\Agency\StoreAgencyDocument;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Agency\AgencyDocumentRequest;
 use App\Http\Requests\Agency\CategorizeDocumentRequest;
+use App\Jobs\Documents\StoreCategorizedData;
 
 class DocumentController extends Controller
 {
@@ -17,13 +18,17 @@ class DocumentController extends Controller
         //should return the categorized data
         $data = CategorizeDocumentData::run($request);
         [$categorized, $totalProducts] = $data;
-        return response()->json([
-            'agencyName' => $request->getAgencyName(),
-            'message' => 'document sucessfully categorized',
-            'totalProducts' => $totalProducts,
-            'categoriesNumber' => count($categorized),
+        $categorizedData = [
+            'total_products' => $totalProducts,
+            'document_id' => $request->documentId(),
+            'agency_id' => $request->user()->id,
+            'categories_number' => count($categorized),
             'data' => $categorized
-        ], 201);
+        ];
+        //a job is dispatched for storing the categorized document in to the database
+        StoreCategorizedData::dispatch($categorizedData);
+        $categorizedData['message'] = 'successfully categorizing data';
+        return response()->json($categorizedData, 201);
     }
     public function upload(AgencyDocumentRequest $request)
     {

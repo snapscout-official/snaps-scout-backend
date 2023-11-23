@@ -14,7 +14,10 @@ class CategorizedDocument extends Model
         'agency_id',
         'total_products',
         'data',
+        'categories_number',
+        'document_id',
     ];
+
     protected $casts = [
         'data' => 'array'
     ];
