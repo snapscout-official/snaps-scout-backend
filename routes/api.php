@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Agency\AgencyAuthController;
+use App\Http\Controllers\Agency\CategoriesController;
+use App\Http\Controllers\Agency\CategorizedProductController;
 use App\Http\Controllers\Agency\DocumentController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -130,3 +132,6 @@ Route::middleware('guest')->group(function () {
             : back()->withErrors(['email' => [__($status)]]);
     });
 });
+
+
+Route::get('/agency/get-products', [CategorizedProductController::class, 'read']);
