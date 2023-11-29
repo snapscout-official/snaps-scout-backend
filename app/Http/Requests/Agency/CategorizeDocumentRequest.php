@@ -13,7 +13,6 @@ class CategorizeDocumentRequest extends FormRequest
     /**
      * Determine if the user is authorized to make this request.
      */
-
     public function authorize(): bool
     {
         return true;
@@ -39,8 +38,8 @@ class CategorizeDocumentRequest extends FormRequest
     {
         return (new HeadingRowImport(SecondSheetImport::HEADER))->toArray(Storage::path($this->documentName))[1][0];
     }
-    public function documentId()
+    public function documentModel()
     {
-        return AgencyDocument::where('document_name', $this->documentName)->first()->id;
+        return AgencyDocument::where('document_name', $this->documentName)->first();
     }
 }

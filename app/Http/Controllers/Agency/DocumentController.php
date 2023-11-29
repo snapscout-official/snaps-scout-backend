@@ -15,18 +15,18 @@ class DocumentController extends Controller
     {
 
 
-        //should return the categorized data
+        $documentModel = $request->documentModel();
         $data = CategorizeDocumentData::run($request);
-        [$categorized, $totalProducts] = $data;
+        [$categorized, $totalProducts] = $data;       
         $categorizedData = [
             'total_products' => $totalProducts,
-            'document_id' => $request->documentId(),
+            'document_id' => $documentModel->id,
             'agency_id' => $request->user()->id,
             'categories_number' => count($categorized),
             'data' => $categorized
         ];
         //a job is dispatched for storing the categorized document in to the database
-        StoreCategorizedData::dispatch($categorizedData);
+        StoreCategorizedData::dispatch($categorizedData, $documentModel);
         $categorizedData['message'] = 'successfully categorizing data';
         return response()->json($categorizedData, 201);
     }
