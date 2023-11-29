@@ -16,6 +16,7 @@ class StoreAgencyDocument
         $file = $request->file('document');
         $fileName = explode('.', $file->getClientOriginalName())[0] . '-' .  $request->user()->id;
         $fileModifiedOriginalName = $fileName . '.' . $file->getClientOriginalExtension();
+
         $file->storeAs('', $fileModifiedOriginalName, 'local');
         $agencyModel = $request->user()->agency;
         $documentModel = $agencyModel->documents()->create([

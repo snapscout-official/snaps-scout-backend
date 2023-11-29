@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\Merchant;
 use App\Models\MerchantProduct;
+
+
 use App\Models\ParentCategory;
 use App\Models\Spec;
 use Illuminate\Database\Query\Builder;
@@ -13,6 +16,7 @@ class TestController extends Controller
 {
     public function __invoke(Request $request)
     {
+
         $merchantTest = new MerchantProduct([
             'product_name' => 'Shampoo',
             'quantity' => 20,
@@ -21,5 +25,9 @@ class TestController extends Controller
         $merchantTest->save();
         
         return $merchantTest;
+
+      
+       
+
     }
 }
