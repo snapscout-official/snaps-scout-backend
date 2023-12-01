@@ -11,5 +11,5 @@ class MerchantProduct extends Model
     ];
     protected $connection = 'mongodb';
     protected $collection = 'merchant_products';
-
+    
 }

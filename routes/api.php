@@ -66,8 +66,11 @@ Route::middleware('auth:sanctum')->group(function () {
                     'error' => 'Product does not exist'
                 ], 500) : 'product does not exist';
             });
-            Route::get('/product-specs/{product}', 'getProductSpecs')->withoutMiddleware(['role:super_admin', 'auth:sanctum'])->middleware('admin');
+            Route::get('/product-specs/{productWithSpecs}', 'getProductSpecs')
+                    ->withoutMiddleware(['role:super_admin', 'auth:sanctum'])->middleware('admin');
             Route::delete('/product-spec/{product}/{spec}', 'deleteSpecValues')->name('delete');
+            //this api route is for deleting a single spec value. For example if there are typos in adding a spec
+            // then we have the ability to delete
             Route::delete('/product-spec/{product}/{spec}/{specValueId}', 'deleteSpecValue');
         });
         Route::post('/logout', function (Request $request) {

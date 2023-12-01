@@ -12,7 +12,7 @@ class DeleteOneSpecValue
     use AsAction;
     public function handle(Product $product, Spec $spec, int $specValueId)
     {
-        $deletedCount = $spec->values()->wherePivot('product_id', $product->product_id)->detach($specValueId);
+        $deletedCount = $spec->values()->detach([$specValueId]);
         if ($deletedCount <= 0 || $deletedCount != 1) {
             throw new ProductException("error deleting spec value on product {$product->product_name}");
         }

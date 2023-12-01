@@ -10,20 +10,14 @@ use Illuminate\Support\Facades\Storage;
 
 class CategorizeDocumentRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
+    
+    public $documentModel;
+    //if the document is already categorized then this api should not be accessed again for categorizing since it has been categorized
     public function authorize(): bool
     {
-        return true;
+        $this->documentModel = $this->documentModel();
+        return !$this->documentModel->is_categorized;
     }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-
     public function rules(): array
     {
         return [

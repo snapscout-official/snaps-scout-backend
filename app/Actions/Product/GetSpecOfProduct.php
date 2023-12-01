@@ -27,11 +27,8 @@ class GetSpecOfProduct
 
     public static function loadProductSpecs($spec, $product)
     {
-        $productSpecs =  $spec->whereHas('values', function ($query) use ($product) {
-            $query->where('product_id', $product->product_id);
-        })->with(['values' => function ($query) use ($product) {
-            $query->where('product_id', $product->product_id);
-        }])->get();
-        return $productSpecs;
+      $product->specs()->syncWithoutDetaching([$spec->code]);
+      $product->refresh();
+      return $product->with('specs.values')->find($product->product_id);
     }
 }
