@@ -35,6 +35,7 @@ class AgencyDocumentRequest extends FormRequest
     public function fileIsValid()
     {
         $this->headings = (new HeadingRowImport(SecondSheetImport::HEADER))->toArray($this->file('document'))[1][0];
+        //checks if it exists on the excel header and should correspond to it
         if (in_array('general_description', $this->headings) && in_array('quantitysize', $this->headings)  && in_array('unit_of_measure', $this->headings)) {
             return true;
         }

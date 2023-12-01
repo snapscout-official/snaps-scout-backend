@@ -7,7 +7,6 @@ use App\Models\Spec;
 use App\Models\Product;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\AddSpecRequest;
-use App\Http\Resources\ProductSpecResource;
 use App\Models\SpecValue;
 use Lorisleiva\Actions\Concerns\AsAction;
 
@@ -25,35 +24,28 @@ class AddSpecValueToProduct
             if (empty($spec)) {
                 throw new ProductException("error adding spec value on spec {$request->specName}");
             }
-            //get the current spec values of the product
-            $existingProductValuesName = $spec->values()->wherePivot('product_id', $product->product_id)
-                ->get()
-                ->map(function ($value) {
-                    return $value->spec_value;
-                })->toArray();
-            //store each id of the specValue into an array
             $arrId = [];
             foreach ($request->specValues as $value) {
                 //if the currently to be inserted value is already in the table then skip and proceed to the next value
-                if (in_array($value, $existingProductValuesName)) {
-                    continue;
-                }
                 $arrId[] = SpecValue::firstOrCreate([
                     'spec_value' => $value,
                 ])->id;
             }
+            $spec->values()->syncWithoutDetaching($arrId);
             //attach to intermediate the spec and values with a desired product 
-            $spec->values()->attach($arrId, ['product_id' => $product->product_id]);
             DB::commit();
             $spec->refresh();
-            $productSpecs = GetSpecOfProduct::loadProductSpecs($spec, $product);
-
-            return ['product' => $product, 'productSpecs' => $productSpecs];
+            $productWithSpecs = GetSpecOfProduct::loadProductSpecs($spec, $product);
+            
+            return ['productWithSpecs' => $productWithSpecs];
         });
         //extract the associative array
         extract($data);
-        return empty($product) ? response()->json([
+        return empty($productWithSpecs) ? response()->json([
             'error' => 'error adding spec and specs value',
-        ], 400) : response()->json(new ProductSpecResource($product, $productSpecs), 201);
+        ], 400) : response()->json([
+            'message' => "spec and values successfully added to product {$productWithSpecs->product_name}",
+            'data' => $productWithSpecs
+        ], 201);
     }
 }
