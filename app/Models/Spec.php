@@ -15,7 +15,7 @@ class Spec extends Model
     protected $fillable = [
         'specs_name',
     ];
-
+    protected $hidden = ['pivot'];
     protected $table = 'product_specs';
     public $timestamps = false;
     protected $primaryKey = 'code';
@@ -23,8 +23,7 @@ class Spec extends Model
 
     public function values(): BelongsToMany
     {
-        return $this->belongsToMany(SpecValue::class, 'products_specs_values', 'spec_name_id', 'spec_value_id', 'code', 'id')
-            ->withPivot('product_id');
+        return $this->belongsToMany(SpecValue::class, 'products_specs_values', 'spec_name_id', 'spec_value_id', 'code', 'id');
     }
     protected static function newFactory(): Factory
     {

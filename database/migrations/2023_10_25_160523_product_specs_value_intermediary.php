@@ -19,9 +19,6 @@ return new class extends Migration
             $table->foreignId('spec_value_id')->constrained('specs_value')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignId('product_id')->constrained('products', 'product_id')
-                ->cascadeOnDelete()
-                ->cascadeOnUpdate();
         });
     }
 

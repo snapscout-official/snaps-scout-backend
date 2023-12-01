@@ -37,21 +37,20 @@ class DatabaseSeeder extends Seeder
         // }
         DB::beginTransaction();
 
-        $date = Carbon::createFromFormat('F j, Y', 'March 21, 2002')
-            ->format('Y-m-d');
+        // $date = Carbon::createFromFormat('F j, Y', 'March 21, 2002')
+        //     ->format('Y-m-d');
 
-        $user = User::create([
-            'first_name' => 'Mary',
-            'last_name' => 'Soliva',
-            'birth_date' => $date,
-            'tin_number' => '1023131',
-            'gender' => 'Female',
-            'phone_number' => '09338603326',
-            'email' => 'mary.soliva@carsu.edu.ph',
-            'password' => Hash::make('starmovies3144'),
-            'role_id' => Role::SUPERADMIN
-        ]);
-        DB::commit();
+        // $user = User::create([
+        //     'first_name' => 'Mary',
+        //     'last_name' => 'Soliva',
+        //     'birth_date' => $date,
+        //     'tin_number' => '1023131',
+        //     'gender' => 'Female',
+        //     'phone_number' => '09338603326',
+        //     'email' => 'mary.soliva@carsu.edu.ph',
+        //     'password' => Hash::make('starmovies3144'),
+        //     'role_id' => Role::SUPERADMIN
+        // ]);
         // ParentCategory::factory(5)->create();
         // SubCategory::factory(5)->create();
         // ThirdCategory::factory(4)->create();
@@ -64,6 +63,8 @@ class DatabaseSeeder extends Seeder
         //         'description' => fake()->sentence()
         //     ]);
         // }
+        DB::commit();
+
         // $roles = ['merchant', 'agency', 'super_admin'];
         // foreach ($roles as $role) {
         //     Role::create([
