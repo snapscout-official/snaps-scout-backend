@@ -42,7 +42,7 @@ class DatabaseSeeder extends Seeder
         // }
         DB::beginTransaction();
 
-        $date = Carbon::createFromFormat('F j, Y', 'June 11, 2002')
+        $date = Carbon::createFromFormat('F j, Y', 'June 5, 2002')
             ->format('Y-m-d');
 
         // $user = User::create([
@@ -84,44 +84,49 @@ class DatabaseSeeder extends Seeder
         //     'location_id' => $location->location_id,
         //     'category_id' => $agencyCategory->id
         // ]);
-        $user = User::create([
-            'first_name' => 'Klinth',
-            'last_name' => 'Matugas',
-            'birth_date' => $date,
-            'tin_number' => '12313130',
-            'gender' => 'Male',
-            'phone_number' => '09918804162',
-            'email' => 'klinth.matugas@carsu.edu.ph',
-            'password' => Hash::make('test'),
-            'role_id' => Role::MERCHANT
-        ]);
-        $location = Location::create([
-            'building_name' => 'SM',
-            'street' => 'Zacor',
-            'barangay' => 'Zacor',
-            'city' => 'Butuan City',
-            'province' => 'Agusan Del Norte',
-            'country' => 'Philippines'
-        ]);
-        $merchantCategory = MerchantCategory::create([
-            'name' => 'General Merchandise'
-        ]);
-        $philgep = Philgep::create([
-            'type' => 'development'
-        ]);
-        
-        // ParentCategory::factory(5)->create();
-        // SubCategory::factory(5)->create();
-        // ThirdCategory::factory(4)->create();
-        // $products = ['Calculator', 'Carbon Film', 'Chalk'];
-        // foreach ($products as $product) {
-        //     Product::create([
-        //         'product_name' => $product,
-        //         'sub_code' => rand(1, 5),
-        //         'third_code' => Arr::random([null, rand(1, 4)]),
-        //         'description' => fake()->sentence()
-        //     ]);
-        // }
+        // $user = User::create([
+        //     'first_name' => 'Klinth',
+        //     'last_name' => 'Matugas',
+        //     'birth_date' => $date,
+        //     'tin_number' => '12313130',
+        //     'gender' => 'Male',
+        //     'phone_number' => '09918804162',
+        //     'email' => 'klinth.matugas@carsu.edu.ph',
+        //     'password' => Hash::make('test'),
+        //     'role_id' => Role::MERCHANT
+        // ]);
+        // $location = Location::create([
+        //     'building_name' => 'SM',
+        //     'street' => 'Zacor',
+        //     'barangay' => 'Zacor',
+        //     'city' => 'Butuan City',
+        //     'province' => 'Agusan Del Norte',
+        //     'country' => 'Philippines'
+        // ]);
+        // $merchantCategory = MerchantCategory::create([
+        //     'merchant_name' => 'General Merchandise'
+        // ]);
+        // $philgep = Philgep::create([
+        //     'type' => 'development'
+        // ]);
+        // $user->merchant()->create([
+        //     'business_name' => 'SM City Butuan',
+        //     'location_id' => $location->location_id,
+        //     'category_id' => $merchantCategory->id,
+        //     'philgeps_id' => $philgep->id
+        // ]);
+        ParentCategory::factory(5)->create();
+        SubCategory::factory(5)->create();
+        ThirdCategory::factory(4)->create();
+        $products = ['Calculator', 'Carbon Film', 'Chalk'];
+        foreach ($products as $product) {
+            Product::create([
+                'product_name' => $product,
+                'sub_code' => rand(1, 5),
+                'third_code' => Arr::random([null, rand(1, 4)]),
+                'description' => fake()->sentence()
+            ]);
+        }
         DB::commit();
 
         // $roles = ['merchant', 'agency', 'super_admin'];

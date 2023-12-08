@@ -11,7 +11,6 @@ class Merchant extends Model
 {
     use HasFactory, HybridRelations;
     protected $fillable = [
-        'merchant_id',
         'business_name',
         'location_id',
         'category_id',

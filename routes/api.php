@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Agency\AgencyAuthController;
 use App\Http\Controllers\Agency\DocumentController;
+use App\Http\Controllers\Merchant\AuthController;
 use App\Http\Controllers\Merchant\MerchantProductsController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -20,6 +21,10 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 Route::prefix('agency')->group(function () {
     Route::post('/register', [AgencyAuthController::class, 'register']);
     Route::post('/login', [AgencyAuthController::class, 'login']);
+});
+Route::prefix('merchant')->group(function()
+{
+    Route::post('/login', [AuthController::class, 'login']);
 });
 
 Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
