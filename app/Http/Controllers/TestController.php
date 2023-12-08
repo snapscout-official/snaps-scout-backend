@@ -106,5 +106,9 @@ class TestController extends Controller
         // } catch (Exception $e) {
         //     printf($e->getMessage());
         // }
+        $data = MerchantProduct::all();
+        return response()->json([
+            'data' => $data
+        ]);
     }
 }

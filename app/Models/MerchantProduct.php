@@ -13,7 +13,7 @@ class MerchantProduct extends Model
         'quantity',
         'is_available',
         'price',
-        'bar_code',
+        'barcode',
         'specs'
     ];
     // protected $casts = [

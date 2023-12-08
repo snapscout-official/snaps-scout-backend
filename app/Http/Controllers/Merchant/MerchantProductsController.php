@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\merchant\AddSpecRequest;
 use App\Http\Requests\merchant\StoreMerchantProductRequest;
 use App\Models\MerchantProduct;
-use Illuminate\Support\Facades\DB;
 
 class MerchantProductsController extends Controller
 {
@@ -25,9 +26,10 @@ class MerchantProductsController extends Controller
             'product_name' => $request->product_name,
             'product_category' => $request->product_category,
             'is_available' => true,
+            'specs' => [],
             'price' => $request->price,
-            'bar_code' => $request->bar_code,
-        ]);
+            'barcode' => $request->barcode,
+        ]); 
         return response()->json([
             'message' => 'success',
             'data' => $product
@@ -35,5 +37,11 @@ class MerchantProductsController extends Controller
 
 
         DB::commit();
+    }
+    public function storeSpec(AddSpecRequest $request)
+    {
+            $product = MerchantProduct::where('product_name', $request->product_name)->first();
+            $product->push('specs', $request->specs, true);
+        return 'ok';
     }
 }
