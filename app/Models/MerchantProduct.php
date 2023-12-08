@@ -9,26 +9,21 @@ class MerchantProduct extends Model
 {
     protected $fillable = [
         'product_name',
+        'product_category',
         'quantity',
-        'description',
         'is_available',
         'price',
         'bar_code',
         'specs'
     ];
-    protected $casts = [
-        'specs' => 'array',
-    ];
+    // protected $casts = [
+    //     'specs' => 'array',
+    // ];
     protected $connection = 'mongodb';
     protected $collection = 'merchant_products';
     
-    public function owner()
+    public function merchant()
     {
-        return $this->belongsTo(Owner::class);
+        return $this->belongsTo(Merchant::class);
     }
-    public function addSpecs($data)
-    {
-        $this->push('specs', $data);
-    }
-
 }

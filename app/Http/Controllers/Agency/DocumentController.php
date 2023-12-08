@@ -14,7 +14,6 @@ class DocumentController extends Controller
     public function categorize(CategorizeDocumentRequest $request)
     {
 
-
         $documentModel = $request->documentModel();
         $data = CategorizeDocumentData::run($request);
         [$categorized, $totalProducts] = $data;       

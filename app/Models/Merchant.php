@@ -5,11 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-
+use MongoDB\Laravel\Eloquent\HybridRelations;
 
 class Merchant extends Model
 {
-    use HasFactory;
+    use HasFactory, HybridRelations;
     protected $fillable = [
         'merchant_id',
         'business_name',
@@ -44,4 +44,10 @@ class Merchant extends Model
     {
         return $this->belongsTo(Philgep::class, 'philgeps_id');
     }
+    
+    public function products()
+    {
+        return $this->hasMany(MerchantProduct::class);
+    }
+    
 }

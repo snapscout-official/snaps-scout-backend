@@ -21,7 +21,7 @@ class CategorizeDocumentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'documentName' => ['required', 'string', 'exists:agency_document,document_name'],
+            'document_name' => ['required', 'string', 'exists:agency_document,document_name'],
         ];
     }
     public function getAgencyName()
@@ -30,10 +30,10 @@ class CategorizeDocumentRequest extends FormRequest
     }
     public function getHeadings()
     {
-        return (new HeadingRowImport(SecondSheetImport::HEADER))->toArray(Storage::path($this->documentName))[1][0];
+        return (new HeadingRowImport(SecondSheetImport::HEADER))->toArray(Storage::path($this->document_name))[1][0];
     }
     public function documentModel()
     {
-        return AgencyDocument::where('document_name', $this->documentName)->first();
+        return AgencyDocument::where('document_name', $this->document_name)->first();
     }
 }

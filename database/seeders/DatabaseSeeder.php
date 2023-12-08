@@ -4,6 +4,10 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\AgencyCategory;
+use App\Models\Location;
+use App\Models\Merchant;
+use App\Models\MerchantCategory;
 use Carbon\Carbon;
 use App\Models\Role;
 use App\Models\User;
@@ -12,6 +16,7 @@ use App\Models\SubCategory;
 use Illuminate\Support\Str;
 use App\Models\ThirdCategory;
 use App\Models\ParentCategory;
+use App\Models\Philgep;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -37,20 +42,74 @@ class DatabaseSeeder extends Seeder
         // }
         DB::beginTransaction();
 
-        // $date = Carbon::createFromFormat('F j, Y', 'March 21, 2002')
-        //     ->format('Y-m-d');
+        $date = Carbon::createFromFormat('F j, Y', 'June 11, 2002')
+            ->format('Y-m-d');
 
         // $user = User::create([
         //     'first_name' => 'Mary',
         //     'last_name' => 'Soliva',
         //     'birth_date' => $date,
-        //     'tin_number' => '1023131',
+        //     'tin_number' => '4411233',
         //     'gender' => 'Female',
         //     'phone_number' => '09338603326',
         //     'email' => 'mary.soliva@carsu.edu.ph',
         //     'password' => Hash::make('starmovies3144'),
         //     'role_id' => Role::SUPERADMIN
         // ]);
+        // $user = User::create([
+        //     'first_name' => 'Gio',
+        //     'last_name' => 'Gonzales',
+        //     'birth_date' => $date,
+        //     'tin_number' => '123133',
+        //     'gender' => 'Male',
+        //     'phone_number' => '09918804161',
+        //     'email' => 'gio.gonzales@carsu.edu.ph',
+        //     'password' => Hash::make('starmovies3144'),
+        //     'role_id' => Role::AGENCY
+        // ]);
+        // $location = Location::create([
+        //     'building_name' => 'Navigatu',
+        //     'street' => 'Purok-6 Ampayon',
+        //     'barangay' => 'Ampayon',
+        //     'city' => 'Butuan City',
+        //     'province' => 'Agusan Del Norte',
+        //     'country' => 'Philippines'
+        // ]);
+        // $agencyCategory = AgencyCategory::create([
+        //     'agency_category_name' => 'General Merchandise'
+        // ]);
+        // $agency = $user->agency()->create([
+        //     'agency_name' => 'COA',
+        //     'position' => 'GSO',
+        //     'location_id' => $location->location_id,
+        //     'category_id' => $agencyCategory->id
+        // ]);
+        $user = User::create([
+            'first_name' => 'Klinth',
+            'last_name' => 'Matugas',
+            'birth_date' => $date,
+            'tin_number' => '12313130',
+            'gender' => 'Male',
+            'phone_number' => '09918804162',
+            'email' => 'klinth.matugas@carsu.edu.ph',
+            'password' => Hash::make('test'),
+            'role_id' => Role::MERCHANT
+        ]);
+        $location = Location::create([
+            'building_name' => 'SM',
+            'street' => 'Zacor',
+            'barangay' => 'Zacor',
+            'city' => 'Butuan City',
+            'province' => 'Agusan Del Norte',
+            'country' => 'Philippines'
+        ]);
+        $merchantCategory = MerchantCategory::create([
+            'name' => 'General Merchandise'
+        ]);
+        $philgep = Philgep::create([
+            'type' => 'development'
+        ]);
+        
         // ParentCategory::factory(5)->create();
         // SubCategory::factory(5)->create();
         // ThirdCategory::factory(4)->create();

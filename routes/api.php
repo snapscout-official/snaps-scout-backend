@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Agency\AgencyAuthController;
 use App\Http\Controllers\Agency\DocumentController;
+use App\Http\Controllers\Merchant\MerchantProductsController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -26,6 +27,11 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::group(['middleware' => ['role:merchant'], 'prefix' => 'merchant'], function(){
+    Route::controller(MerchantProductsController::class)->group(function(){
+            Route::post('add-product', 'store');
+    });
+});
     Route::middleware('role:merchant')->group(function () {
         Route::get('/merchant/{merchant}', function (Merchant $merchant) {
             Gate::authorize('view-merchant', $merchant);
@@ -33,6 +39,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 'AgencyUser' => auth()->user()->merchant
             ]);
         });
+        // Route::post()
     });
 
     Route::middleware('role:agency')->group(function () {
