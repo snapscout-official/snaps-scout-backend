@@ -7,15 +7,17 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\merchant\AddSpecRequest;
 use App\Http\Requests\merchant\StoreMerchantProductRequest;
 use App\Models\MerchantProduct;
+use Illuminate\Http\Client\Request;
 
 class MerchantProductsController extends Controller
 {
-    public function read()
+    public function read(Request $request)
     {
-        $merchantProducts = [];
+        $merchant = $request->user()->merchant;
+        $products = $merchant->products()->get();
         return response()->json([
             'message' => 'success',
-            'data' => $merchantProducts
+            'data' => $products
         ]);
     }
     public function store(StoreMerchantProductRequest $request)
@@ -26,7 +28,6 @@ class MerchantProductsController extends Controller
             'product_name' => $request->product_name,
             'product_category' => $request->product_category,
             'is_available' => true,
-            'specs' => [],
             'price' => $request->price,
             'barcode' => $request->barcode,
         ]); 
@@ -34,14 +35,23 @@ class MerchantProductsController extends Controller
             'message' => 'success',
             'data' => $product
         ]);
-
-
         DB::commit();
     }
     public function storeSpec(AddSpecRequest $request)
     {
-            $product = MerchantProduct::where('product_name', $request->product_name)->first();
-            $product->push('specs', $request->specs, true);
-        return 'ok';
+            //update product specs
+            $product = MerchantProduct::where('product_name', 'bla')->first();
+            $specs = $product->specs;
+            //append the specs
+            foreach($request->specs as $key => $value)
+            {
+                $specs[$key] = $value;
+            }
+            $product->specs = $specs;
+            $product->save();
+        return response()->json([
+            'message' => 'success',
+            'data' => $product
+        ]);
     }
 }

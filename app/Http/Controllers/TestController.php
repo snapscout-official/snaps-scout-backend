@@ -65,9 +65,9 @@ class TestController extends Controller
         // //     'data' => $owner
         // // ]);
         
-        $owner = Owner::where('name', 'Gio Gonzales')->first();
-        $merchantProduct = MerchantProduct::first();
-        return $merchantProduct;
+        // $owner = Owner::where('name', 'Gio Gonzales')->first();
+        // $merchantProduct = MerchantProduct::first();
+        // return $merchantProduct;
         // phpinfo();
             // return MerchantProduct::all();
         // $owner->products()->create([
