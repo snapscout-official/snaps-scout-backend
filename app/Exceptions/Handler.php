@@ -31,5 +31,12 @@ class Handler extends ExceptionHandler
                 'error' => 'Unauthenticated',
             ]) : redirect()->guest($e->redirectTo() ?? route('login'));
         });
+        $this->renderable(function (MerchantProductException $e, Request $request)
+        {
+            return response()->json([
+                'error' => $e->getMessage(),
+
+            ], 400);
+        });
     }
 }

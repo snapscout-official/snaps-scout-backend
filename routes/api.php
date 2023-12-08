@@ -34,8 +34,9 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
 Route::middleware('auth:sanctum')->group(function () {
     Route::group(['middleware' => ['role:merchant'], 'prefix' => 'merchant'], function(){
     Route::controller(MerchantProductsController::class)->group(function(){
-            Route::post('add-product', 'store');
-            Route::post('add-spec', 'storeSpec');
+            Route::post('/add-product', 'store');
+            Route::post('/add-spec', 'storeSpec');
+            Route::get('/products', 'read');
     });
 });
     Route::middleware('role:merchant')->group(function () {

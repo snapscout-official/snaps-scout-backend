@@ -26,4 +26,8 @@ class AddSpecRequest extends FormRequest
             'product_name' => 'required|string'            
         ];
     }
+    public function merchant()
+    {
+        return $this->user()->merchant;
+    }
 }

@@ -23,4 +23,8 @@ class StoreMerchantProductRequest extends FormRequest
             'barcode' => 'required',
         ];
     }
+    public function merchant()
+    {
+        return $this->user()->merchant;
+    }
 }
