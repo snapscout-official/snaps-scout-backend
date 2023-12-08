@@ -11,7 +11,7 @@ class MerchantCategory extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name'
+        'merchant_name'
     ];
     
     protected $table = 'merchant_category';

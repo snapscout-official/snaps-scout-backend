@@ -40,14 +40,9 @@ class Product extends Model
     protected function productName(): Attribute
     {
         return Attribute::make(
-            get: fn (string $value) => ucwords($value),
             set: function (string $value) {
-                $stringArr = explode(' ', $value);
-                foreach ($stringArr as &$string) {
-                    $string = lcfirst($string);
-                }
-                $value = implode(' ', $stringArr);
-                return $value;
+                $value = strtolower($value);
+                return ucwords($value);
             },
 
         );

@@ -13,6 +13,8 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Agency\AgencyAuthController;
 use App\Http\Controllers\Agency\DocumentController;
+use App\Http\Controllers\Merchant\AuthController;
+use App\Http\Controllers\Merchant\MerchantProductsController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -20,12 +22,22 @@ Route::prefix('agency')->group(function () {
     Route::post('/register', [AgencyAuthController::class, 'register']);
     Route::post('/login', [AgencyAuthController::class, 'login']);
 });
+Route::prefix('merchant')->group(function()
+{
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
 Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
     Route::post('/login', [AdminController::class, 'login']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::group(['middleware' => ['role:merchant'], 'prefix' => 'merchant'], function(){
+    Route::controller(MerchantProductsController::class)->group(function(){
+            Route::post('add-product', 'store');
+            Route::post('add-spec', 'storeSpec');
+    });
+});
     Route::middleware('role:merchant')->group(function () {
         Route::get('/merchant/{merchant}', function (Merchant $merchant) {
             Gate::authorize('view-merchant', $merchant);
@@ -33,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 'AgencyUser' => auth()->user()->merchant
             ]);
         });
+        // Route::post()
     });
 
     Route::middleware('role:agency')->group(function () {

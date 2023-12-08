@@ -94,7 +94,7 @@ return [
         ],
         'mongodb' => [
             'driver' => 'mongodb',
-            'dsn' => 'mongodb+srv://giogonzales:7PmwnIE378PsXckF@snap-scout-mongo.3sybvnx.mongodb.net/?retryWrites=true&w=majority',
+            'dsn' => env('MONGO_URI', null),
             'database' => env('MONGO_DATABASE','snap-scout-mongo'),
         ]
 
