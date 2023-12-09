@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products', 'product_id')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
-            $table->foreignId('spec_id')->constrained('product_specs', 'code')
+            $table->foreignId('spec_name_id')->constrained('product_specs', 'code')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->timestamps();

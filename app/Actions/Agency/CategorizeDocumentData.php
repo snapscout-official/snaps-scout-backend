@@ -19,7 +19,7 @@ class CategorizeDocumentData
         $categoryTestimport = new CategoryTestImport();
         $categoryTestimport->onlySheets('sheet2');
         //transform in to an associative with a column/value pair
-        $importArray =  $categoryTestimport->toArray(Storage::path($request->documentName))[1];
+        $importArray =  $categoryTestimport->toArray(Storage::path($request->document_name))[1];
         //sanitize or filter the import array closing and opening parenthesis
         $categorized = [];
         $code = 1;
@@ -35,7 +35,7 @@ class CategorizeDocumentData
             //eager load also the retrieved product
             $matchedProduct = Product::where('product_name', $productName)->with('subCategory.parentCategory')
                 ->first();
-
+            
             //if is null or it means that the productName does not exist on the database meaning it has no category associated
             //add it to the others category 
             if (is_null($matchedProduct)) {

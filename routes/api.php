@@ -15,6 +15,8 @@ use App\Http\Controllers\Agency\AgencyAuthController;
 use App\Http\Controllers\Agency\CategoriesController;
 use App\Http\Controllers\Agency\CategorizedProductController;
 use App\Http\Controllers\Agency\DocumentController;
+use App\Http\Controllers\Merchant\AuthController;
+use App\Http\Controllers\Merchant\MerchantProductsController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
@@ -22,12 +24,22 @@ Route::prefix('agency')->group(function () {
     Route::post('/register', [AgencyAuthController::class, 'register']);
     Route::post('/login', [AgencyAuthController::class, 'login']);
 });
+Route::prefix('merchant')->group(function()
+{
+    Route::post('/login', [AuthController::class, 'login']);
+});
 
 Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
     Route::post('/login', [AdminController::class, 'login']);
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::group(['middleware' => ['role:merchant'], 'prefix' => 'merchant'], function(){
+    Route::controller(MerchantProductsController::class)->group(function(){
+            Route::post('add-product', 'store');
+            Route::post('add-spec', 'storeSpec');
+    });
+});
     Route::middleware('role:merchant')->group(function () {
         Route::get('/merchant/{merchant}', function (Merchant $merchant) {
             Gate::authorize('view-merchant', $merchant);
@@ -35,6 +47,7 @@ Route::middleware('auth:sanctum')->group(function () {
                 'AgencyUser' => auth()->user()->merchant
             ]);
         });
+        // Route::post()
     });
 
     Route::middleware('role:agency')->group(function () {
@@ -68,8 +81,11 @@ Route::middleware('auth:sanctum')->group(function () {
                     'error' => 'Product does not exist'
                 ], 500) : 'product does not exist';
             });
-            Route::get('/product-specs/{product}', 'getProductSpecs')->withoutMiddleware(['role:super_admin', 'auth:sanctum'])->middleware('admin');
+            Route::get('/product-specs/{productWithSpecs}', 'getProductSpecs')
+                    ->withoutMiddleware(['role:super_admin', 'auth:sanctum'])->middleware('admin');
             Route::delete('/product-spec/{product}/{spec}', 'deleteSpecValues')->name('delete');
+            //this api route is for deleting a single spec value. For example if there are typos in adding a spec
+            // then we have the ability to delete
             Route::delete('/product-spec/{product}/{spec}/{specValueId}', 'deleteSpecValue');
         });
         Route::post('/logout', function (Request $request) {

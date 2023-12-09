@@ -16,13 +16,14 @@ class DeleteProductSpecValues
         if (empty($spec)) {
             throw new ProductException("error deleting spec id{$spec->code}");
         }
-        $result = $spec->values()->wherePivot('product_id', $product->product_id)->detach();
+        // $result = $spec->values()->wherePivot('product_id', $product->product_id)->detach();
+        $result = $product->specs()->detach([$spec->code]);
         //if there is no deleted values then throw the exception
         if ($result <= 0) {
             throw new ProductException("error deleting a spec on product {$product->product_name}");
         }
         return response()->json([
-            'message' => "spec on product {$product->product_name} has been deleted",
+            'message' => "spec {$spec->specs_name} on product {$product->product_name} has been deleted",
         ]);
     }
 }

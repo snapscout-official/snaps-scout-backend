@@ -10,25 +10,18 @@ use Illuminate\Support\Facades\Storage;
 
 class CategorizeDocumentRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-
+    
+    public $documentModel;
+    //if the document is already categorized then this api should not be accessed again for categorizing since it has been categorized
     public function authorize(): bool
     {
-        return true;
+        $this->documentModel = $this->documentModel();
+        return !$this->documentModel->is_categorized;
     }
-
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
-
     public function rules(): array
     {
         return [
-            'documentName' => ['required', 'string', 'exists:agency_document,document_name'],
+            'document_name' => ['required', 'string', 'exists:agency_document,document_name'],
         ];
     }
     public function getAgencyName()
@@ -37,10 +30,10 @@ class CategorizeDocumentRequest extends FormRequest
     }
     public function getHeadings()
     {
-        return (new HeadingRowImport(SecondSheetImport::HEADER))->toArray(Storage::path($this->documentName))[1][0];
+        return (new HeadingRowImport(SecondSheetImport::HEADER))->toArray(Storage::path($this->document_name))[1][0];
     }
-    public function documentId()
+    public function documentModel()
     {
-        return AgencyDocument::where('document_name', $this->documentName)->first()->id;
+        return AgencyDocument::where('document_name', $this->document_name)->first();
     }
 }

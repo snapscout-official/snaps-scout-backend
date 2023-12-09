@@ -12,10 +12,12 @@ class StoreAgencyDocument
     public function handle(AgencyDocumentRequest $request)
     {
         //the document name will be its originaldocument name plus the id of the agency
+        //should prevent adding the same file to the server 
         $file = $request->file('document');
         $fileName = explode('.', $file->getClientOriginalName())[0] . '-' .  $request->user()->id;
         $fileModifiedOriginalName = $fileName . '.' . $file->getClientOriginalExtension();
-        $request->file('document')->storeAs('public', $fileModifiedOriginalName, 'local');
+
+        $file->storeAs('', $fileModifiedOriginalName, 'local');
         $agencyModel = $request->user()->agency;
         $documentModel = $agencyModel->documents()->create([
             'document_name' => $fileModifiedOriginalName,

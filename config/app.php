@@ -1,11 +1,12 @@
 <?php
 
-use Barryvdh\Debugbar\Facades\Debugbar;
-use Barryvdh\Debugbar\ServiceProvider as DebugbarServiceProvider;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Facade;
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Illuminate\Support\ServiceProvider;
 use Maatwebsite\Excel\ExcelServiceProvider;
+use MongoDB\Laravel\MongoDBServiceProvider;
+use Barryvdh\Debugbar\ServiceProvider as DebugbarServiceProvider;
 
 return [
 
@@ -167,7 +168,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         ExcelServiceProvider::class,
         DebugbarServiceProvider::class,
-        MongoDB\Laravel\MongoDBServiceProvider::class,
+        MongoDBServiceProvider::class,
     ])->toArray(),
 
     /*

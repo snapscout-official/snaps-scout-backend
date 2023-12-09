@@ -14,8 +14,8 @@ class SpecValue extends Model
         'spec_value',
     ];
     protected $table = 'specs_value';
+    protected $hidden = ['pivot'];
     public $timestamps = false;
-
     public function specNames(): BelongsToMany
     {
         return $this->belongsToMany(Spec::class, 'products_specs_values', 'spec_value_id', 'spec_name_id', 'id', 'code')
