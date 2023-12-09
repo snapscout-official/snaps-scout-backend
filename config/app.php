@@ -167,6 +167,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         ExcelServiceProvider::class,
         DebugbarServiceProvider::class,
+        MongoDB\Laravel\MongoDBServiceProvider::class,
     ])->toArray(),
 
     /*
