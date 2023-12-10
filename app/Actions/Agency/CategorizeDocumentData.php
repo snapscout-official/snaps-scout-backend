@@ -105,7 +105,13 @@ class CategorizeDocumentData
         foreach ($categorized as $category => $value) {
             $overallTotalProducts += $value['totalProducts'];
 
-            $data[] = ['parentCategoryName' => $category, 'products' => $value['products'], 'productNumber' => $value['totalProducts'], 'isComplete' => false, 'totalQuantity' => $value['quantity']];
+            $data[] = [
+                'parentCategoryName' => $category, 
+                'products' => $value['products'], 
+                'productNumber' => $value['totalProducts'], 
+                'isComplete' => false, 
+                'totalQuantity' => $value['quantity']
+            ];
         }
         return [$data, $overallTotalProducts];
     }
