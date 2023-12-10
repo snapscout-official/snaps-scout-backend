@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use App\Exceptions\MerchantProductException;
+use Illuminate\Http\Request;
+use App\Models\MerchantProduct;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\merchant\AddSpecRequest;
 use App\Http\Requests\merchant\StoreMerchantProductRequest;
-use App\Models\MerchantProduct;
-use Illuminate\Http\Client\Request;
 
 class MerchantProductsController extends Controller
 {
@@ -16,14 +17,15 @@ class MerchantProductsController extends Controller
         $merchant = $request->user()->merchant;
         $products = $merchant->products()->get();
         return response()->json([
-            'message' => 'success',
-            'data' => $products
+            'message' => 'success product retrieval',
+            'data' => $products,
+            'total_products' => count($products),
         ]);
     }
     public function store(StoreMerchantProductRequest $request)
     {
         DB::beginTransaction();
-        $merchant = $request->user()->merchant;
+        $merchant = $request->merchant();
         $product = $merchant->products()->create([
             'product_name' => $request->product_name,
             'product_category' => $request->product_category,
@@ -31,16 +33,20 @@ class MerchantProductsController extends Controller
             'price' => $request->price,
             'barcode' => $request->barcode,
         ]); 
+        DB::commit();
         return response()->json([
-            'message' => 'success',
+            'message' => "successfully added product {$product->product_name}",
             'data' => $product
         ]);
-        DB::commit();
     }
     public function storeSpec(AddSpecRequest $request)
     {
             //update product specs
-            $product = MerchantProduct::where('product_name', 'bla')->first();
+            $product = MerchantProduct::where('product_name', $request->product_name)->first();
+            if (is_null($product))
+            {
+                throw new MerchantProductException('product cannot be found');
+            }
             $specs = $product->specs;
             //append the specs
             foreach($request->specs as $key => $value)
@@ -50,7 +56,7 @@ class MerchantProductsController extends Controller
             $product->specs = $specs;
             $product->save();
         return response()->json([
-            'message' => 'success',
+            'message' => "successfully added specs to product {$request->product_name}",
             'data' => $product
         ]);
     }

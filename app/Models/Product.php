@@ -32,7 +32,6 @@ class Product extends Model
     {
         return $this->belongsTo(ThirdCategory::class, 'third_code', 'third_id');
     }
-    //casts/mutators for product Name
     public function specs():BelongsToMany
     {
         return $this->belongsToMany(Spec::class, 'product_specs_intermediary', 'product_id', 'spec_name_id', 'product_id', 'code');
