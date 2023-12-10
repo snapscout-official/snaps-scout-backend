@@ -13,6 +13,7 @@ class ProductResource extends JsonResource
      * @return array<string, mixed>
      */
     public static $wrap = 'product';
+    public $preserveKeys = true;
     public function toArray(Request $request): array
     {
         return [
@@ -23,6 +24,8 @@ class ProductResource extends JsonResource
                 return $this->thirdCategory->third_name;
             }),
             'sub_name' => $this->subCategory->sub_name,
+            'specs' => $this->specs
+            
         ];
     }
 }

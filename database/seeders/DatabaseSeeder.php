@@ -4,21 +4,23 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\AgencyCategory;
-use App\Models\Location;
-use App\Models\Merchant;
-use App\Models\MerchantCategory;
 use Carbon\Carbon;
 use App\Models\Role;
+use App\Models\Spec;
 use App\Models\User;
+use App\Models\Philgep;
 use App\Models\Product;
+use App\Models\Location;
+use App\Models\Merchant;
 use App\Models\SubCategory;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use App\Models\ThirdCategory;
+use App\Models\AgencyCategory;
 use App\Models\ParentCategory;
-use App\Models\Philgep;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Arr;
+use App\Models\MerchantCategory;
+use App\Models\SpecValue;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -115,18 +117,34 @@ class DatabaseSeeder extends Seeder
         //     'category_id' => $merchantCategory->id,
         //     'philgeps_id' => $philgep->id
         // ]);
-        ParentCategory::factory(5)->create();
-        SubCategory::factory(5)->create();
-        ThirdCategory::factory(4)->create();
-        $products = ['Calculator', 'Carbon Film', 'Chalk'];
-        foreach ($products as $product) {
-            Product::create([
-                'product_name' => $product,
-                'sub_code' => rand(1, 5),
-                'third_code' => Arr::random([null, rand(1, 4)]),
-                'description' => fake()->sentence()
-            ]);
+        // ParentCategory::factory(20)->create();
+        // SubCategory::factory(5)->create();
+        // ThirdCategory::factory(4)->create();
+        // $products = ['Calculator', 'Carbon Film', 'Chalk'];
+        // foreach ($products as $product) {
+        //     Product::create([
+        //         'product_name' => $product,
+        //         'sub_code' => rand(1, 5),
+        //         'third_code' => Arr::random([null, rand(1, 4)]),
+        //         'description' => fake()->sentence()
+        //     ]);
+        // }
+        $specs = Spec::all();
+        foreach($specs as $spec)
+        {
+            $random  = rand(1, count($specs));
+            $i = 0;
+            $specValueIds = [];
+            while($i <= $random)
+            {
+               $specValueIds[] =  SpecValue::create([
+                    'spec_value' => fake()->word()
+                ])->id;
+                $i++;
+            }
+            $spec->values()->syncWithoutDetaching($specValueIds);
         }
+        
         DB::commit();
 
         // $roles = ['merchant', 'agency', 'super_admin'];

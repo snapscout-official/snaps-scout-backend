@@ -46,7 +46,6 @@ Route::middleware('auth:sanctum')->group(function () {
                 'AgencyUser' => auth()->user()->merchant
             ]);
         });
-        // Route::post()
     });
 
     Route::middleware('role:agency')->group(function () {

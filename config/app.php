@@ -169,6 +169,7 @@ return [
         ExcelServiceProvider::class,
         DebugbarServiceProvider::class,
         MongoDBServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class
     ])->toArray(),
 
     /*
@@ -185,7 +186,8 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'Excel' => Excel::class,
-        'Debugbar' => Debugbar::class
+        'Debugbar' => Debugbar::class,
+        // 'PDF' => Barryvdh\DomPDF\Facade::class
     ])->toArray(),
 
 ];

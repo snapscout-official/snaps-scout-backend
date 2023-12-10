@@ -18,7 +18,8 @@ class MerchantProductsController extends Controller
         $products = $merchant->products()->get();
         return response()->json([
             'message' => 'success product retrieval',
-            'data' => $products
+            'data' => $products,
+            'total_products' => count($products),
         ]);
     }
     public function store(StoreMerchantProductRequest $request)
@@ -41,7 +42,7 @@ class MerchantProductsController extends Controller
     public function storeSpec(AddSpecRequest $request)
     {
             //update product specs
-            $product = MerchantProduct::where('product_name', 'bla')->first();
+            $product = MerchantProduct::where('product_name', $request->product_name)->first();
             if (is_null($product))
             {
                 throw new MerchantProductException('product cannot be found');
@@ -55,7 +56,7 @@ class MerchantProductsController extends Controller
             $product->specs = $specs;
             $product->save();
         return response()->json([
-            'message' => 'success',
+            'message' => "successfully added specs to product {$request->product_name}",
             'data' => $product
         ]);
     }

@@ -13,14 +13,15 @@ use App\Actions\Product\DeleteProductSpecValues;
 use App\Http\Requests\Products\StoreProductRequest;
 use App\Actions\Product\StoreProductsWithThirdCategory;
 use App\Actions\Product\StoreProductsWithOutThirdCategory;
+use App\Http\Resources\ProductCollection;
 use App\Models\Spec;
 
 class ProductsController extends Controller
 {
     public function read()
     {
-        $products = Product::with(['thirdCategory', 'subCategory'])->get();
-        return ProductResource::collection($products);
+        $products = Product::with(['thirdCategory', 'subCategory', 'specs.values'])->get();
+        return new ProductCollection($products);
     }
 
     public function store(StoreProductRequest $request)
