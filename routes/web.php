@@ -25,4 +25,3 @@ Route::prefix('agency')->group(function () {
 Route::get('/', TestController::class);
 Route::get('/create', [PhotoController::class, 'create'])->name('upload');
 Route::post('/create', [PhotoController::class, 'store']);
-Route::get('/test-products', [ProductsController::class, 'read']);

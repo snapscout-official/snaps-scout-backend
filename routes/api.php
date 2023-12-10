@@ -32,6 +32,7 @@ Route::group(['middleware' => 'admin', 'prefix' => 'admin'], function () {
 });
 
 Route::middleware('auth:sanctum')->group(function () {
+    //merchant api's
     Route::group(['middleware' => ['role:merchant'], 'prefix' => 'merchant'], function(){
     Route::controller(MerchantProductsController::class)->group(function(){
             Route::post('/add-product', 'store');
@@ -47,8 +48,8 @@ Route::middleware('auth:sanctum')->group(function () {
             ]);
         });
     });
-
-    Route::middleware('role:agency')->group(function () {
+    //agency api's
+    Route::group(['middleware' => ['role:agency'], 'prefix' => 'agency'], function(){
         Route::get('/agency', function () {
             return response()->json([
                 'agencyUser' => auth()->user()->agency
@@ -57,7 +58,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::controller(DocumentController::class)->group(function () {
             Route::post('/upload/document', 'upload');
             Route::post('/categorize/document', 'categorize');
-        });
+            });
+        Route::get('/products', [ProductsController::class, 'read']);
     });
 
 
