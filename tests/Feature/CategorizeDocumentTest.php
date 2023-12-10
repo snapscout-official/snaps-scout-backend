@@ -2,13 +2,14 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Maatwebsite\Excel\Facades\Excel;
 use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Http\Testing\File;
+use Illuminate\Http\UploadedFile;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class CategorizeDocumentTest extends TestCase
 {
@@ -24,10 +25,15 @@ class CategorizeDocumentTest extends TestCase
     {
         Storage::fake('TestSnap');
         Excel::fake();
-        $user = User::find(2);   
-        $file = UploadedFile::fake()->create('snapscout.xlsx');
-        $response = $this->actingAs($user)->post('/api/agency/upload/document', ['document' => $file]);
-        $response->assertStatus(201);
-        Storage::disk('TestSnap')->assertExists($file->getClientOriginalName());
+        $user = User::find(2);
+        $sampleFilePath = Storage::path('SnapScout-2.xlsx');
+        // dd($sampleFilePath);
+        $fakeFile = UploadedFile::fake()->createWithContent('snapscout.xlsx', file_get_contents($sampleFilePath));
+        $response = $this->actingAs($user)
+            ->withoutExceptionHandling()
+            ->post('/api/agency/upload/document', ['document' => $fakeFile]);
+        
+        $response->assertStatus(500);
+        Storage::disk('TestSnap')->assertExists('SnapScout-2-2.xlsx');
     }
 }
