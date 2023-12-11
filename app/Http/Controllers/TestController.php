@@ -49,7 +49,9 @@ class TestController extends Controller
         // }finally{
         //     $lock?->release();
         // }
-     
+        return response()->json([
+            'data' => Cache::store('cache')->get('1products'),
+        ]);
         //Cache the products specs with a name of productName . productId
 
         // $owner = new Owner([

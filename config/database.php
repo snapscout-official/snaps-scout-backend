@@ -107,8 +107,13 @@ return [
             'cache' => [
                 'host' => env('REDIS_HOST', '127.0.0.1'),
                 'port' => env('REDIS_PORT', 6379),
-                'database' => env('REDIS_DB', 0),  
+                'database' => env('REDIS_DB', 1),  
             ],
+            'queue' => [
+                'host' => env('REDIS_HOST', '127.0.0.1'),
+                'port' => env('REDIS_PORT', 6379),
+                'database' => env('REDIS_QUEUE', 2),
+            ]
         ]
 
     ],
@@ -163,6 +168,11 @@ return [
             'port' => env('REDIS_PORT', '6379'),
             'database' => env('REDIS_CACHE_DB', '1'),
         ],
+        'queue' => [
+            'host' => '127.0.0.1',
+            'port' => '6379',
+            'database' => env('REDIS_QUEUE', 2),
+        ]
 
     ],
 
