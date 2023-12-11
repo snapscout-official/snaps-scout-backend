@@ -26,4 +26,8 @@ class MerchantProduct extends Model
     {
         return $this->belongsTo(Merchant::class);
     }
+    public function owner()
+    {
+        return Merchant::with(['user', 'location', 'merchantCategory', 'philgep'])->find($this->merchant_merchant_id);
+    }
 }

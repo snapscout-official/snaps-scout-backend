@@ -25,9 +25,9 @@ class CategorizeDocumentData
         $code = 1;
         foreach ($importArray as $row) {
             //replace parenthesis with commas in order for the explode 
-            $productName = Str::replace(['(', ')'], ',', $row[$generalDesc]);
+            $replacedGeneralDesc = Str::replace(['(', ')'], ',', $row[$generalDesc]);
             //modify to lower case each word and then upper case word after
-            $productName = Str::lower(explode(',', $productName)[0]);
+            $productName = Str::lower(explode(',', $replacedGeneralDesc)[0]);
 
             $productName  = ucwords($productName);
             //gets the product from the product table of our admin 
@@ -35,18 +35,38 @@ class CategorizeDocumentData
             //eager load also the retrieved product
             $matchedProduct = Product::where('product_name', $productName)->with('subCategory.parentCategory')
                 ->first();
-            
+            $specs = [];
+            $row[$generalDesc] = explode(',',$replacedGeneralDesc);
+            foreach( $row[$generalDesc] as $key => $description)
+            {
+                if ($key === 0)
+                    continue;
+                $specs[] = trim($description);
+            }
+            $productName = trim($productName);
             //if is null or it means that the productName does not exist on the database meaning it has no category associated
             //add it to the others category 
             if (is_null($matchedProduct)) {
                 if (!isset($categorized['others']['quantity'])) {
                     $categorized['others']['quantity'] = $row['quantitysize'];
-                    $categorized['others']['products'][] = [$code, $row[$generalDesc], $row[$unitMeasure], $row[$quantity]];
+                    $categorized['others']['products'][] = [
+                        'code' => $code, 
+                        'product' => $productName, 
+                        'specs' => $specs,
+                        'unit_of_measure' =>  $row[$unitMeasure], 
+                        'quantity' => $row[$quantity]
+                    ];
                     $categorized['others']['totalProducts'] = count($categorized['others']['products']);
                     $code++;
                     continue;
                 }
-                $categorized['others']['products'][] = [$code, $row[$generalDesc], $row[$unitMeasure], $row[$quantity]];
+                $categorized['others']['products'][] =  [
+                    'code' => $code, 
+                    'product' => $productName, 
+                    'specs' => $specs,
+                    'unit_of_measure' =>  $row[$unitMeasure], 
+                    'quantity' => $row[$quantity]
+                ];
                 $categorized['others']['totalProducts'] = count($categorized['others']['products']);
                 $code++;
                 $categorized['others']['quantity'] += $row['quantitysize'];
@@ -57,12 +77,24 @@ class CategorizeDocumentData
             // categoryName => ['products' => [array of products], 'quantity => realNumber ]
             if (!isset($categorized[$parentName]['quantity'])) {
                 $categorized[$parentName]['quantity'] = $row['quantitysize'];
-                $categorized[$parentName]['products'][] = [$code, $row[$generalDesc], $row[$unitMeasure], $row[$quantity]];
+                $categorized[$parentName]['products'][] = [
+                    'code' => $code, 
+                    'product' => $productName, 
+                    'specs' => $specs,
+                    'unit_of_measure' =>  $row[$unitMeasure], 
+                    'quantity' => $row[$quantity]
+                ];
                 $categorized[$parentName]['totalProducts'] = count($categorized[$parentName]['products']);
                 $code++;
                 continue;
             }
-            $categorized[$parentName]['products'][] = [$code, $row[$generalDesc], $row[$unitMeasure], $row[$quantity]];
+            $categorized[$parentName]['products'][] =  [
+                'code' => $code, 
+                'product' => $productName, 
+                'specs' => $specs,
+                'unit_of_measure' =>  $row[$unitMeasure], 
+                'quantity' => $row[$quantity]
+            ];
             $categorized[$parentName]['totalProducts'] = count($categorized[$parentName]['products']);
             $code++;
 
@@ -73,7 +105,13 @@ class CategorizeDocumentData
         foreach ($categorized as $category => $value) {
             $overallTotalProducts += $value['totalProducts'];
 
-            $data[] = ['parentCategoryName' => $category, 'products' => $value['products'], 'productNumber' => $value['totalProducts'], 'isComplete' => false, 'totalQuantity' => $value['quantity']];
+            $data[] = [
+                'parentCategoryName' => $category, 
+                'products' => $value['products'], 
+                'productNumber' => $value['totalProducts'], 
+                'isComplete' => false, 
+                'totalQuantity' => $value['quantity']
+            ];
         }
         return [$data, $overallTotalProducts];
     }

@@ -27,8 +27,7 @@ class CategorizeDocumentTest extends TestCase
         Excel::fake();
         $user = User::find(2);
         $sampleFilePath = Storage::path('SnapScout-2.xlsx');
-        // dd($sampleFilePath);
-        $fakeFile = UploadedFile::fake()->createWithContent('snapscout.xlsx', file_get_contents($sampleFilePath));
+        $fakeFile = UploadedFile::fake()->createWithContent('snapscout.xlsx', file_get_contents($sampleFilePath));  
         $response = $this->actingAs($user)
             ->withoutExceptionHandling()
             ->post('/api/agency/upload/document', ['document' => $fakeFile]);
