@@ -62,7 +62,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/products', [ProductsController::class, 'read']);
     });
 
-
     Route::group(['middleware' => ['role:super_admin', 'throttle:api'], 'prefix' => 'admin'], function () {
         Route::controller(CategoryController::class)->group(function () {
             Route::get('/create-category', 'create');
