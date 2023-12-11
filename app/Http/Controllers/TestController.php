@@ -25,30 +25,31 @@ class TestController extends Controller
         
         // return $merchantTest;
         //lock test
-        $lock = Cache::lock('test', 10);
-        try {
-            $lock->block(5);
-            $res = Cache::store('cache')->get('merchant_products');
-            if(is_null($res))
-            {
-                $merchantProducts = MerchantProduct::all();                
-                Cache::store('cache')->put('merchant_products', $merchantProducts, 600);
-                return response()->json([
-                    'data' => $merchantProducts
-                ]);
-            }
-            return response()->json([
-                'data' => $res
-            ]);
+        // $lock = Cache::lock('test', 10);
+        // try {
+        //     $lock->block(5);
+        //     $res = Cache::store('cache')->get('merchant_products');
+        //     if(is_null($res))
+        //     {
+        //         $merchantProducts = MerchantProduct::all();                
+        //         Cache::store('cache')->put('merchant_products', $merchantProducts, 600);
+        //         return response()->json([
+        //             'data' => $merchantProducts
+        //         ]);
+        //     }
+        //     return response()->json([
+        //         'data' => $res
+        //     ]);
             
-        } catch (LockTimeoutException $err) {
-            return response()->json([
-                'error' => 'cannot make the action',
-                'message' => $err->getMessage()
-            ]);
-        }finally{
-            $lock?->release();
-        }
+        // } catch (LockTimeoutException $err) {
+        //     return response()->json([
+        //         'error' => 'cannot make the action',
+        //         'message' => $err->getMessage()
+        //     ]);
+        // }finally{
+        //     $lock?->release();
+        // }
+     
         //Cache the products specs with a name of productName . productId
 
         // $owner = new Owner([
