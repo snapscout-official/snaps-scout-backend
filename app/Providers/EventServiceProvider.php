@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\CategoryAdded;
 use App\Events\CategoryDeleted;
+use App\Events\DocumentCategorized;
 use App\Events\PasswordReset;
 use App\Events\TestEvent;
 use App\Events\UserRegistered;
@@ -39,7 +40,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         TestEvent::class => [
             TestListener::class
-        ]
+        ],
 
 
     ];
@@ -53,5 +54,10 @@ class EventServiceProvider extends ServiceProvider
             UserRegistered::class,
             [SendEmailNotification::class, 'handle']
         );
+    }
+  
+    public function shouldDiscoverEvents(): bool
+    {
+        return true;
     }
 }
