@@ -23,7 +23,7 @@ class StoreCategorizedData implements ShouldQueue
     public function handle(): void
     {
         DB::beginTransaction();
-        CategorizedDocument::create($this->categorizedData);
+        $this->documentModel->categorizedDocument()->create($this->categorizedData);
         $this->documentModel->is_categorized = true;
         $this->documentModel->save();
         DB::commit();

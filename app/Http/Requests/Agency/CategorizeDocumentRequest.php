@@ -15,8 +15,9 @@ class CategorizeDocumentRequest extends FormRequest
     //if the document is already categorized then this api should not be accessed again for categorizing since it has been categorized
     public function authorize(): bool
     {
-        $this->documentModel = $this->documentModel();
-        return !$this->documentModel->is_categorized;
+        // $this->documentModel = $this->documentModel();
+        // return !$this->documentModel->is_categorized;
+        return true;
     }
     public function rules(): array
     {
