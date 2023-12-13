@@ -15,15 +15,20 @@ use App\Actions\Product\StoreProductsWithThirdCategory;
 use App\Actions\Product\StoreProductsWithOutThirdCategory;
 use App\Http\Resources\ProductCollection;
 use App\Models\Spec;
+use Illuminate\Support\Facades\Cache;
 
 class ProductsController extends Controller
 {
     public function read()
     {
-        $products = Product::with(['thirdCategory', 'subCategory', 'specs.values'])->get();
+        $products = Cache::store('cache')->get('admin_products');
+        if (is_null($products))
+        {
+            $products = Product::with(['thirdCategory', 'subCategory', 'specs.values'])->get();
+            Cache::store('cache')->put('admin_products', $products, 600);
+        }
         return new ProductCollection($products);
     }
-
     public function store(StoreProductRequest $request)
     {
         if ($request->filled('thirdCategoryId')) {

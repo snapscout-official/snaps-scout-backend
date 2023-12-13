@@ -58,8 +58,10 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::controller(DocumentController::class)->group(function () {
             Route::post('/upload/document', 'upload');
             Route::post('/categorize/document', 'categorize');
-            });
+            Route::get('categorize/document/{document}', 'read');
+        });
         Route::get('/products', [ProductsController::class, 'read']);
+   
     });
 
     Route::group(['middleware' => ['role:super_admin', 'throttle:api'], 'prefix' => 'admin'], function () {

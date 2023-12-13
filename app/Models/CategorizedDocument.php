@@ -15,7 +15,7 @@ class CategorizedDocument extends Model
         'total_products',
         'data',
         'categories_number',
-        'document_id',
+        // 'document_id',
     ];
 
     protected $casts = [
@@ -24,5 +24,9 @@ class CategorizedDocument extends Model
     public function agency(): BelongsTo
     {
         return $this->belongsTo(Agency::class, 'agency_id', 'agency_id');
+    }
+    public function document():BelongsTo
+    {
+        return $this->belongsTo(AgencyDocument::class, 'document_id', 'id');
     }
 }

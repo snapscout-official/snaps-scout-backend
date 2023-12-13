@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Agency;
 
-use App\Actions\Agency\CategorizeDocumentData;
-use App\Actions\Agency\StoreAgencyDocument;
+use Illuminate\Http\Request;
+use App\Models\AgencyDocument;
 use App\Events\DocumentCategorized;
+use App\Models\CategorizedDocument;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Cache;
+use App\Actions\Agency\StoreAgencyDocument;
+use App\Jobs\Documents\StoreCategorizedData;
+use App\Actions\Agency\CategorizeDocumentData;
 use App\Http\Requests\Agency\AgencyDocumentRequest;
 use App\Http\Requests\Agency\CategorizeDocumentRequest;
-use App\Jobs\Documents\StoreCategorizedData;
 
 class DocumentController extends Controller
 {
@@ -42,5 +46,25 @@ class DocumentController extends Controller
             ], 422);
         }
         return StoreAgencyDocument::run($request);
+    }
+    public function read(AgencyDocument $document)
+    {
+        if ($document->is_categorized)
+        {
+            $categorizedDocument = Cache::store('cache')->get("{$document->id}products");
+            if (is_null($categorizedDocument))
+            {
+                $categorizedDocument =  CategorizedDocument::where('document_id', $document->id)->first();
+                DocumentCategorized::dispatch($categorizedDocument);
+                return response()->json([
+                    'message' => 'success',
+                    'data' => $categorizedDocument
+                ]);
+            }
+        }
+        return response()->json([
+            'message' => 'document is not yet categorized',
+            'data' => null
+        ]);
     }
 }
