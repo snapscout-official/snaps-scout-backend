@@ -40,14 +40,15 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::get('/products', 'read');
     });
 });
-    Route::middleware('role:merchant')->group(function () {
-        Route::get('/merchant/{merchant}', function (Merchant $merchant) {
-            Gate::authorize('view-merchant', $merchant);
-            return response()->json([
-                'AgencyUser' => auth()->user()->merchant
-            ]);
-        });
-    });
+    // Route::middleware('role:merchant')->group(function () {
+    //     Route::get('/merchant/{merchant}', function (Merchant $merchant) {
+    //         Gate::authorize('view-merchant', $merchant);
+    //         return response()->json([
+    //             'AgencyUser' => auth()->user()->merchant
+    //         ]);
+    //     });
+    // });
+
     //agency api's
     Route::group(['middleware' => ['role:agency'], 'prefix' => 'agency'], function(){
         Route::get('/agency', function () {

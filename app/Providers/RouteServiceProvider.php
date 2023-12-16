@@ -2,12 +2,14 @@
 
 namespace App\Providers;
 
+use App\Models\AgencyDocument;
 use App\Models\Product;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use League\CommonMark\Node\Block\Document;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -46,5 +48,9 @@ class RouteServiceProvider extends ServiceProvider
         Route::bind('productWithSpecs', function (string $value) {
             return Product::with('specs.values')->find($value);
         });
+        // Route::bind('document', function(string $value)
+        // {
+        //     return AgencyDocument::find($value);
+        // });
     }
 }

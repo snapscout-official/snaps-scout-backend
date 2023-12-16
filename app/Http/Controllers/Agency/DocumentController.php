@@ -49,18 +49,22 @@ class DocumentController extends Controller
     }
     public function read(AgencyDocument $document)
     {
+        //the document to be retrieved data is already categorized
         if ($document->is_categorized)
         {
+            //gets the categorized document if it is already in the cache
             $categorizedDocument = Cache::store('cache')->get("{$document->id}products");
+            //if not in the cache then cache the retrieved data
             if (is_null($categorizedDocument))
             {
                 $categorizedDocument =  CategorizedDocument::where('document_id', $document->id)->first();
+                //does have conflict since we passed a model
                 DocumentCategorized::dispatch($categorizedDocument);
-                return response()->json([
-                    'message' => 'success',
-                    'data' => $categorizedDocument
-                ]);
             }
+            return response()->json([
+                'message' => 'success',
+                'data' => $categorizedDocument
+            ]);
         }
         return response()->json([
             'message' => 'document is not yet categorized',
