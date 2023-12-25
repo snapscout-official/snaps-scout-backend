@@ -60,6 +60,7 @@ Route::middleware('auth:sanctum')->group(function () {
             Route::post('/upload/document', 'upload');
             Route::post('/categorize/document', 'categorize');
             Route::get('categorize/document/{document}', 'read');
+            Route::get('/documents', 'readDocuments');
         });
         Route::get('/products', [ProductsController::class, 'read']);
    

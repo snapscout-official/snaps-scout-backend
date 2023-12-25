@@ -52,7 +52,6 @@ class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
     {
         return $this->hasOne(Merchant::class, 'merchant_id', 'id');
     }
-
     public function agency(): HasOne
     {
         return $this->hasOne(Agency::class, 'agency_id', 'id');

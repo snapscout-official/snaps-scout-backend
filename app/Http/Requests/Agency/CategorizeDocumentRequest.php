@@ -33,8 +33,5 @@ class CategorizeDocumentRequest extends FormRequest
     {
         return (new HeadingRowImport(SecondSheetImport::HEADER))->toArray(Storage::path($this->document_name))[1][0];
     }
-    public function documentModel()
-    {
-        return AgencyDocument::where('document_name', $this->document_name)->first();
-    }
+    
 }

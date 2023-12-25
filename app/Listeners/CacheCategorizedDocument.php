@@ -18,7 +18,12 @@ class CacheCategorizedDocument
     }
     public function handle(DocumentCategorized $event): void
     {
-        $documentId = $event->categorizedData['document_id'];
+        if (is_object($event->categorizedData))
+        {
+            $documentId = $event->categorizedData->document_id;
+        }else{
+            $documentId = $event->categorizedData['document_id'];
+        }
        //cache document data with a documentId + products key
         Cache::store('cache')->put("{$documentId}products", $event->categorizedData, 600);
     }

@@ -9,18 +9,17 @@ use App\Models\CategorizedDocument;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Actions\Agency\StoreAgencyDocument;
+use App\Services\CategorizeDocumentService;
 use App\Jobs\Documents\StoreCategorizedData;
-use App\Actions\Agency\CategorizeDocumentData;
 use App\Http\Requests\Agency\AgencyDocumentRequest;
 use App\Http\Requests\Agency\CategorizeDocumentRequest;
 
 class DocumentController extends Controller
 {
-    public function categorize(CategorizeDocumentRequest $request)
+    public function categorize(CategorizeDocumentRequest $request, CategorizeDocumentService $categorizeService)
     {
-
-        $documentModel = $request->documentModel();
-        $data = CategorizeDocumentData::run($request);
+        $documentModel =  $categorizeService->documentModel();
+        $data = $categorizeService->categorizeDocument();
         [$categorized, $totalProducts] = $data;       
         $categorizedData = [
             'total_products' => $totalProducts,
@@ -69,6 +68,15 @@ class DocumentController extends Controller
         return response()->json([
             'message' => 'document is not yet categorized',
             'data' => null
+        ]);
+    }
+    public function readDocuments( Request $request)
+    {
+        $agency = $request->user()->agency;
+        $documents = $agency->documents;
+        return response()->json([
+            'message' => "agency {$agency->agency_name} documents successfully retrieved",
+            'data' => $documents
         ]);
     }
 }

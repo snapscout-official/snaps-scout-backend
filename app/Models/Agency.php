@@ -26,7 +26,7 @@ class Agency extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'agency_id', 'id');
+        return $this->belongsTo(User::class, 'agency_id', 'id');  
     }
 
     public function location(): BelongsTo
