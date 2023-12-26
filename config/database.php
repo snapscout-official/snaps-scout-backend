@@ -150,7 +150,7 @@ return [
         'queue' => [
             'host' => '127.0.0.1',
             'port' => '6379',
-            'database' => env('REDIS_QUEUE', 2),
+            'database' => env('REDIS_QUEUE_DATABASE', '0'),
         ]
 
     ],

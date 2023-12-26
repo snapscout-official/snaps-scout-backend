@@ -13,8 +13,8 @@ class ProductCategoryException extends Exception
     }
     public function render(Request $request)
     {
-        $request->expectsJson() ? response()->json([
-            'error' => $this->getMessage()
-        ], 400) : $this->message;
+        return $request->expectsJson() ? response()->json([
+            'error' => $this->getMessage(),
+        ], 400): $this->getMessage();
     }
 }

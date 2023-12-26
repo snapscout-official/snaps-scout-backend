@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Http\Requests\Agency\CategorizeDocumentRequest;
 use App\Models\Product;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -15,13 +16,8 @@ class CategorizeDocumentService{
     {
         
     }
-    public function documentModel()
+    public function categorizeDocument(CategorizeDocumentRequest $request)
     {
-        return AgencyDocument::where('document_name', $this->request->document_name)->first();
-    }
-    public function categorizeDocument()
-    {
-        $request = $this->request;
         [$generalDesc, $unitMeasure, $quantity] = $request->getHeadings();
         $categoryTestimport = new CategoryTestImport();
         $categoryTestimport->onlySheets('sheet2');

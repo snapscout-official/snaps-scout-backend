@@ -44,7 +44,7 @@ class DatabaseSeeder extends Seeder
         // }
         DB::beginTransaction();
 
-        $date = Carbon::createFromFormat('F j, Y', 'June 5, 2002')
+        $date = Carbon::createFromFormat('F j, Y', 'March 21, 2002')
             ->format('Y-m-d');
 
         // $user = User::create([
@@ -124,7 +124,7 @@ class DatabaseSeeder extends Seeder
         // foreach ($products as $product) {
         //     Product::create([
         //         'product_name' => $product,
-        //         'sub_code' => rand(1, 5),
+        //         'sub_code' => rand(11, 12),
         //         'third_code' => Arr::random([null, rand(1, 4)]),
         //         'description' => fake()->sentence()
         //     ]);
