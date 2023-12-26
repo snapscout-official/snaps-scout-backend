@@ -9,6 +9,9 @@ use App\Models\CategorizedDocument;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Actions\Agency\StoreAgencyDocument;
+use App\Exceptions\DocumentCategorizeException;
+use App\Exceptions\MerchantProductException;
+use App\Exceptions\ProductCategoryException;
 use App\Services\CategorizeDocumentService;
 use App\Jobs\Documents\StoreCategorizedData;
 use App\Http\Requests\Agency\AgencyDocumentRequest;
@@ -18,8 +21,11 @@ class DocumentController extends Controller
 {
     public function categorize(CategorizeDocumentRequest $request, CategorizeDocumentService $categorizeService)
     {
-        $documentModel =  $categorizeService->documentModel();
-        $data = $categorizeService->categorizeDocument();
+        $documentModel =  $request->documentModel();
+        if ($documentModel->is_categorized){
+            throw new DocumentCategorizeException("The document is already categorized:{$documentModel->document_name}");   
+        }
+        $data = $categorizeService->categorizeDocument($request);
         [$categorized, $totalProducts] = $data;       
         $categorizedData = [
             'total_products' => $totalProducts,
@@ -29,11 +35,14 @@ class DocumentController extends Controller
             'data' => $categorized
         ];
         //a job is dispatched for storing the categorized document in to the database
+        // dd("Test");
         StoreCategorizedData::dispatch($categorizedData, $documentModel);
         //event that will cache the categorized data into redis
         //Note: issue is if ever there is an redis error, the categorized document is stored in db but it wont be cached
         // When retrieving the data on the cache for get api there might be error that will happen if it was not cached.
+        
         DocumentCategorized::dispatch($categorizedData);
+        
         $categorizedData['message'] = 'successfully categorizing data';
         return response()->json($categorizedData, 201);
     }

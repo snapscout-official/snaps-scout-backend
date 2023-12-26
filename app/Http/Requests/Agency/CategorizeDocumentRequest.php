@@ -15,8 +15,7 @@ class CategorizeDocumentRequest extends FormRequest
     //if the document is already categorized then this api should not be accessed again for categorizing since it has been categorized
     public function authorize(): bool
     {
-        // $this->documentModel = $this->documentModel();
-        // return !$this->documentModel->is_categorized;
+        
         return true;
     }
     public function rules(): array
@@ -33,5 +32,9 @@ class CategorizeDocumentRequest extends FormRequest
     {
         return (new HeadingRowImport(SecondSheetImport::HEADER))->toArray(Storage::path($this->document_name))[1][0];
     }
-    
+    public function documentModel()
+    {
+        return AgencyDocument::where('document_name', $this->document_name)->first();
+    }
+   
 }

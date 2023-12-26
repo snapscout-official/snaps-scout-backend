@@ -2,10 +2,8 @@
 
 use App\Events\PasswordReset;
 use App\Models\User;
-use App\Models\Merchant;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Password;
