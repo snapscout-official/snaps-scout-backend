@@ -10,8 +10,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Cache;
 use App\Actions\Agency\StoreAgencyDocument;
 use App\Exceptions\DocumentCategorizeException;
-use App\Exceptions\MerchantProductException;
-use App\Exceptions\ProductCategoryException;
 use App\Services\CategorizeDocumentService;
 use App\Jobs\Documents\StoreCategorizedData;
 use App\Http\Requests\Agency\AgencyDocumentRequest;
