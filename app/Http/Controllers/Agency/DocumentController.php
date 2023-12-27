@@ -17,6 +17,7 @@ use App\Http\Requests\Agency\CategorizeDocumentRequest;
 
 class DocumentController extends Controller
 {
+    
     public function categorize(CategorizeDocumentRequest $request, CategorizeDocumentService $categorizeService)
     {
         $documentModel =  $request->documentModel();
@@ -56,7 +57,7 @@ class DocumentController extends Controller
             return response()->json([
                 'message' => 'The document does not adhere to the rule',
                 'errorRows' => $errors
-            ], 400);
+            ], 422);
         }
         return StoreAgencyDocument::run($request);
     }
