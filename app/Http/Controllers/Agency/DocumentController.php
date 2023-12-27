@@ -44,12 +44,19 @@ class DocumentController extends Controller
         $categorizedData['message'] = 'successfully categorizing data';
         return response()->json($categorizedData, 201);
     }
-    public function upload(AgencyDocumentRequest $request)
+    public function upload(AgencyDocumentRequest $request, CategorizeDocumentService $documentService)
     {
         if (!$request->fileIsValid()) {
             return response()->json([
                 'error' => 'file format is invalid'
             ], 422);
+        }
+        $errors = $documentService->checkDocumentBeforeUpload($request);
+        if (count($errors) != 0){
+            return response()->json([
+                'message' => 'The document does not adhere to the rule',
+                'errorRows' => $errors
+            ], 400);
         }
         return StoreAgencyDocument::run($request);
     }
