@@ -73,8 +73,11 @@ class TestController extends Controller
         // $products = $merchant->products;
         $pattern = '/^[a-zA-Z0-9.!#$%&]+@[a-zA-z]+(?:\.[a-zA-Z0-9]+)*$/';
         // $patternGeneralDescription  = '/^[a-zA-Z0-9%],+[a-zA-Z]$/';
-        $patternGeneralDescription = '/(?<!,)\b[a-zA-Z0-9%-]+\b(?!,)$/';
-        $string = "ALCOHOL, ethyl, 68%-72%, Gallon";
-        return preg_match($patternGeneralDescription, $string);
+        $patternGeneralDescription = '/.(?:^|,)\s*(?![^:,]+\s*:[^:,])\s*([^:,]+)\s*(?=(?:,[^:,]+:|,|$))/';
+        $patternNoCommaAtEnd = '/\w(?!,)\w.$/';
+        $string = "ALCOHOL BLUE RED,type:ethyl,percent:68%-72%,Size:Gallon,";
+        if (preg_match($patternGeneralDescription, $string))
+            return "There is an error";
+        return "There is no error for the row";
     }
 }
