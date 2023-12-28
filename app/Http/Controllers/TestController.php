@@ -49,9 +49,9 @@ class TestController extends Controller
         // }finally{
         //     $lock?->release();
         // }
-        return response()->json([
-            'data' => Cache::store('cache')->get('1products'),
-        ]);
+        // return response()->json([
+        //     'data' => Cache::store('cache')->get('1products'),
+        // ]);
         //Cache the products specs with a name of productName . productId
 
         // $owner = new Owner([
@@ -71,6 +71,13 @@ class TestController extends Controller
         // $merchantProducts = MerchantProduct::all();
         // dd($merchantProduct);
         // $products = $merchant->products;
-       
+        $pattern = '/^[a-zA-Z0-9.!#$%&]+@[a-zA-z]+(?:\.[a-zA-Z0-9]+)*$/';
+        // $patternGeneralDescription  = '/^[a-zA-Z0-9%],+[a-zA-Z]$/';
+        $patternGeneralDescription = '/.(?:^|,)\s*(?![^:,]+\s*:[^:,])\s*([^:,]+)\s*(?=(?:,[^:,]+:|,|$))/';
+        $patternNoCommaAtEnd = '/\w(?!,)\w.$/';
+        $string = "ALCOHOL BLUE RED,type:ethyl,percent:68%-72%,Size:Gallon,";
+        if (preg_match($patternGeneralDescription, $string))
+            return "There is an error";
+        return "There is no error for the row";
     }
 }

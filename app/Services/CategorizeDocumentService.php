@@ -2,20 +2,19 @@
 
 namespace App\Services;
 
-use App\Http\Requests\Agency\CategorizeDocumentRequest;
 use App\Models\Product;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Models\AgencyDocument;
+use App\Imports\SecondSheetImport;
 use App\Imports\CategoryTestImport;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\HeadingRowImport;
+use App\Http\Requests\Agency\AgencyDocumentRequest;
+use App\Http\Requests\Agency\CategorizeDocumentRequest;
 
 class CategorizeDocumentService{
-
-    public function __construct(private Request $request)
-    {
-        
-    }
+    //pattern for checking the rule of specs:specValue
+    private $pattern = '/.(?:^|,)\s*(?![^:,]+\s*:[^:,])\s*([^:,]+)\s*(?=(?:,[^:,]+:|,|$))/';
+    //refactor to have a format like [specsName] = specsValue
     public function categorizeDocument(CategorizeDocumentRequest $request)
     {
         [$generalDesc, $unitMeasure, $quantity] = $request->getHeadings();
@@ -44,8 +43,10 @@ class CategorizeDocumentService{
             {
                 if ($key === 0)
                     continue;
-                $specs[] = trim($description);
-            }
+                 $trimmedSpecs= trim($description);
+                 [$specsName, $specsValue] = explode(":", $trimmedSpecs);
+                 $specs[$specsName] = $specsValue;
+                }
             $productName = trim($productName);
             //if is null or it means that the productName does not exist on the database meaning it has no category associated
             //add it to the others category 
@@ -117,5 +118,20 @@ class CategorizeDocumentService{
             ];
         }
         return [$data, $overallTotalProducts];
+    }
+    public function checkDocumentBeforeUpload(AgencyDocumentRequest $request){
+        $categoryTestimport = new CategoryTestImport();
+        $categoryTestimport->onlySheets('sheet2');
+        [$generalDesc] =  (new HeadingRowImport(SecondSheetImport::HEADER))->toArray($request->document)[1][0];
+        //transform in to an associative with a column/value pair
+        $importArray =  $categoryTestimport->toArray($request->document)[1];
+        $errorRows = [];
+        foreach($importArray as $row){
+            if (preg_match($this->pattern, $row[$generalDesc])){
+                $errorRows[] = $row[$generalDesc];
+            }
+            
+        }
+        return $errorRows;
     }
 }
