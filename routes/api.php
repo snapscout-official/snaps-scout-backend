@@ -15,6 +15,7 @@ use App\Http\Controllers\Merchant\AuthController;
 use App\Http\Controllers\Merchant\MerchantProductsController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Auth;
 
 Route::prefix('agency')->group(function () {
     Route::post('/register', [AgencyAuthController::class, 'register']);
@@ -57,7 +58,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::controller(DocumentController::class)->group(function () {
             Route::post('/upload/document', 'upload');
             Route::post('/categorize/document', 'categorize');
-            Route::get('categorize/document/{document}', 'read');
+            Route::get('categorize/document/{document}', 'read')->missing(function(Request $request){
+                return $request->expectsJson() ? response()->json([
+                    'error' => 'cannot find document in the database',
+                    'document_id' => "{$request->segment(5)}"
+                ], 422) : [
+                    'error' => 'cannot find document in the database',
+                    'document_id' => "{$request->segment(5)}"
+                ];
+            });
             Route::get('/documents', 'readDocuments');
         });
         Route::get('/products', [ProductsController::class, 'read']);
@@ -148,4 +157,9 @@ Route::middleware('guest')->group(function () {
             ? response()->json(['status' =>  __($status)])
             : back()->withErrors(['email' => [__($status)]]);
     });
+    
+});
+Route::middleware('auth:jwt')->get('/user', function()
+{
+    return Auth::user();
 });

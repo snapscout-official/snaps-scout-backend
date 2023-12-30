@@ -13,9 +13,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable implements MustVerifyEmail, CanResetPassword
+class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, Notifiable, PasswordsCanResetPassword;
+    use  HasFactory, Notifiable, PasswordsCanResetPassword;
 
     protected $fillable = [
         'first_name',
