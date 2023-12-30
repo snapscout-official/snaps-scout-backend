@@ -15,6 +15,7 @@ use App\Http\Controllers\Merchant\AuthController;
 use App\Http\Controllers\Merchant\MerchantProductsController;
 use App\Http\Controllers\ProductsController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use Illuminate\Support\Facades\Auth;
 
 Route::prefix('agency')->group(function () {
     Route::post('/register', [AgencyAuthController::class, 'register']);
@@ -156,4 +157,9 @@ Route::middleware('guest')->group(function () {
             ? response()->json(['status' =>  __($status)])
             : back()->withErrors(['email' => [__($status)]]);
     });
+    
+});
+Route::middleware('auth:jwt')->get('/user', function()
+{
+    return Auth::user();
 });
