@@ -17,7 +17,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'api',
+        'guard' => 'jwt',
         'passwords' => 'users',
         
     ],
