@@ -7,16 +7,17 @@ namespace App\Providers;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Agency;
+use App\Guard\JWTGuard;
 use App\Models\Merchant;
-use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Config;
+use SebastianBergmann\CodeUnit\FunctionUnit;
 use Illuminate\Auth\Notifications\VerifyEmail;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
-use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -66,5 +67,17 @@ class AuthServiceProvider extends ServiceProvider
         ResetPassword::createUrlUsing(function (User $user, string $token) {
             return 'https://www.snap-scout.com/reset-password?token=' . $token;
         });
+        $this->registerPolicies();
+        $this->app['auth']->extend(
+            'jwt-authentication',
+            function($app, $name, array $config){
+                $guard = new JWTGuard(
+                    $app['tymon.jwt'],
+                    $app['request']
+                );
+                $app->refresh('request', $guard, 'setRequest');
+                return $guard;
+            }
+        );
     }
 }
