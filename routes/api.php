@@ -57,7 +57,15 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::controller(DocumentController::class)->group(function () {
             Route::post('/upload/document', 'upload');
             Route::post('/categorize/document', 'categorize');
-            Route::get('categorize/document/{document}', 'read');
+            Route::get('categorize/document/{document}', 'read')->missing(function(Request $request){
+                return $request->expectsJson() ? response()->json([
+                    'error' => 'cannot find document in the database',
+                    'document_id' => "{$request->segment(5)}"
+                ], 422) : [
+                    'error' => 'cannot find document in the database',
+                    'document_id' => "{$request->segment(5)}"
+                ];
+            });
             Route::get('/documents', 'readDocuments');
         });
         Route::get('/products', [ProductsController::class, 'read']);

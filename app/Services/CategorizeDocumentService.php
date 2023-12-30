@@ -31,7 +31,7 @@ class CategorizeDocumentService{
             //modify to lower case each word and then upper case word after
             $productName = Str::lower(explode(',', $replacedGeneralDesc)[0]);
 
-            $productName  = ucwords($productName);
+            $productName = ucwords($productName);
             //gets the product from the product table of our admin 
             //on each product retrieved from the imported array, we query it to the database to check if it has a match
             //eager load also the retrieved product
@@ -39,12 +39,13 @@ class CategorizeDocumentService{
                 ->first();
             $specs = [];
             $row[$generalDesc] = explode(',',$replacedGeneralDesc);
+            $replacePattern = '/[\(\)]/';
             foreach( $row[$generalDesc] as $key => $description)
             {
                 if ($key === 0)
                     continue;
-                 $trimmedSpecs= trim($description);
-                 [$specsName, $specsValue] = explode(":", $trimmedSpecs);
+                $trimmedSpecs= trim($description );
+                [$specsName, $specsValue] = explode(":", $trimmedSpecs);
                  $specs[$specsName] = $specsValue;
                 }
             $productName = trim($productName);
